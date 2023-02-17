@@ -59,6 +59,7 @@
 		5228CB2727B4163300EDF103 /* ShadchanGirlNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5228CB2627B4163300EDF103 /* ShadchanGirlNote.swift */; };
 		5238D5CE2931307C00ECB2AF /* NasiSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5238D5CD2931307C00ECB2AF /* NasiSearchController.swift */; };
 		5238D5D0293131AF00ECB2AF /* SearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5238D5CF293131AF00ECB2AF /* SearchResultCell.swift */; };
+		52577764299FE024002C13D4 /* ShadchanVCViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52577763299FE024002C13D4 /* ShadchanVCViewController.swift */; };
 		528F5E232960780C00DE5223 /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 528F5E222960780C00DE5223 /* CategoryCell.swift */; };
 		528F5E2529619AFC00DE5223 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 528F5E2429619AFC00DE5223 /* CategoryViewController.swift */; };
 		5290DBB8293E3FAE004F6A04 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5290DBB7293E3FAE004F6A04 /* HomeViewController.swift */; };
@@ -170,6 +171,7 @@
 		5228CB2627B4163300EDF103 /* ShadchanGirlNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadchanGirlNote.swift; sourceTree = "<group>"; };
 		5238D5CD2931307C00ECB2AF /* NasiSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NasiSearchController.swift; sourceTree = "<group>"; };
 		5238D5CF293131AF00ECB2AF /* SearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCell.swift; sourceTree = "<group>"; };
+		52577763299FE024002C13D4 /* ShadchanVCViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadchanVCViewController.swift; sourceTree = "<group>"; };
 		528F5E222960780C00DE5223 /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
 		528F5E2429619AFC00DE5223 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		5290DBB7293E3FAE004F6A04 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -556,6 +558,7 @@
 				520578D4299BBA2500B732A0 /* MatchView.swift */,
 				520578CE299BB55700B732A0 /* SendMessageButton.swift */,
 				520578D0299BB56E00B732A0 /* KeepSwipingButton.swift */,
+				52577763299FE024002C13D4 /* ShadchanVCViewController.swift */,
 				529D1DFA286A78FF0030F193 /* custom.swift */,
 				520578D6299D62FF00B732A0 /* AppRowCell.swift */,
 				52DB325A2997BFE700AC5F87 /* GirlCell.swift */,
@@ -882,6 +885,7 @@
 				5238D5D0293131AF00ECB2AF /* SearchResultCell.swift in Sources */,
 				5228CB1827A5066300EDF103 /* ProgramPickerViewController.swift in Sources */,
 				52DB325D29988DA800AC5F87 /* UserInfo.swift in Sources */,
+				52577764299FE024002C13D4 /* ShadchanVCViewController.swift in Sources */,
 				3DC18497258AF5C200B529F0 /* GirlResearchCell.swift in Sources */,
 				CEF80D222460BBBC009FE684 /* FTCollegeTableViewCell.swift in Sources */,
 				CEF80D1E245F7014009FE684 /* HudView.swift in Sources */,
