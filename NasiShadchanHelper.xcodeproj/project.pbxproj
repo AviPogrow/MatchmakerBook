@@ -60,6 +60,7 @@
 		5238D5CE2931307C00ECB2AF /* NasiSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5238D5CD2931307C00ECB2AF /* NasiSearchController.swift */; };
 		5238D5D0293131AF00ECB2AF /* SearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5238D5CF293131AF00ECB2AF /* SearchResultCell.swift */; };
 		52577764299FE024002C13D4 /* ShadchanVCViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52577763299FE024002C13D4 /* ShadchanVCViewController.swift */; };
+		5257776629A12432002C13D4 /* AdminLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5257776529A12432002C13D4 /* AdminLoginController.swift */; };
 		528F5E232960780C00DE5223 /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 528F5E222960780C00DE5223 /* CategoryCell.swift */; };
 		528F5E2529619AFC00DE5223 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 528F5E2429619AFC00DE5223 /* CategoryViewController.swift */; };
 		5290DBB8293E3FAE004F6A04 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5290DBB7293E3FAE004F6A04 /* HomeViewController.swift */; };
@@ -172,6 +173,7 @@
 		5238D5CD2931307C00ECB2AF /* NasiSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NasiSearchController.swift; sourceTree = "<group>"; };
 		5238D5CF293131AF00ECB2AF /* SearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultCell.swift; sourceTree = "<group>"; };
 		52577763299FE024002C13D4 /* ShadchanVCViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadchanVCViewController.swift; sourceTree = "<group>"; };
+		5257776529A12432002C13D4 /* AdminLoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminLoginController.swift; sourceTree = "<group>"; };
 		528F5E222960780C00DE5223 /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
 		528F5E2429619AFC00DE5223 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		5290DBB7293E3FAE004F6A04 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -551,6 +553,7 @@
 		CE3AC07224536729006B9FEA /* NasiShadchanHelper */ = {
 			isa = PBXGroup;
 			children = (
+				5257776529A12432002C13D4 /* AdminLoginController.swift */,
 				3D9D5B8D2673D7F70063D252 /* NasiShadchanHelper.entitlements */,
 				CE3AC07324536729006B9FEA /* AppDelegate.swift */,
 				CE525A6F2461B55200CBEC41 /* UIImage+Resize.swift */,
@@ -848,6 +851,7 @@
 				5228CB10279C492A00EDF103 /* AllDatesViewController.swift in Sources */,
 				184F9859252C622B00187D72 /* AlignedPlaceholderTextField.swift in Sources */,
 				52DB326129997D0D00AC5F87 /* AddEditGirlViewController.swift in Sources */,
+				5257776629A12432002C13D4 /* AdminLoginController.swift in Sources */,
 				184F2F55252AE16200252C97 /* Categories.swift in Sources */,
 				52257DE92809FFA8007A5A49 /* UserProfileVC.swift in Sources */,
 				CEC468DE245B37950071EC85 /* FullTimeCollegeWorkingViewController.swift in Sources */,

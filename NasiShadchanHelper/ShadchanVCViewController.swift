@@ -7,60 +7,53 @@
 //
 
 import UIKit
+import Firebase
 
 class ShadchanVCViewController: UIViewController {
     
     
-    
+    var hasAccess = false
     @IBOutlet weak var myGirlsButton: UIButton!
     
     @IBOutlet weak var myMatches: UIButton!
     
-    let accessList = [String]()
+   
+  let masterUsersListRef = Database.database().reference().child("NasiShadchanUserList")
+   
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        checkForAccess()
-
-     
-   
+        hasAccess = fetchListAndCheck()
+    }
+    
+    // does current user have accesss?
+    // fetch current user and check access property
+    func fetchListAndCheck() -> Bool {
+        
+        
+    guard let myId = UserInfo.curentUser?.id else {
+        return false
+        
+    }
+        
+     masterUsersListRef.observe(.value, with: { snapshot in
             
-        
+            var usersWithAccessArray: [ShadchanUser] = []
+            
+            for child in snapshot.children {
+            let snapshot = child as? DataSnapshot
+            let shadchanUser = ShadchanUser(snapshot: snapshot!)
+             
+              // if we have the current user then
+              // find out permission yes/no
+              if shadchanUser.shadchanUserID == myId {
+                
+                //if shadchanUser.hasAccess == true {
+                // give them acceess
+               }
+            }
+     })
+        return hasAccess
     }
-    
-    func fetchAccessListArray() -> [String] {
-   
-     
-      let accessList = [String]()
-      return accessList
-    }
-    func checkForAccess() {
-       
-      
-        //get the list
-let accessUserArray =    ["VdpgEVKTc5eJHyKtA6jjzXIodwT2",
-    "FbM5JVwEsQhjALAhY8TKZZTW2lp2","sJNVs2tgVCav6pwz6FaKKSOhhZm2","IYY5JzXwHvOwd5vQd9Hg8txz4ml1","6N8PrDYD5bdbbLQSoWhPkROSwd62"]
-    
-        let currentUserID = (UserInfo.curentUser?.id)!
-        print("my id is \(currentUserID)")
-        
-        
-        
-        let hasAccess = accessUserArray.contains(currentUserID)
-        //myMatches.isEnabled = hasAccess
-        //myGirlsButton.isEnabled = hasAccess
-        // in array
-    }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

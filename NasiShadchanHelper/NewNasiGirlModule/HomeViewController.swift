@@ -157,7 +157,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource,UICollect
         self.searchBar.endEditing(true)
     }
     
-   
+ 
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         self.searchBar.resignFirstResponder()
     }
@@ -255,13 +255,14 @@ class HomeViewController: UIViewController, UICollectionViewDataSource,UICollect
         
         //let cell = UICollectionViewCell.self
        cell.girl = filteredNasiGirlsList[indexPath.item]
-        
-        
+      
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
         self.searchBar.resignFirstResponder()
+        
         let identifier = "ShadchanListDetailViewController"
         let girlDetailController = storyboard!.instantiateViewController(withIdentifier: identifier) as! ShadchanListDetailViewController
         
@@ -292,4 +293,5 @@ extension UIView {
         
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: format, options: NSLayoutConstraint.FormatOptions(), metrics: nil, views: viewsDictionary))
     }
+
 }

@@ -22,15 +22,18 @@ class AddEditBoyViewController: FormViewController {
     var notesImageView: UIImageView!
     var resumeImageView: UIImageView!
     var boysPhotoImageView: UIImageView!
+    var matchHimButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.title = "Profile Details"
+        //navigationItem.title = "Profile Details"
         
         if selectedNasiBoy != nil {
         let barButtonDelete = UIBarButtonItem(title: "Delete", style: .plain, target: self, action: #selector(handleDelete))
         barButtonDelete.tintColor = UIColor.red
+            
+            navigationItem.title = selectedNasiBoy.boyFirstName + " " + selectedNasiBoy.boyLastName
         
        let barButtonSave = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(saveBoyToFirebase))
         
@@ -73,32 +76,30 @@ class AddEditBoyViewController: FormViewController {
       }
         +++ Section("Match Him")
         <<< ViewRow<UIView>()
-        .cellSetup { (cell, row) in
-            //  Construct the view - in this instance the a rudimentry view created here
+            .cellSetup { [self] (cell, row) in
             cell.view = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 88))
-            //cell.view!.backgroundColor = UIColor.orange
-            
-            
+        
             let rect = CGRect(x: 0, y: 0, width: 0, height:0)
-            
-            let matchHimButton = UIButton(frame: rect)
-            
-            
+            matchHimButton = UIButton(frame: rect)
             matchHimButton.tag = 1001
             matchHimButton.setTitle(title: "Match Him!")
             matchHimButton.titleLabel?.font = .boldSystemFont(ofSize: 26)
-            //matchHimButton.backgroundColor = .systemGreen
-            matchHimButton.isEnabled = false
-            matchHimButton.backgroundColor = .lightGray
             cell.view!.addSubview(matchHimButton)
             matchHimButton.fillSuperview()
             matchHimButton.addTarget(self, action: #selector(self.handleMatch), for: .touchUpInside)
            
-    
+                if self.selectedNasiBoy.boyFirstName.isEmpty && selectedNasiBoy.boyLastName.isEmpty {
+                    matchHimButton.isEnabled = false
+                    matchHimButton.backgroundColor = .lightGray
+                } else  {
+                    matchHimButton.isEnabled = true
+                    matchHimButton.backgroundColor = .systemGreen
+                }
+            }
             
     
         
-    }
+    
         //section 1
     form  +++ Section()
 

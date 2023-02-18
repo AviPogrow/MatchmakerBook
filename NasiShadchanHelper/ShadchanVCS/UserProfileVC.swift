@@ -62,6 +62,8 @@ class UserProfileVC: UITableViewController {
         
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
+   //let uid  = "WRMbDH8uid4CMVIo63w0zN4hhZw8ox2"
+        
         Database.database().reference().child("NasiShadchanUserList").child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
            
             print(snapshot.value ?? "")
@@ -77,7 +79,7 @@ class UserProfileVC: UITableViewController {
             
             
             
-                
+            
             //self.user = User(dictionary: dictionary)
             //self.navigationItem.title = self.user?.username
             
