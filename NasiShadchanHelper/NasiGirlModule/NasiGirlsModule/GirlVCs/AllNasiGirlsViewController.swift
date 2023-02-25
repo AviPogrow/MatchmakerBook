@@ -14,12 +14,17 @@ class AllNasiGirlsViewController: UIViewController, UITableViewDataSource, UITab
      @IBOutlet weak var tableView: UITableView!
     
     var inMatchMode = true
+    var selectedNasiBoy: NasiBoy!
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
         
-
+        
+        
+        if selectedNasiBoy != nil {
+            navigationItem.title = selectedNasiBoy.boyFirstName + " " + selectedNasiBoy.boyLastName
+        }
         fetchAndCreateNasiGirlsArray()
     //allNasiGirlsList = self.allNasiGirlsList.sorted(by: { ($0.lastNameOfGirl ) < ($1.lastNameOfGirl ) })
     //self.allNasiGirlsList = self.allNasiGirlsList.filter { (singleGirl) -> Bool in
@@ -106,6 +111,7 @@ class AllNasiGirlsViewController: UIViewController, UITableViewDataSource, UITab
                    let currentGirl = allNasiGirlsList[indexPath.row]
                    controller.inMatchMode = inMatchMode
                    controller.selectedNasiGirl = currentGirl
+                   controller.selectedNasiBoy = selectedNasiBoy
             }
         }
     }

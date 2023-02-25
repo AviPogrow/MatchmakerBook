@@ -86,7 +86,7 @@ class AddEditBoyViewController: FormViewController {
             matchHimButton.titleLabel?.font = .boldSystemFont(ofSize: 26)
             cell.view!.addSubview(matchHimButton)
             matchHimButton.fillSuperview()
-            matchHimButton.addTarget(self, action: #selector(self.handleMatch), for: .touchUpInside)
+            matchHimButton.addTarget(self, action: #selector(self.handleMatchEm), for: .touchUpInside)
            
                 if self.selectedNasiBoy.boyFirstName.isEmpty && selectedNasiBoy.boyLastName.isEmpty {
                     matchHimButton.isEnabled = false
@@ -440,17 +440,16 @@ form
     }
     
     @objc func handleMatchEm() {
-        let categoriesController = storyboard?.instantiateViewController(withIdentifier: "categoriesVC")
+        let categoriesController = storyboard?.instantiateViewController(withIdentifier: "CategoriesViewController") as! CategoriesViewController
         
-        //if selectedNasiBoy != nil {
-        //let barButtonDelete = UIBarButtonItem(title: "Delete", style: .plain, target: self, action: #selector(handleDelete))
-       // barButtonDelete.tintColor = UIColor.red
-        
-       self.navigationController?.pushViewController(categoriesController!, animated: true)
+        if selectedNasiBoy != nil {
+       
+        categoriesController.selectedNasiBoy = selectedNasiBoy
+       self.navigationController?.pushViewController(categoriesController, animated: true)
+        }
     }
     
-    @objc func match(){
-    }
+    
     
     
     @objc func handleDelete() {
@@ -463,11 +462,7 @@ form
         
     }
     
-    @objc func handleMatch() {
-        let controller = storyboard!.instantiateViewController(withIdentifier: "CategoriesViewController")
-        navigationController?.pushViewController(controller, animated: true)
-        
-    }
+   
     
     @objc func pincheGestureHandler(recognizer:UIPinchGestureRecognizer){
         //self.view.bringSubview(toFront: imageView)

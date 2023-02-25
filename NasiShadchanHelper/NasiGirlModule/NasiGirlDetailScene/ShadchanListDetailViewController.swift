@@ -28,18 +28,37 @@ class ShadchanListDetailViewController: UITableViewController, UICollectionViewD
     
     @IBOutlet weak var collectionView: UICollectionView!
     
-    var inMatchMode: Bool = false 
+    var inMatchMode: Bool = false
+    var selectedNasiBoy: NasiBoy!
     
     override func viewDidLoad() {
          super.viewDidLoad()
+        
+    saveProfileViewToFB()
+        
+        
+        
 let matchButton = UIBarButtonItem(title: "Match Them!",style: .plain, target: self, action: #selector(match))
         
-        if inMatchMode == true {
+        
+        //let sendButton = UIBarButtonItem(title: "Send", style: .bordered, target: self, action: #selector(presentSendController))
+        //print("nasiboy is \(selectedNasiBoy.debugDescription)")
+        
+        if selectedNasiBoy == nil {
+        //    navigationItem.rightBarButtonItem = sendButton
+        }
+        if selectedNasiBoy != nil {
             navigationItem.rightBarButtonItem = matchButton
+
+            navigationItem.title = selectedNasiBoy.boyFirstName + " " + selectedNasiBoy.boyLastName
+            navigationItem.largeTitleDisplayMode = .always
         }
         
-        self.navigationItem.title = 
-         selectedNasiGirl.nameSheIsCalledOrKnownBy + " " + selectedNasiGirl.lastNameOfGirl
+        
+    
+        
+        //self.navigationItem.title =
+         //selectedNasiGirl.nameSheIsCalledOrKnownBy + " " + selectedNasiGirl.lastNameOfGirl
         
         populateBioTextField()
   
@@ -65,15 +84,39 @@ let matchButton = UIBarButtonItem(title: "Match Them!",style: .plain, target: se
         
         }
     
-
+    func saveProfileViewToFB() {
+        let now = "\(Date())"
+        let girlID = selectedNasiGirl.key
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let profileView = ProfileView(timesStamp: now, girlID: girlID, shadchanID: uid)
+        
+        let profileViewDict = profileView.toAnyObject()
+        
+        let profileViewFBNode = Database.database().reference().child("GirlProfileViews").child(uid)
+        let currentProfileViewRef = profileViewFBNode.childByAutoId()
+        currentProfileViewRef.setValue(profileViewDict)
+        
+    }
+    
+    @objc func addToFavorites() {
+        
+    }
     @objc func match() {
         
+        
         let matchView = MatchView(frame: self.view.bounds)
+        matchView.selectedNasiGirl = selectedNasiGirl
+        matchView.descriptionText = selectedNasiGirl.firstNameOfGirl  + " " +
+        selectedNasiGirl.lastNameOfGirl + " & " +
+        selectedNasiBoy.boyFirstName + " " + selectedNasiBoy.boyLastName
+        //matchView.selectedNasiBoy = selectedNasiBoy
         view.addSubview(matchView)
         
     }
     var visualEffectView: UIVisualEffectView!
-    fileprivate func presentMatchView() {
+    
+    @objc func presentMatchView() {
         visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
         visualEffectView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapDismiss)))
         visualEffectView.frame = self.view.bounds
@@ -100,6 +143,45 @@ let matchButton = UIBarButtonItem(title: "Match Them!",style: .plain, target: se
         }
     }
     
+  @objc  func saveMatchIdeaToFirebase() {
+        print("state of nasiBoy is \(selectedNasiBoy) and girl is \(selectedNasiGirl)")
+      
+      
+         
+        // get uid for current user
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let shadchanNasiMatchIdeaRef = Database.database().reference().child("shadchanNasiMatchIdea").child(uid)
+                
+      let boysName = selectedNasiBoy.boyFirstName + " " + selectedNasiBoy.boyLastName
+      let girlsName = selectedNasiGirl.firstNameOfGirl + " " + selectedNasiGirl.lastNameOfGirl
+      
+      
+      let boyFirstName = selectedNasiBoy.boyFirstName
+      let boyLastName = selectedNasiBoy.boyLastName
+      let girlFirstName = selectedNasiGirl.firstNameOfGirl
+      let girlLastName = selectedNasiGirl.lastNameOfGirl
+      
+      let girlImageDownloadString = selectedNasiGirl.imageDownloadURLString
+      let girlResumeDownloadString = selectedNasiGirl.documentDownloadURLString
+      
+      let boySendResumeEmail = selectedNasiBoy.sendResumeEmail ?? "N/A"
+      let boySendResumeText = selectedNasiBoy.sendResumeText ?? "N/A"
+      let boyPersonToRedd = selectedNasiBoy.boyCell ?? "N/A"
+      let boyPhotoImageURL =  selectedNasiBoy.photoImageURL
+      
+      
+      let newMatch = MatchIdea(boyID: selectedNasiBoy.key, girlID: selectedNasiGirl.key, dateCreated: "\(Date())", boyFirstName: selectedNasiBoy.boyFirstName, boyLastName: selectedNasiBoy.boyLastName, girlFirstName: selectedNasiGirl.firstNameOfGirl, girlLastName: selectedNasiGirl.lastNameOfGirl, girlImageDownloadString: selectedNasiGirl.imageDownloadURLString, girlResumeDownlaodString: selectedNasiGirl.documentDownloadURLString, boySendResumeEmail: selectedNasiBoy.sendResumeEmail, boySendResumeText: selectedNasiBoy.sendResumeText, boyCell: selectedNasiBoy.boyCell, boyPhotoImageURL: selectedNasiBoy.photoImageURL)
+      
+      
+      print(newMatch.description)
+      
+        let dict = newMatch.toAnyObject()
+        let newshadchanNasiMatchIdeaRef = shadchanNasiMatchIdeaRef.childByAutoId()
+        newshadchanNasiMatchIdeaRef.setValue(dict)
+        
+        self.navigationController?.popToRootViewController(animated: true)
+    }
+            
     
     func populateBioTextField() {
     
@@ -170,16 +252,20 @@ let matchButton = UIBarButtonItem(title: "Match Them!",style: .plain, target: se
         lookingForTextView.attributedText = attributedText
     }
    
+   @objc func presentSendController(){
+        let sendController = storyboard!.instantiateViewController(withIdentifier: "ResumeViewController") as! ResumeViewController
+        
+        
+        sendController.selectedNasiGirl  = self.selectedNasiGirl
+        navigationController?.pushViewController(sendController, animated: true)
+        
+    }
+        
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     
         
-        if segue.identifier == "ShowResumeVC" {
-            let controller = segue.destination as! ResumeViewController
-            controller.selectedNasiGirl  = self.selectedNasiGirl
-            
-        }
-        
-        else if segue.identifier == "ShowViewResumeVC" {
+         if segue.identifier == "ShowViewResumeVC" {
         let controller = segue.destination as! ViewResumeVCViewController
            
             controller.selectedNasiGirl  = self.selectedNasiGirl

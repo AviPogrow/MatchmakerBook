@@ -14,9 +14,13 @@ class CategoriesViewController: UIViewController {
     
     var ref: DatabaseReference!
     var arrayOfNasiGirls = [NasiGirl]()
+    var selectedNasiBoy: NasiBoy!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if selectedNasiBoy != nil {
+            navigationItem.title = selectedNasiBoy.boyFirstName + " " + selectedNasiBoy.boyLastName
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -70,6 +74,7 @@ class CategoriesViewController: UIViewController {
         if segue.identifier == "AllNasiGirls" {
             let controller = segue.destination as! AllNasiGirlsViewController
             controller.allNasiGirlsList  = arrayOfNasiGirls
+            controller.selectedNasiBoy = selectedNasiBoy
             
         }
         
@@ -83,6 +88,7 @@ class CategoriesViewController: UIViewController {
             
             let controller = segue.destination as! FullTimeYeshivaViewController
             controller.arrGirlsList = arrayOfNasiGirls
+            controller.selectedNasiBoy = selectedNasiBoy
             
         } else if segue.identifier == "ShowFullTimeCollege/Working" {
             
@@ -94,6 +100,7 @@ class CategoriesViewController: UIViewController {
             
             let controller = segue.destination as! FullTimeCollegeWorkingViewController
                 controller.arrGirlsList = arrayOfNasiGirls
+            controller.selectedNasiBoy = selectedNasiBoy
             
             } else if segue.identifier  == "ShowYeshivaAndCollege/Working" {
             
@@ -105,6 +112,7 @@ class CategoriesViewController: UIViewController {
             
             let controller = segue.destination as! YeshivaAndCollegeWorkingViewController
             controller.arrGirlsList = arrayOfNasiGirls
+                controller.selectedNasiBoy = selectedNasiBoy
         }
     }
 }

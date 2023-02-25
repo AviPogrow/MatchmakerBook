@@ -7,8 +7,35 @@
 //
 
 import UIKit
+import Firebase
 
 class MatchView: UIView {
+    
+    
+    
+    var descriptionText: String! {
+        didSet {
+            descriptionLabel.text = descriptionText
+            
+        }
+    }
+    
+    var selectedNasiGirl: NasiGirl! {
+        didSet {
+            let girlImageURLString = selectedNasiGirl.imageDownloadURLString
+            cardUserImageView.loadImageFromUrl(strUrl: girlImageURLString, imgPlaceHolder: "")
+          
+        }
+    }
+    var selectedNasiBoy: NasiBoy!
+    //didSet {
+      //  let boyImageURLString = selectedNasiBoy.photoImageURL
+       // currentUserImageView.loadImageFromUrl(strUrl: boyImageURLString, imgPlaceHolder: "")
+      
+   // }
+//}
+
+    
     
     fileprivate let itsAMatchImageView: UIImageView = {
         let iv = UIImageView(image: #imageLiteral(resourceName: "itsamatch"))
@@ -19,10 +46,10 @@ class MatchView: UIView {
     
     fileprivate let descriptionLabel: UILabel = {
         let label = UILabel()
-        label.text = "Excellent Idea!"
+        label.text = "Cancel"
         label.textAlignment = .center
         label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 20)
+        label.font = UIFont.systemFont(ofSize: 22)
         label.numberOfLines = 0
         return label
     }()
@@ -37,7 +64,7 @@ class MatchView: UIView {
     }()
     
     fileprivate let cardUserImageView: UIImageView = {
-        let imageView = UIImageView(image: #imageLiteral(resourceName: "weiss"))
+        let imageView = UIImageView(image: #imageLiteral(resourceName: "AviYoung"))
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.borderWidth = 2
@@ -49,6 +76,8 @@ class MatchView: UIView {
         let button = SendMessageButton(type: .system)
         button.setTitle("Save Match Idea", for: .normal)
         button.setTitleColor(.white, for: .normal)
+    
+        button.addTarget(self, action: #selector(handleSaveMatch), for: .touchUpInside)
         return button
     }()
     
@@ -66,6 +95,17 @@ class MatchView: UIView {
         
         setupLayout()
         setupAnimations()
+    }
+    
+    @objc func  handleSaveMatch() {
+        let parentViewController = parentContainerViewController() as! ShadchanListDetailViewController
+        
+        //call method on i
+        parentViewController.saveMatchIdeaToFirebase()
+        //let navController = parentViewController.navigationController
+        //if navController != nil {
+         //   navController?.popToRootViewController(animated: true)
+        //}
     }
     
     fileprivate func setupAnimations() {
@@ -112,7 +152,7 @@ class MatchView: UIView {
         addSubview(currentUserImageView)
         addSubview(cardUserImageView)
         addSubview(sendMessageButton)
-        addSubview(keepSwipingButton)
+        //addSubview(keepSwipingButton)
         
         let imageWidth: CGFloat = 140
         
@@ -139,7 +179,7 @@ class MatchView: UIView {
         sendMessageButton.anchored(top: currentUserImageView.bottomAnchor, leading: leadingAnchor, bottom: nil, trailing: trailingAnchor, padding: .init(top: 32, left: 48, bottom: 0, right: 48), size: .init(width: 0, height: 60))
       
         
-        keepSwipingButton.anchored(top: sendMessageButton.bottomAnchor, leading: sendMessageButton.leadingAnchor, bottom: nil, trailing: sendMessageButton.trailingAnchor, padding: .init(top: 16, left: 0, bottom: 0, right: 0), size: .init(width: 0, height: 60))
+      //  keepSwipingButton.anchored(top: sendMessageButton.bottomAnchor, leading: sendMessageButton.leadingAnchor, bottom: nil, trailing: sendMessageButton.trailingAnchor, padding: .init(top: 16, left: 0, bottom: 0, right: 0), size: .init(width: 0, height: 60))
     }
     
     let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))

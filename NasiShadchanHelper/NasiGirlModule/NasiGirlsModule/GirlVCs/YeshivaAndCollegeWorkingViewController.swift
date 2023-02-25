@@ -31,11 +31,13 @@ class YeshivaAndCollegeWorkingViewController: UIViewController, UITableViewDeleg
     let str3 = "Needsprofessionaltrack"
     var searchActive:Bool = false
     var inMatchMode = true
-    
+    var selectedNasiBoy:NasiBoy!
     override func viewDidLoad() {
         super.viewDidLoad()
     
-      
+        if selectedNasiBoy != nil {
+            navigationItem.title = selectedNasiBoy.boyFirstName + " " + selectedNasiBoy.boyLastName
+        }
         
         //let point = CGPoint(x: 0, y:(self.navigationController?.navigationBar.frame.size.height)!)
         //self.tableView.setContentOffset(point, animated: true)
@@ -169,6 +171,7 @@ class YeshivaAndCollegeWorkingViewController: UIViewController, UITableViewDeleg
                 let currentSingle = arrFilterList[indexPath.row]
               
                 controller.selectedNasiGirl = currentSingle
+                controller.selectedNasiBoy = selectedNasiBoy
                 controller.inMatchMode = inMatchMode
             
                 

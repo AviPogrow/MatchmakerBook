@@ -21,9 +21,9 @@ class ContactsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        populateToDiscussTextField()
-        populateToReddTextField()
-        populateGirlTextField()
+        //populateToDiscussTextField()
+        //populateToReddTextField()
+        //populateGirlTextField()
     }
     
     func addDashesToCellString(originalString: String) -> String{

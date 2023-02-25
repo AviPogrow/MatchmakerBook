@@ -31,13 +31,10 @@ class HomeViewController: UIViewController, UICollectionViewDataSource,UICollect
     var logOutImageView: UIImageView!
     let cellId = "cellId"
     var  label: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-      
-       
         navigationItem.title = "All Nasi Girls"
-
         
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -47,8 +44,6 @@ class HomeViewController: UIViewController, UICollectionViewDataSource,UICollect
         collectionView.register(SearchResultCell.self, forCellWithReuseIdentifier: cellId)
         collectionView.backgroundColor = .systemBackground
         navigationController?.navigationBar.addSubview(searchBar)
-        
-       
         
         let navBar = navigationController?.navigationBar
         searchBar.isHidden = false
@@ -87,10 +82,32 @@ class HomeViewController: UIViewController, UICollectionViewDataSource,UICollect
         logOutImageView.anchor(top: navBar?.topAnchor, left: searchBar.rightAnchor, bottom: navBar?.bottomAnchor, right: navBar?.rightAnchor, paddingTop: 8, paddingLeft: 8, paddingBottom: 8, paddingRight: 8, width: 0, height: 44)
         
         fetchAndCreateNasiGirlsArray()
+        homeScreenLaunchToFB()
         
 
         
     }
+    
+    
+    func homeScreenLaunchToFB() {
+        let now = "\(Date())"
+        
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let homeScreenLaunch = UserLaunch(timesStamp: now, shadchanID: uid)
+        
+        let dict = homeScreenLaunch.toAnyObject()
+        
+        let homeScreenLaunchFBNode = Database.database().reference().child("HomeScreenLaunch").child(uid)
+        
+        let currentHomeScreenLaunchFBNode = homeScreenLaunchFBNode.childByAutoId()
+        currentHomeScreenLaunchFBNode.setValue(dict)
+        
+    }
+    
+    
+    
+    
     
     @objc func handleLogOut() {
         

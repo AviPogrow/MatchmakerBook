@@ -70,9 +70,9 @@ class NasiBoy: NSObject {
         let photoImageURL = value["photoImageURL"] as? String
        
         
-        self.boyFirstName = boyFirstName ?? ""
+        self.boyFirstName = boyFirstName ?? "N/A"
         self.boyLastName = boyLastName ?? ""
-        self.boyCell = boyCell ?? ""
+        self.boyCell = boyCell ?? "N/A"
          
         self.dateCreated = dateCreated ?? ""
         self.dobIntervalString = dobIntervalString ?? ""
@@ -82,8 +82,8 @@ class NasiBoy: NSObject {
        // self.dob = dob
         self.calculatedAge = calculatedAge ?? ""
         self.boyHeight = boyHeight ?? ""
-        self.sendResumeEmail = sendResumeEmail ?? ""
-        self.sendResumeText = sendResumeText ?? ""
+        self.sendResumeEmail = sendResumeEmail ?? "N/A"
+        self.sendResumeText = sendResumeText ?? "N/A"
         self.categories = categories ?? [String]()
         self.status = status ?? "available"
         self.shadchanNotes = shadchanNotes ?? ""

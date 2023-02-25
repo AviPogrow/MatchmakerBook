@@ -37,8 +37,12 @@ class FullTimeCollegeWorkingViewController: UIViewController, UITableViewDataSou
     
     
     var inMatchMode = true
+    var selectedNasiBoy:NasiBoy!
     override func viewDidLoad() {
         super.viewDidLoad()
+        if selectedNasiBoy != nil {
+            navigationItem.title = selectedNasiBoy.boyFirstName + "  " + selectedNasiBoy.boyLastName
+        }
    
        
         
@@ -222,6 +226,7 @@ class FullTimeCollegeWorkingViewController: UIViewController, UITableViewDataSou
                 let currentGirl = arrFilterList[indexPath.row]
                 
                 controller.selectedNasiGirl = currentGirl
+                controller.selectedNasiBoy = selectedNasiBoy
                 controller.inMatchMode = true 
 
                 

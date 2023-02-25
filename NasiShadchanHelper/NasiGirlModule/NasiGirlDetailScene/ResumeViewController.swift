@@ -18,7 +18,7 @@ class ResumeViewController: UITableViewController {
     
     @IBOutlet weak var pdfView: PDFView!
     var selectedNasiGirl: NasiGirl!
-    
+    var selectedMatchIdea: MatchIdea!
     var documentController : UIDocumentInteractionController!
     
 
@@ -37,7 +37,8 @@ class ResumeViewController: UITableViewController {
 
     var ref: DatabaseReference!
     var sentSegmentChildArr = [[String : String]]()
-    lazy var  subject = selectedNasiGirl.firstNameOfGirl + " " + selectedNasiGirl.lastNameOfGirl + " - Shidduch Information" +
+    
+    lazy var  subject = selectedMatchIdea.girlFirstName + " " + selectedMatchIdea.girlLastName + " - Shidduch Information" +
     " - Please confirm receipt"
     
     override func viewDidLoad() {
@@ -45,16 +46,18 @@ class ResumeViewController: UITableViewController {
         
         view.isUserInteractionEnabled = false
         view.showLoadingIndicator()
-        
+        if selectedMatchIdea != nil {
         self.navigationItem.title =
-         selectedNasiGirl.nameSheIsCalledOrKnownBy + " " + selectedNasiGirl.lastNameOfGirl
+            selectedMatchIdea.boyFirstName + " " + selectedMatchIdea.boyLastName + " " + selectedMatchIdea.girlFirstName + " " + selectedMatchIdea.girlLastName
         downloadDocument()
         downloadProfileImage()
+        }
     }
     
     
     @IBAction func sendPhotoWhatsAppTapped(sender: UIButton) {
-        
+        addToWhatsAppSends()
+        addToJustPhotoSendsTapped()
         print("the state of localImageURL is \(self.localImageURL)")
         
         documentController = UIDocumentInteractionController(url:self.localImageURL)
@@ -65,7 +68,7 @@ class ResumeViewController: UITableViewController {
     
     @IBAction func sendResumeWhatsAppTapped (sender: UIButton)  {
        
-        
+        addToWhatsAppSends()
         documentController = UIDocumentInteractionController(url:self.localURL)
         documentController.presentOptionsMenu(from: sender.frame, in: self.view, animated: true)
         
@@ -79,7 +82,7 @@ class ResumeViewController: UITableViewController {
         let composeVC = MFMailComposeViewController()
         
         composeVC.mailComposeDelegate = self
-         
+        //selectedMatchIdea.boySendResumeEmail
         // Configure the fields of the interface.
         //composeVC.setToRecipients(["address@example.com"])
         composeVC.setSubject(subject)
@@ -90,7 +93,7 @@ class ResumeViewController: UITableViewController {
     }
     
     @IBAction func emailJustPhotoTapped(_ sender: Any) {
-        
+        addToJustPhotoSendsTapped()
         let selectedGirlProfileImage =  girlProfileImageView.image
          let imageData = selectedGirlProfileImage?.jpegData(compressionQuality: 0.10)
         
@@ -161,7 +164,7 @@ class ResumeViewController: UITableViewController {
     }
     
     @IBAction func textJustPhotoTapped(_ sender: Any) {
-        
+        addToJustPhotoSendsTapped()
         let selectedGirlProfileImage =  girlProfileImageView.image
          let imageData = selectedGirlProfileImage?.jpegData(compressionQuality: 0.10)
         
@@ -210,7 +213,7 @@ class ResumeViewController: UITableViewController {
       
         //let ShadchanUserUID = ""
         //"R6w4ccaV1mdnGQV6zndtltfDgWS2"
-        let girlsUID = selectedNasiGirl.key
+        let girlsUID = selectedMatchIdea.girlID
         //"9DD1AFD6-4810-4D73-9(AB5-7FFAADA2DBF9"
         let sendTimeStamp = "\(Date())"
         //sentsSegemntWithTimeStamp
@@ -228,6 +231,41 @@ class ResumeViewController: UITableViewController {
         let ref = sentResumeNodeRef.childByAutoId()
         ref.setValue(newSendDict)
         }
+
+    func addToJustPhotoSendsTapped(){
+        let girlsUID = selectedMatchIdea.girlID
+        let sendTimeStamp = "\(Date())"
+        guard let ShadchanUserUID = Auth.auth().currentUser?.uid else { return }
+        
+        let sendJustPhotoNodeRef = Database.database().reference().child("sendJustPhotoTaps").child(ShadchanUserUID)
+        
+        
+        let justPhotoDict = ["timeStamp": sendTimeStamp,
+                           "ShadchanUserUID": ShadchanUserUID,
+                            "girlsUID": girlsUID]
+        
+        let ref = sendJustPhotoNodeRef.childByAutoId()
+        ref.setValue(justPhotoDict)
+        
+    }
+    
+    func addToWhatsAppSends() {
+        
+        let girlsUID = selectedMatchIdea.girlID
+    
+        let sendTimeStamp = "\(Date())"
+        guard let ShadchanUserUID = Auth.auth().currentUser?.uid else { return }
+        
+       
+       let sentWhatsAppResumeNodeRef = Database.database().reference().child("sentWhatsAppSegemntWithTimeStamp").child(ShadchanUserUID)
+        
+        let newSendDict = ["timeStamp": sendTimeStamp,
+                           "ShadchanUserUID": ShadchanUserUID,
+                            "girlsUID": girlsUID]
+        
+        let ref = sentWhatsAppResumeNodeRef.childByAutoId()
+        ref.setValue(newSendDict)
+    }
     
     func drawPDFfromURL(url: URL) -> UIImage? {
            guard let document = CGPDFDocument(url as CFURL) else { return nil }
@@ -257,7 +295,7 @@ extension ResumeViewController: URLSessionDownloadDelegate {
     func downloadDocument() {
         self.pdfView.showLoadingIndicator()
      
-        let documentURL = URL(string: selectedNasiGirl.documentDownloadURLString )
+        let documentURL = URL(string: selectedMatchIdea.girlResumeDownloadString )
         
       let downloadTask = downloadsSession.downloadTask(with: documentURL!)
         
@@ -267,7 +305,7 @@ extension ResumeViewController: URLSessionDownloadDelegate {
     
     func downloadProfileImage() {
 
-        let profileImageURL = URL(string: selectedNasiGirl.imageDownloadURLString )
+        let profileImageURL = URL(string: selectedMatchIdea.girlImageDownloadString )
         let downloadTask = downloadsSession.downloadTask(with: profileImageURL!)
      
       downloadTask.resume()

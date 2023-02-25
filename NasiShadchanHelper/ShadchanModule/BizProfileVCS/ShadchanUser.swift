@@ -27,6 +27,8 @@ class ShadchanUser: NSObject {
     var familyTypes: [String] = []
     var singlesPlan: [String] = []
     var singlesTypes: [String] = []
+    var privateGirlsListAccess = ""
+    
     
     var welcomePaidBrainstormingSessions: String = ""
     var needToMeetSingle: String = ""
@@ -73,7 +75,10 @@ class ShadchanUser: NSObject {
         var methodOfCommunicationPrimary = value["methodOfCommunicationPrimary"] as? String
         var methodOfCommunicationSecondary = value["methodOfCommunicationSecondary"] as? String
         
+        var privateGirlsListAccess = ["privateGirlsListAccess"] as? String
         
+        
+       self.privateGirlsListAccess = privateGirlsListAccess ?? "bugs"
         self.shadchanEmail = shadchanEmail ?? ""
         self.shadchanFirstName = shadchanFirstName ?? ""
         self.shadchanLastName = shadchanLastName ?? ""

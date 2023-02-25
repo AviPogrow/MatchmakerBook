@@ -47,6 +47,7 @@ import IQKeyboardManagerSwift
           self.makingRootFlow(Constant.AppRootFlow.kAuthVc)
         } else {
             self.makingRootFlow(Constant.AppRootFlow.kEnterApp)
+            
           }
           
       }

@@ -15,7 +15,7 @@ class SingleTableViewCell: UITableViewCell {
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var SeminaryLabel: UILabel!
-    @IBOutlet weak var parnassahPlanLabel: UILabel!
+    
     @IBOutlet weak var profileImageView: UIImageView!
     
     override func awakeFromNib() {
@@ -34,7 +34,7 @@ class SingleTableViewCell: UITableViewCell {
          cityLabel.text = nil
          categoryLabel.text = nil
          SeminaryLabel.text = nil
-         parnassahPlanLabel.text = nil
+        // parnassahPlanLabel.text = nil
          profileImageView.image = nil
      }
 }

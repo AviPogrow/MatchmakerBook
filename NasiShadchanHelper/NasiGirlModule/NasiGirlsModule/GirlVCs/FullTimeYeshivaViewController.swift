@@ -44,6 +44,7 @@ class FullTimeYeshivaViewController: UIViewController, UITableViewDataSource,UIT
     
    var arrayForSection = [NasiGirl]()
     var inMatchMode: Bool = true
+    var selectedNasiBoy: NasiBoy!
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -263,21 +264,13 @@ class FullTimeYeshivaViewController: UIViewController, UITableViewDataSource,UIT
         cell.categoryLabel.textColor = .lightGray
         cell.categoryLabel.text = "\(currentGirl.category ) - " + (currentGirl.yearsOfLearning ) // 4th Label - Categories
         cell.SeminaryLabel.text = currentGirl.seminaryName  //5th Label - Seminary
-        cell.parnassahPlanLabel.text = "\(currentGirl.plan )"  // 6th Label - Plan
-        
-        //print("the value of last name is \(currentGirl.lastNameOfGirl)")
-        
-        
-        
-        print("the value of image download string is \(currentGirl.imageDownloadURLString)")
-        
-        
-        
-        
+        //cell.parnassahPlanLabel.text = "\(currentGirl.plan )"  // 6th Label - Plan
         
         if currentGirl.imageDownloadURLString == "N/A"  {
             
         } else {
+            cell.profileImageView.contentMode = .scaleAspectFit
+           // cell.profileImageView.image = UIImage(named: "imgCamera")
         cell.profileImageView.loadImageFromUrl(strUrl: currentGirl.imageDownloadURLString, imgPlaceHolder:"imgCamera")
         }
            
@@ -312,7 +305,7 @@ class FullTimeYeshivaViewController: UIViewController, UITableViewDataSource,UIT
            currentNasiGirl = arrFilterList[indexPath.row]
           controller.selectedNasiGirl = currentNasiGirl
         controller.inMatchMode = inMatchMode
-           
+        controller.selectedNasiBoy = selectedNasiBoy
            navigationController?.pushViewController(controller, animated: true)
 
        }
