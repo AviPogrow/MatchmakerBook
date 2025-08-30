@@ -45,7 +45,7 @@ class ReddsDetailVC: UITableViewController {
             boySendResumeEmail: selectedRedd.boySendResumeEmail,
             boySendResumeText: selectedRedd.boySendResumeText,
             boyCell: selectedRedd.boyCell,
-            boyPhotoImageURL: selectedRedd.boyPhotoImageURL)
+            boyPhotoImageURL: selectedRedd.boyPhotoImageURL, status: selectedRedd.stage)
         
         let dict = newFirstDate.toAnyObject()
         let newFirstDateRef = myFirstDateListRef.childByAutoId()
@@ -54,6 +54,7 @@ class ReddsDetailVC: UITableViewController {
         self.navigationController?.popToRootViewController(animated: true)
     
     }
+    
     
     /*
     func saveReddToFirstDates() {
