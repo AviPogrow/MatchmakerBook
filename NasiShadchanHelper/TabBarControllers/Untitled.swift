@@ -9,8 +9,7 @@
 // a model to describe one dating relationship
 // between one boy and one girl
 struct DatingRelationship {
-    //github auth token
-    //***REMOVED***
+    
     var boyId: String
     var boyName: String
     var boyCellNumber:String
