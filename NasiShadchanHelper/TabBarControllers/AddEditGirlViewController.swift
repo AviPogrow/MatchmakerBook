@@ -20,8 +20,7 @@ class AddEditGirlViewController: FormViewController,CNContactPickerDelegate, Sca
         
     func didScanAndParseResume(dict: [String: String]) {
         
-    
-        
+
         let firstName = dict["firstName"]
         let lastName = dict["lastName"]
         let phoneNumber = dict["telephone"]
@@ -852,27 +851,30 @@ func importContact(_ contact: CNContact){
      }
     
     func saveSelectedShadchanGirlToFB() {
+        
         // get uid for current user
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-    
-        
-        
         if selectedShadchanGirl.ref != nil {
+        let shadchanGirlRef = selectedShadchanGirl.ref!
         
-        let nasiBoyNodeRef = Database.database().reference().child("PrivateGirlsList").child(uid)
+        // since we have the full referece we can reset the value
+        // at that location and it will update
+        shadchanGirlRef.setValue(selectedShadchanGirl.toAnyObject())
            
-        let selectedNasiBoyRef = selectedShadchanGirl.ref
-        selectedNasiBoyRef!.setValue(selectedShadchanGirl.toAnyObject())
-           
-        } else {
+        } else { // if no referece exists then we are creating a new object
             
-            // get uid for current user
-            guard let uid = Auth.auth().currentUser?.uid else { return }
-            let nasiBoyNodeRef = Database.database().reference().child("PrivateGirlsList").child(uid)
+        // get uid for current user
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        // go to the private girls list and find the current user's list
+        // which will be under their uid
+        let shadchanGirlNodeRef = Database.database().reference().child("PrivateGirlsList").child(uid)
             
-            let newNasiBoyRef = nasiBoyNodeRef.childByAutoId()
-            newNasiBoyRef.setValue(selectedShadchanGirl.toAnyObject())
+            // add a child node with a UID to put the new girl under
+            let newNasiGirlRef = shadchanGirlNodeRef.childByAutoId()
+            // convert the girl object to dictionary and add it
+            newNasiGirlRef.setValue(selectedShadchanGirl.toAnyObject())
             }
         }
     

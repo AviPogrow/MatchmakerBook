@@ -16,7 +16,7 @@ import IQKeyboardManagerSwift
     
    // var window: UIWindow?
    var handle: AuthStateDidChangeListenerHandle?
-   // 7187627699
+   
     // solve dark mode by keeping it in light mode always
     var window: UIWindow? {
       didSet {

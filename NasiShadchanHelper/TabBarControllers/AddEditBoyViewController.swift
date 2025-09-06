@@ -793,10 +793,7 @@ form
         // get uid for current user
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
-        
-        
-        
-       if selectedNasiBoy.ref != nil {
+    if selectedNasiBoy.ref != nil {
         
         let nasiBoyNodeRef = Database.database().reference().child("NasiBoysList").child(uid)
          
@@ -804,6 +801,7 @@ form
         selectedNasiBoyRef!.setValue(selectedNasiBoy.toAnyObject())
         
        } else {
+        
             
             // get uid for current user
             guard let uid = Auth.auth().currentUser?.uid else { return }
