@@ -200,7 +200,8 @@ class ScannerViewController: UITableViewController, VNDocumentCameraViewControll
             self.dob = self.extractDateOfBirth(from: rawRecognizedText) ?? ""
             self.city  = self.extractCity(from: rawRecognizedText) ?? ""
             self.telephone = self.extractNormalizedPhoneNumber(from: rawRecognizedText) ?? ""
-            self.height = self.extractHeight(from: rawRecognizedText) ?? ""
+            //self.height = self.extractHeight(from: rawRecognizedText) ?? ""
+            self.height = self.extractFeetInches(from: rawRecognizedText) ?? ""
         
           }
         
@@ -470,6 +471,33 @@ class ScannerViewController: UITableViewController, VNDocumentCameraViewControll
 
         return nil
     }
+    
+    
+
+   
+    /// Returns a canonical ASCII string: e.g., "5'7\"" or nil if not found.
+    func extractFeetInches(from text: String) -> String? {
+        // ([4-6]) → feet 4..6
+        // \D+     → one or more non-digits between
+        // (1[01]|[0-9]) → inches 0..11 (no leading zeros)
+        let pattern = #"(?<!\d)\b([4-6])\b\D+(1[01]|[0-9])\b(?!\d)"#
+
+        guard let regex = try? NSRegularExpression(pattern: pattern) else { return nil }
+        let nsrange = NSRange(text.startIndex..<text.endIndex, in: text)
+
+        guard let m = regex.firstMatch(in: text, range: nsrange),
+              let feetRange = Range(m.range(at: 1), in: text),
+              let inchRange = Range(m.range(at: 2), in: text),
+              let feet = Int(text[feetRange]),
+              let inches = Int(text[inchRange]) else {
+            return nil
+        }
+
+        // Canonical output: 5'7"
+        return "\(feet)'\(inches)\""
+    }
+
+
     
     
     
