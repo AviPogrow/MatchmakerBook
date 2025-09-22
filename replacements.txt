@@ -1,0 +1,2 @@
+regex:github_pat_[0-9A-Za-z_]{82}==>***REMOVED***
+regex:gh[pousr]_[0-9A-Za-z]{36}==>***REMOVED***
