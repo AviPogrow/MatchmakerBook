@@ -21,7 +21,7 @@ class NasiBoy: NSObject {
     //var dob: Date?
     var ageEntered: Int = 0
     var dobIntervalString = ""
-    var calculatedAge = ""
+    
     
     var city = ""
     var boyHeight = ""
@@ -64,7 +64,7 @@ class NasiBoy: NSObject {
         //let dob = value["dob"] as? Date
         let ageEntered = value["ageEntered"] as? Int
         let dobIntervalString = value["dobIntervalString"] as? String
-        let calculatedAge = value["calculatedAge"] as? String
+        
         var boyHeight = value["boyHeight"] as? String
         
         let sendResumeEmail = value["sendResumeEmail"] as? String
@@ -92,7 +92,7 @@ class NasiBoy: NSObject {
         
         self.dateLastUpdate = dateLastUpdate ?? 0
         // self.dob = dob
-        self.calculatedAge = calculatedAge ?? ""
+        
         self.boyHeight = boyHeight ?? ""
         self.sendResumeEmail = sendResumeEmail ?? "N/A"
         self.sendResumeText = sendResumeText ?? "N/A"
@@ -108,13 +108,13 @@ class NasiBoy: NSObject {
         self.dobIntervalString = dobIntervalString ?? ""
         let nowString = "\(Date())"
         let age = calculateAgeFrom(dobString: dobIntervalString ?? nowString)
-        self.calculatedAge = "\(age)"
+        
         
     }
     
   
     // MARK: Initialize with data from user input
-    init(boyCell: String, boyLastName: String,boyFirstName:String,city:String,ageEntered: Int,calculatedAge: String, dobIntervalString:String,  dateCreated: String,dateLastUpdate: Int, boyHeight: String, sendResumeEmail: String,sendResumeText:String,categories: [String],status: String, shadchanNotes: String,shadchanNotesNew: String, datingHistory:String, notesImageURL: String,resumeImageURL:String, photoImageURL: String, key: String = "") {
+    init(boyCell: String, boyLastName: String,boyFirstName:String,city:String, dobIntervalString:String,  dateCreated: String,dateLastUpdate: Int, boyHeight: String, sendResumeEmail: String,sendResumeText:String,categories: [String],status: String, shadchanNotes: String,shadchanNotesNew: String, datingHistory:String, notesImageURL: String,resumeImageURL:String, photoImageURL: String, key: String = "") {
         
         
       self.ref = nil
@@ -125,13 +125,12 @@ class NasiBoy: NSObject {
       self.boyLastName = boyLastName
       self.city = city
     
-      self.ageEntered = ageEntered
       self.dateCreated = dateCreated
       self.dobIntervalString = dobIntervalString
         self.dateLastUpdate = dateLastUpdate
         
      // self.dob = dob
-      self.calculatedAge = calculatedAge
+      
       self.boyHeight = boyHeight
     
     
@@ -161,7 +160,7 @@ class NasiBoy: NSObject {
         "dateCreated": dateCreated,
         "dateLastUpdate": dateLastUpdate,
         "dobIntervalString": dobIntervalString,
-        "calculatedAge": calculatedAge,
+        
         "sendResumeEmail": sendResumeEmail,
         "sendResumeText": sendResumeText,
         "categories": categories,

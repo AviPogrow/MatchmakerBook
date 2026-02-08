@@ -727,7 +727,7 @@ form
         dateFormatter.dateFormat = "YY/MM/dd"
     let dateCreatedString = dateFormatter.string(from: dateCreated)
         
-    self.selectedNasiBoy = NasiBoy(boyCell: "", boyLastName: "", boyFirstName: "", city: "",ageEntered: 0, calculatedAge: "", dobIntervalString: "", dateCreated: dateCreatedString, dateLastUpdate: updateTimeStamp, boyHeight: "", sendResumeEmail: "", sendResumeText: "",categories: ["",""],status: "available", shadchanNotes: "",shadchanNotesNew: "",datingHistory: "", notesImageURL: "", resumeImageURL: "", photoImageURL: "" )
+    self.selectedNasiBoy = NasiBoy(boyCell: "", boyLastName: "", boyFirstName: "", city: "", dobIntervalString: "", dateCreated: dateCreatedString, dateLastUpdate: updateTimeStamp, boyHeight: "", sendResumeEmail: "", sendResumeText: "",categories: ["",""],status: "available", shadchanNotes: "",shadchanNotesNew: "",datingHistory: "", notesImageURL: "", resumeImageURL: "", photoImageURL: "" )
     }
     
     // if the shadchan entered an age for this boy previously

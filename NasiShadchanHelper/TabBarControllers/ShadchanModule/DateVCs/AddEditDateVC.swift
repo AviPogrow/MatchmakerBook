@@ -18,7 +18,10 @@ class AddEditDateVC: FormViewController, CreateBoyControllerDelegate, CreateGirl
     
     var isEditingDate = false
     var boysToSelectArray:[NasiBoy]!
-    var girlsToSelectArray:[Girl]!
+    var girlsToSelectArray: [any Girl] = []
+
+    
+    
     var selectedNasiDate: NasiDate!
     let dateNumbers = [
         "0",

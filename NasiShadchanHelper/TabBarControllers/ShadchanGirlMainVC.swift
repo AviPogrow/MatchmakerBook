@@ -42,6 +42,7 @@ class ShadchanGirlMainVC: UIViewController,
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Add Girl", style: .plain, target: self, action: #selector(handleAdd))
         
         navigationItem.title = "Girl Categories"
@@ -56,23 +57,46 @@ class ShadchanGirlMainVC: UIViewController,
         let navBar = navigationController?.navigationBar
         searchBar.isHidden = false
        
+        
+        let button = UIButton(type: .system)
+        button.setTitle("Search", for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(openNextScreen), for: .touchUpInside)
+        //button.font = .boldSystemFont(ofSize: 24)
+        button.layer.borderWidth = 0.0
+        button.layer.borderColor = UIColor.systemPink.cgColor
+        button.layer.cornerRadius = 8
+        button.clipsToBounds = true
+        navigationController?.navigationBar.addSubview(button)
+        
+
         let rect = CGRect.zero
         label = UILabel(frame: rect)
         label.backgroundColor = .systemPink
-        label.textColor = .white
+        label.textColor = .green
         label.textAlignment = .center
-        label.text = "Nasi"
+        label.text = "Test"
         label.font = .boldSystemFont(ofSize: 24)
         label.layer.borderWidth = 0.0
         label.layer.borderColor = UIColor.systemPink.cgColor
         label.layer.cornerRadius = 8
         label.clipsToBounds = true
-        navigationController?.navigationBar.addSubview(label)
+        //navigationController?.navigationBar.addSubview(label)
         
         searchBar.anchor(top: navBar?.topAnchor, left: navBar?.leftAnchor, bottom: navBar?.bottomAnchor, right: navBar?.rightAnchor, paddingTop: 0, paddingLeft: 90, paddingBottom: 0, paddingRight: 98, width: 0, height: 0)
         
-        label.anchor(top: navBar?.topAnchor, left: navBar?.leftAnchor, bottom: navBar?.bottomAnchor, right: searchBar.leftAnchor, paddingTop: 0, paddingLeft: 8, paddingBottom: 0, paddingRight: 8, width: 0, height: 44)
+        button.anchor(top: navBar?.topAnchor, left: navBar?.leftAnchor, bottom: navBar?.bottomAnchor, right: searchBar.leftAnchor, paddingTop: 0, paddingLeft: 8, paddingBottom: 0, paddingRight: 8, width: 0, height: 44)
     }
+    
+    @objc private func openNextScreen() {
+        
+            let vc = GirlsFilterSearchVC()
+            let nav = UINavigationController(rootViewController: vc)
+            nav.modalPresentationStyle = .fullScreen
+            present(nav, animated: true)
+        }
+
+       
     @objc func handleAdd() {
 
         //showAddGirlOptions()
@@ -90,12 +114,7 @@ class ShadchanGirlMainVC: UIViewController,
         
     }
      func handleScanResumeWithDocScanner() {
-        
-        
-        
         let docScannerVC = ScannerViewController()
-            
-        
         self.navigationController?.pushViewController(docScannerVC, animated: true)
        }
     
@@ -190,11 +209,7 @@ class ShadchanGirlMainVC: UIViewController,
             
         let shadchanGirl = ShadchanGirl(snapshot: snapshot)
         self.shadchanGirlsArrayAll.append(shadchanGirl)
-        self.shadchanGirlsArrayAll = self.shadchanGirlsArrayAll.filter { (girl) -> Bool in
-            return girl.status ==
-            "available"
-           }
-            
+        
         self.shadchanGirlsArrayAll = self.shadchanGirlsArrayAll.sorted(by: { ($0.girlLastName) < ($1.girlLastName)
                  })
           DispatchQueue.main.async(execute: {
@@ -282,10 +297,6 @@ class ShadchanGirlMainVC: UIViewController,
         return allGirlDatingHistoryArray
     }
     
-    
-   
-    
-  
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
        
         self.searchBar.endEditing(true)
@@ -303,7 +314,7 @@ class ShadchanGirlMainVC: UIViewController,
             self.filteredShadchanGirlsList = self.shadchanGirlsArrayAll.filter { (girl) -> Bool in
                 return
             
-                girl.girlFirstName.lowercased().contains(searchText.lowercased()) || girl.girlLastName.lowercased().contains(searchText.lowercased()) ||   girl.city.lowercased().contains(searchText.lowercased()) ||  girl.shadchanNotes.lowercased().contains(searchText.lowercased()) ||  girl.sendResumeEmail.lowercased().contains(searchText.lowercased())
+                girl.girlFirstName.lowercased().contains(searchText.lowercased()) || girl.girlLastName.lowercased().contains(searchText.lowercased()) ||   girl.city.lowercased().contains(searchText.lowercased()) ||  girl.shadchanNotesNew.lowercased().contains(searchText.lowercased()) ||  girl.sendResumeEmail.lowercased().contains(searchText.lowercased())
                 
            }
         }
@@ -352,7 +363,7 @@ class ShadchanGirlMainVC: UIViewController,
         
        let girlAgeAsString = "\(girlAge)"
        
-        
+        let path = indexPath.row
         
         var cellString = "N/A"
         if girl.girlCell == "" {
@@ -360,7 +371,7 @@ class ShadchanGirlMainVC: UIViewController,
         } else  {
             cellString = girl.girlCell
         }
-        let stringForLabel = girl.girlLastName + " " + girl.girlFirstName + " - " + "Age: " + girlAgeAsString  //+ " - cell: " + cellString
+        let stringForLabel = "\(path)" + ": " + girl.girlLastName + " " + girl.girlFirstName + " - " + "Age: " + girlAgeAsString  //+ " - cell: " + cellString
         
         cell.nameLabel.textColor = .systemPink.lighter()
         cell.nameLabel.text = stringForLabel
@@ -375,6 +386,7 @@ class ShadchanGirlMainVC: UIViewController,
          searchBar.isHidden = true
             
          let controller =  AddEditGirlViewController()
+    
 
         var currentGirl: ShadchanGirl!
             
@@ -446,4 +458,9 @@ class ShadchanGirlSearchResultCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 }
+
+
+
+
+  
 

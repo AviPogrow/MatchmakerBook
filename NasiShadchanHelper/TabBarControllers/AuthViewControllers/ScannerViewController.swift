@@ -23,6 +23,7 @@ class ScannerViewController: UITableViewController, VNDocumentCameraViewControll
     var  city = ""
     var  telephone = ""
     var  height = ""
+    var  heightInInches: String  = "0"
     
     var showResultsLabel = UILabel()
     let scanResumeLabel: UILabel = {
@@ -158,10 +159,11 @@ class ScannerViewController: UITableViewController, VNDocumentCameraViewControll
     
     @objc func saveParsedData() {
      
-
+        let parsedGirlDictionary: [String: String] = ["firstName": self.firstName, "lastName": self.lastName, "dob": self.dob, "city": self.city, "telephone": self.telephone, "height": self.height,"heightInInches": self.heightInInches]
         
-        let parsedGirlDictionary: [String: String] = ["firstName": self.firstName, "lastName": self.lastName, "dob": self.dob, "city": self.city, "telephone": self.telephone, "height": self.height]
-        
+        // send the dictionary back to the edit screen to populate
+        // the fields
+        // then dismiss the scanner view controller
         self.delegate?.didScanAndParseResume(dict: parsedGirlDictionary)
         self.navigationController?.popViewController(animated: true)
     }
@@ -175,17 +177,28 @@ class ScannerViewController: UITableViewController, VNDocumentCameraViewControll
        
         let request = VNRecognizeTextRequest { (request, error) in
             guard error == nil else {return}
+            
+            
             let topLine  = request.results?.first as? VNRecognizedTextObservation
             let string = topLine?.topCandidates(1).first?.string
             print("THE TOP LINE IS \(string!)")
             //girlsName = string!
             
+            // an array of textObservation objects
             let textObservations = request.results as? [VNRecognizedTextObservation]
+            
+            
+            // loop through the array of text observations
             var count = 0
             for textObservation in textObservations ?? [] {
                 
+                //// we only want to loop through the first 8 elements of
+                // the array
                 if count >= 8 {break}
                 
+                // within each text observation there can
+                // be up to ten candidates in decreasing confidence
+                // so we grab the first one
                 let topCandidate = textObservation.topCandidates(1).first
                 let stringVersion = topCandidate?.string
                 
@@ -193,12 +206,19 @@ class ScannerViewController: UITableViewController, VNDocumentCameraViewControll
                 print("THE Raw TEXt IS \(rawRecognizedText)")
                 count += 1
             }
+            
+            // this part of the function takes the OCR text
+            // as a raw string
+            // and extracts the data points we need using various
+            // parsing techniques
             girlsName = self.extractName(from: rawRecognizedText) ?? ""
             var splitName = self.splitLineIntoFirstAndLastName(girlsName) ?? ("","")
             self.firstName = splitName.0
             self.lastName = splitName.1
+            
             self.dob = self.extractDateOfBirth(from: rawRecognizedText) ?? ""
             self.city  = self.extractCity(from: rawRecognizedText) ?? ""
+            
             self.telephone = self.extractNormalizedPhoneNumber(from: rawRecognizedText) ?? ""
             //self.height = self.extractHeight(from: rawRecognizedText) ?? ""
             self.height = self.extractFeetInches(from: rawRecognizedText) ?? ""
@@ -356,23 +376,10 @@ class ScannerViewController: UITableViewController, VNDocumentCameraViewControll
     //      return section == 0 ? 0 : 1
     // }
     
-    func extractHeight(from text: String) -> String? {
-        // Regex for heights like 5'8", 5' 8, 5 ft 8 in, 5ft8
-        let pattern = #"\b(\d)\s?(?:'|ft)\s?(\d{1,2})?\s?(?:\"|in|inch|inches)?\b"#
-
-        if let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive) {
-            let range = NSRange(text.startIndex..<text.endIndex, in: text)
-            if let match = regex.firstMatch(in: text, options: [], range: range) {
-                if let heightRange = Range(match.range, in: text) {
-                    return String(text[heightRange])
-                }
-            }
-        }
-
-        return nil
-    }
+   
     
     func extractName(from text: String) -> String? {
+        
         let lines = text.components(separatedBy: .newlines)
             .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
             .filter { !$0.isEmpty }
@@ -453,18 +460,25 @@ class ScannerViewController: UITableViewController, VNDocumentCameraViewControll
 
     return nil
 }
+    
+    // function that uses three possible solutions to
+    // extract the date
     func extractDateOfBirth(from text: String) -> String? {
+        
         // 1. First, try using NSDataDetector for full dates
+        // try to get the day/month/ year
         if let detectedDate = detectFullDate(from: text) {
             return detectedDate
         }
 
         // 2. Fallback: Check for Month + Year (e.g. "June 1995")
+        // get just the month and year
         if let monthYear = detectMonthYear(from: text) {
             return monthYear
         }
 
         // 3. Fallback: Check for Year only (e.g. "1995")
+        // get just the year
         if let yearOnly = detectYearOnly(from: text) {
             return yearOnly
         }
@@ -472,7 +486,21 @@ class ScannerViewController: UITableViewController, VNDocumentCameraViewControll
         return nil
     }
     
-    
+    func extractHeight(from text: String) -> String? {
+        // Regex for heights like 5'8", 5' 8, 5 ft 8 in, 5ft8
+        let pattern = #"\b(\d)\s?(?:'|ft)\s?(\d{1,2})?\s?(?:\"|in|inch|inches)?\b"#
+
+        if let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive) {
+            let range = NSRange(text.startIndex..<text.endIndex, in: text)
+            if let match = regex.firstMatch(in: text, options: [], range: range) {
+                if let heightRange = Range(match.range, in: text) {
+                    return String(text[heightRange])
+                }
+            }
+        }
+
+        return nil
+    }
 
    
     /// Returns a canonical ASCII string: e.g., "5'7\"" or nil if not found.
@@ -489,19 +517,30 @@ class ScannerViewController: UITableViewController, VNDocumentCameraViewControll
               let feetRange = Range(m.range(at: 1), in: text),
               let inchRange = Range(m.range(at: 2), in: text),
               let feet = Int(text[feetRange]),
-              let inches = Int(text[inchRange]) else {
+              let inches = Int(text[inchRange])
+              
+        else { return nil}
+        let heightInInches = heightToTotalInches(feet: feet, inches: inches)
+        self.heightInInches = "\(heightInInches)"
+        // Canonical output: 5'7"
+                
+        
+        return "\(feet)'\(inches)\""
+    }
+    func heightToTotalInches(feet: Int, inches: Int) -> Int {
+        return (feet * 12) + inches
+    }
+    func heightToTotalInches(feetString: String?, inchesString: String?) -> Int? {
+        guard let feetStr = feetString,
+              let inchStr = inchesString,
+              let feet = Int(feetStr),
+              let inches = Int(inchStr) else {
             return nil
         }
 
-        // Canonical output: 5'7"
-        return "\(feet)'\(inches)\""
+        return feet * 12 + inches
     }
 
-
-    
-    
-    
-    
     //MARK - extract city and state
     func extractCity(from text: String) -> String? {
         do {
@@ -534,34 +573,81 @@ class ScannerViewController: UITableViewController, VNDocumentCameraViewControll
             
             if let date = matches.first?.date {
                 let formatter = DateFormatter()
-                formatter.dateFormat = "yyyy-MM-dd"
-                return formatter.string(from: date)
+                formatter.dateFormat = "YY/MM/dd"
+             return formatter.string(from: date)
             }
         }  catch {
             print("error creatig date \(error)")
         }
         return nil
     }
-    // MARK: - step 2: Month + year (e.g. " June 1995)
+    
     private func detectMonthYear(from text: String) -> String? {
-        let months = ["January","February","March","April","May","June","July","August","September","October","November","December"]
-    for month in months {
-    if let range = text.range(of: "\(month) \\d{4}", options: .regularExpression) {
-        let match = String(text[range])
-        let parts = match.split(separator: " ")
-        if  parts.count == 2, let year = Int(parts[1]) {
-            let monthIndex = months.firstIndex(of: month)! + 1
-            return String(format:"%04d-%02d", year, monthIndex)
+        let months = [
+            "January","February","March","April","May","June",
+            "July","August","September","October","November","December"
+        ]
+        
+        for month in months {
+            // Look for:  "June 1995"   "September 2001" etc.
+            if let range = text.range(of: "\(month) \\d{4}", options: .regularExpression) {
+                let match = String(text[range])          // "June 1995"
+                let parts = match.split(separator: " ")  // ["June", "1995"]
+                
+                // Must have exactly "Month" + "YYYY"
+                guard parts.count == 2, let year = Int(parts[1]) else { continue }
+                
+                // Convert month name → 1–12
+                guard let monthIndex = months.firstIndex(of: month).map({ $0 + 1 }) else { continue }
+                
+                // Build a date: default day = 1
+                var components = DateComponents()
+                components.year = year
+                components.month = monthIndex
+                components.day = 1
+                
+                guard let date = Calendar.current.date(from: components) else { return nil }
+                
+                // Format as "yy/MM/dd"
+                let df = DateFormatter()
+                df.calendar = Calendar(identifier: .gregorian)
+                df.locale = Locale(identifier: "en_US_POSIX")
+                df.timeZone = TimeZone(secondsFromGMT: 0)
+                df.dateFormat = "YY/MM/dd"
+                
+                return df.string(from: date)   // e.g. "95/06/01"
+            }
         }
-       }
-    }
+        
         return nil
     }
-    //MARK: - Step 3 Year only
+
+    // MARK: - Step 3: Year only (e.g. "1998")
     private func detectYearOnly(from text: String) -> String? {
-    guard let range = text.range(of: "\\b(19|20)\\d{2}\\b", options: .regularExpression) else {return nil }
-        return String(text[range])
+        
+        // 1) Extract 4-digit year
+        guard let range = text.range(of: "\\b(19|20)\\d{2}\\b", options: .regularExpression) else {
+            return nil
+        }
+        let yearString = String(text[range])
+        guard let year = Int(yearString) else { return nil }
+        
+        // 2) Build a Date using Junr 1st of that year
+        var components = DateComponents()
+        components.year = year
+        components.month = 6
+        components.day = 1
+        guard let date = Calendar.current.date(from: components) else { return nil }
+        
+        let df = DateFormatter()
+        df.calendar = Calendar(identifier: .gregorian)
+        df.locale = Locale(identifier: "en_US_POSIX")
+        df.timeZone = TimeZone(secondsFromGMT: 0)
+        df.dateFormat = "YY/MM/dd"   // your canonical format
+        return df.string(from: date)
     }
+
+    
 }
 
 

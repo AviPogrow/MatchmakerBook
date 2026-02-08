@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="zrU-ql-0Hx">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="zrU-ql-0Hx">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -20,10 +20,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="1dV-aI-ylu">
-                                <rect key="frame" x="16" y="105" width="361" height="697"/>
+                                <rect key="frame" x="16" y="164" width="361" height="604"/>
                                 <subviews>
                                     <button opaque="NO" tag="102" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nfc-QS-AcS">
-                                        <rect key="frame" x="0.0" y="0.0" width="361" height="155.66666666666666"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="361" height="132.33333333333334"/>
                                         <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                         <state key="normal" title="Full Time Yeshiva"/>
@@ -32,7 +32,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" tag="104" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="22y-av-2kR">
-                                        <rect key="frame" x="0.0" y="180.66666666666669" width="361" height="155.33333333333331"/>
+                                        <rect key="frame" x="0.0" y="157.33333333333331" width="361" height="132.33333333333331"/>
                                         <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                         <state key="normal" title="Part Time Yeshiva"/>
@@ -41,7 +41,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" tag="103" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rle-ep-7LN">
-                                        <rect key="frame" x="0.0" y="361" width="361" height="155.66666666666663"/>
+                                        <rect key="frame" x="0.0" y="314.66666666666669" width="361" height="132"/>
                                         <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                         <state key="normal" title="Full Time College/Working"/>
@@ -50,7 +50,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NFG-S5-GdA">
-                                        <rect key="frame" x="0.0" y="541.66666666666663" width="361" height="155.33333333333337"/>
+                                        <rect key="frame" x="0.0" y="471.66666666666657" width="361" height="132.33333333333331"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                         <state key="normal" title="Whole Nasi List (A-Z)"/>
                                         <connections>
@@ -86,11 +86,11 @@
             <objects>
                 <viewController title="YeshivaAndCollegeWorkingViewController" id="F93-He-pJ4" customClass="YeshivaAndCollegeWorkingViewController" customModule="NasiShadchanHelper" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="N3M-yP-sgi">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="783"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="LSO-Gd-8Mh">
-                                <rect key="frame" x="8" y="20" width="377" height="32"/>
+                                <rect key="frame" x="8" y="79" width="377" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="31" id="cfe-Bp-6Mx"/>
                                 </constraints>
@@ -103,7 +103,7 @@
                                 </connections>
                             </segmentedControl>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="170" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="A3W-sQ-nwz">
-                                <rect key="frame" x="0.0" y="58" width="393" height="764"/>
+                                <rect key="frame" x="0.0" y="117" width="393" height="646"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <view key="tableHeaderView" contentMode="scaleToFill" id="4ZI-S9-Pe0">
                                     <rect key="frame" x="0.0" y="0.0" width="393" height="70"/>
@@ -235,11 +235,11 @@
             <objects>
                 <viewController title="FullTimeCollegeWorkingViewController" id="CTn-kb-YND" customClass="FullTimeCollegeWorkingViewController" customModule="NasiShadchanHelper" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="TyC-RE-hXV">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="783"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="TXo-VK-fDs">
-                                <rect key="frame" x="8" y="20" width="377" height="32"/>
+                                <rect key="frame" x="8" y="79" width="377" height="32"/>
                                 <segments>
                                     <segment title="Needs Koveah Ittim"/>
                                     <segment title="Doesn't Need Koveah"/>
@@ -249,7 +249,7 @@
                                 </connections>
                             </segmentedControl>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="212" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Vkc-r9-Ukx">
-                                <rect key="frame" x="0.0" y="58" width="393" height="784"/>
+                                <rect key="frame" x="0.0" y="117" width="393" height="666"/>
                                 <view key="tableHeaderView" contentMode="scaleToFill" id="Hrv-4z-tJb">
                                     <rect key="frame" x="0.0" y="0.0" width="393" height="60"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -550,7 +550,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="ShadchanListDetailViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ad9-lp-W7g" userLabel="ShadchanListDetailViewController" customClass="ShadchanListDetailViewController" customModule="NasiShadchanHelper" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="100" sectionHeaderHeight="1" sectionFooterHeight="1" id="56g-xw-Yik">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="1490"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="1431"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <sections>
                             <tableViewSection id="dmM-6o-Mcz">
@@ -600,7 +600,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" distribution="fillProportionally" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="kLr-d5-819">
-                                                    <rect key="frame" x="4" y="16" width="400" height="40.333333333333329"/>
+                                                    <rect key="frame" x="4" y="16" width="400" height="40.333333333333336"/>
                                                     <subviews>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jUx-gK-WaC">
                                                             <rect key="frame" x="0.0" y="0.0" width="38.333333333333336" height="40.333333333333336"/>
@@ -738,11 +738,11 @@
             <objects>
                 <viewController storyboardIdentifier="ViewResumeVCViewController" id="KfI-sv-bnQ" customClass="ViewResumeVCViewController" customModule="NasiShadchanHelper" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="nzi-iI-Exc">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="783"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AK4-dG-cRb" userLabel="PDFView" customClass="PDFView">
-                                <rect key="frame" x="0.0" y="81" width="393" height="712"/>
+                                <rect key="frame" x="0.0" y="81" width="393" height="653"/>
                                 <color key="backgroundColor" systemColor="systemGray2Color"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B1q-Rn-iJI">
@@ -754,7 +754,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Waiting For Resume Data..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ElC-iP-rzv">
-                                <rect key="frame" x="0.0" y="400.66666666666669" width="393" height="41"/>
+                                <rect key="frame" x="0.0" y="371" width="393" height="41"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="34"/>
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -904,7 +904,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="ISY-dB-LXB">
-                                <rect key="frame" x="0.0" y="100" width="411" height="44"/>
+                                <rect key="frame" x="0.0" y="159" width="411" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="g9K-yp-kHz"/>
                                 </constraints>
@@ -914,7 +914,7 @@
                                 </connections>
                             </searchBar>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="oD7-Hc-Knw">
-                                <rect key="frame" x="0.0" y="159" width="411" height="32"/>
+                                <rect key="frame" x="0.0" y="218" width="411" height="32"/>
                                 <segments>
                                     <segment title="All"/>
                                     <segment title="Idea"/>
@@ -927,7 +927,7 @@
                                 </connections>
                             </segmentedControl>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="120" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="WYG-ie-PZd">
-                                <rect key="frame" x="0.0" y="206" width="411" height="709"/>
+                                <rect key="frame" x="0.0" y="265" width="411" height="650"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="detailButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cellID" textLabel="LJD-pO-YSg" detailTextLabel="6ma-PQ-A0d" rowHeight="120" style="IBUITableViewCellStyleSubtitle" id="yg9-en-CmL">
@@ -1136,11 +1136,11 @@
             <objects>
                 <viewController id="CdD-Jv-4nl" userLabel="AllNasiGirlsViewController" customClass="AllNasiGirlsViewController" customModule="NasiShadchanHelper" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ati-LH-NjM">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="783"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="225" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="26i-Jj-577">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                                <rect key="frame" x="0.0" y="59" width="393" height="724"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="AllNasiListCell" rowHeight="225" id="P0W-e0-v2u" userLabel="AllGirlsTableViewCell" customClass="AllGirlsTableViewCell" customModule="NasiShadchanHelper" customModuleProvider="target">
@@ -1237,11 +1237,11 @@
             <objects>
                 <viewController storyboardIdentifier="FullTimeYeshivaViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="sTp-Bp-YUK" userLabel="FullTimeYeshivaViewController" customClass="FullTimeYeshivaViewController" customModule="NasiShadchanHelper" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="a2j-RL-uqf">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="783"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="4UB-G1-h9N">
-                                <rect key="frame" x="10" y="0.0" width="373" height="32"/>
+                                <rect key="frame" x="10" y="59" width="373" height="32"/>
                                 <segments>
                                     <segment title="1 - 5 Years"/>
                                     <segment title="5   Years"/>
@@ -1252,7 +1252,7 @@
                                 </connections>
                             </segmentedControl>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="4ZC-2P-C15">
-                                <rect key="frame" x="0.0" y="31" width="393" height="811"/>
+                                <rect key="frame" x="0.0" y="90" width="393" height="693"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <view key="tableHeaderView" contentMode="scaleToFill" id="xLf-iX-iM3">
                                     <rect key="frame" x="0.0" y="0.0" width="393" height="60"/>
@@ -1609,7 +1609,7 @@
             <objects>
                 <tableViewController id="o4b-Y8-YS9" customClass="ShadchanGirlNotesVC" customModule="NasiShadchanHelper" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="Mh1-32-s4i">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="783"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <sections>
@@ -1713,7 +1713,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="ContactsViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="i3d-D5-ysr" userLabel="ContactsViewController" customClass="ContactsViewController" customModule="NasiShadchanHelper" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="vwo-S2-2vM">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="1290"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="1231"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <sections>
@@ -2051,7 +2051,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="boy-dc-NDX">
-                                <rect key="frame" x="32" y="119" width="329" height="44"/>
+                                <rect key="frame" x="32" y="178" width="329" height="44"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vxg-ek-OC2">
                                         <rect key="frame" x="0.0" y="0.0" width="156.66666666666666" height="44"/>
@@ -2215,7 +2215,7 @@
                     <tabBarItem key="tabBarItem" title="Dates List" image="person.2" catalog="system" id="JjZ-y9-a9X"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="HPC-5T-1dZ">
-                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <rect key="frame" x="0.0" y="118" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -2234,7 +2234,7 @@
                     <tabBarItem key="tabBarItem" title="Account" image="person" catalog="system" id="Uw6-qP-8v8"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="OXZ-Vs-lgX">
-                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <rect key="frame" x="0.0" y="118" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -2307,7 +2307,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="48" translatesAutoresizingMaskIntoConstraints="NO" id="pB4-FV-Yym">
-                                <rect key="frame" x="46.666666666666657" y="203.00000000000003" width="296" height="331.66666666666674"/>
+                                <rect key="frame" x="46.666666666666657" y="262" width="296" height="331.66666666666674"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="My Singles " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sfy-u6-lvd">
                                         <rect key="frame" x="84.666666666666686" y="0.0" width="127" height="28.666666666666668"/>
@@ -2740,14 +2740,14 @@
                             <tableViewSection headerTitle="Email" id="GSC-e5-1xA">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="VtY-4H-KU6">
-                                        <rect key="frame" x="20" y="500.66666221618652" width="374" height="51.666667938232422"/>
+                                        <rect key="frame" x="20" y="500.66666221618652" width="374" height="51"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="VtY-4H-KU6" id="o3j-io-0R0">
-                                            <rect key="frame" x="0.0" y="0.0" width="374" height="51.666667938232422"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="51"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="rpogrow@gmail.com" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dxY-F5-PbS">
-                                                    <rect key="frame" x="20" y="11.000000000000002" width="334" height="29.666666666666671"/>
+                                                    <rect key="frame" x="20" y="11" width="334" height="29"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -2766,7 +2766,7 @@
                             <tableViewSection headerTitle="Communication Method Preferred" id="L4h-ji-M7u">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="hNu-gf-isH">
-                                        <rect key="frame" x="20" y="591.33333015441895" width="374" height="51"/>
+                                        <rect key="frame" x="20" y="590.66666221618652" width="374" height="51"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="hNu-gf-isH" id="7hV-0h-iY5">
                                             <rect key="frame" x="0.0" y="0.0" width="374" height="51"/>
@@ -2792,7 +2792,7 @@
                             <tableViewSection headerTitle="Communication Method Secondary" id="eZ2-Xj-XA3">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="qgc-yo-DkN">
-                                        <rect key="frame" x="20" y="681.33333015441895" width="374" height="51"/>
+                                        <rect key="frame" x="20" y="680.66666221618652" width="374" height="51"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="qgc-yo-DkN" id="1n8-gQ-Bk2">
                                             <rect key="frame" x="0.0" y="0.0" width="374" height="51"/>
@@ -2821,7 +2821,7 @@
                             <tableViewSection headerTitle="Family Type" id="8OD-Fz-2yJ">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="6b3-LG-dYD">
-                                        <rect key="frame" x="20" y="810.33333015441895" width="374" height="51"/>
+                                        <rect key="frame" x="20" y="809.66666221618652" width="374" height="51"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="6b3-LG-dYD" id="djV-s5-6pl">
                                             <rect key="frame" x="0.0" y="0.0" width="374" height="51"/>
@@ -2847,7 +2847,7 @@
                             <tableViewSection headerTitle="Singles Plan" id="Qvi-dW-jr9">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="0j9-g5-HwZ">
-                                        <rect key="frame" x="20" y="900.33333015441895" width="374" height="51"/>
+                                        <rect key="frame" x="20" y="899.66666221618652" width="374" height="51"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="0j9-g5-HwZ" id="p34-8J-t6x">
                                             <rect key="frame" x="0.0" y="0.0" width="374" height="51"/>
@@ -2873,7 +2873,7 @@
                             <tableViewSection headerTitle="Singles Type" id="q1S-Fh-Lfc">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="IcJ-E8-xhL">
-                                        <rect key="frame" x="20" y="990.33333015441895" width="374" height="51"/>
+                                        <rect key="frame" x="20" y="989.66666221618652" width="374" height="51"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="IcJ-E8-xhL" id="ZKJ-Zx-6x6">
                                             <rect key="frame" x="0.0" y="0.0" width="374" height="51"/>
@@ -2899,7 +2899,7 @@
                             <tableViewSection headerTitle="Years In Shidduchim Primary" id="DfG-fs-Qdi">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="7Sc-Ym-sYN">
-                                        <rect key="frame" x="20" y="1080.3333301544189" width="374" height="51"/>
+                                        <rect key="frame" x="20" y="1079.6666622161865" width="374" height="51"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="7Sc-Ym-sYN" id="Sfi-FQ-V9N">
                                             <rect key="frame" x="0.0" y="0.0" width="374" height="51"/>
@@ -2925,7 +2925,7 @@
                             <tableViewSection headerTitle="Years In Shidduchim Secondary" id="5ND-fU-oIz">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="Cvo-tk-zuP">
-                                        <rect key="frame" x="20" y="1170.3333301544189" width="374" height="52.333332061767578"/>
+                                        <rect key="frame" x="20" y="1169.6666622161865" width="374" height="52.333332061767578"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Cvo-tk-zuP" id="3R2-wl-yLg">
                                             <rect key="frame" x="0.0" y="0.0" width="374" height="52.333332061767578"/>
@@ -2954,14 +2954,14 @@
                             <tableViewSection headerTitle="Years As Shadchan" id="HHy-Ui-vho">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="hNv-U6-OmX">
-                                        <rect key="frame" x="20" y="1300.6666622161865" width="374" height="51.666667938232422"/>
+                                        <rect key="frame" x="20" y="1299.9999942779541" width="374" height="51"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="hNv-U6-OmX" id="cSn-pb-fU0">
-                                            <rect key="frame" x="0.0" y="0.0" width="374" height="51.666667938232422"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="51"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="el4-32-fnK">
-                                                    <rect key="frame" x="20" y="11.000000000000002" width="334" height="29.666666666666671"/>
+                                                    <rect key="frame" x="20" y="11" width="334" height="29"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -2980,7 +2980,7 @@
                             <tableViewSection headerTitle="Do you Welcome Paid Brainstorming Sessions With Advocate?" id="wEx-LQ-hk6">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="nQZ-8d-FRT">
-                                        <rect key="frame" x="20" y="1409.3333301544189" width="374" height="52.333332061767578"/>
+                                        <rect key="frame" x="20" y="1407.9999942779541" width="374" height="52.333332061767578"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="nQZ-8d-FRT" id="oVt-eu-AAW">
                                             <rect key="frame" x="0.0" y="0.0" width="374" height="52.333332061767578"/>
@@ -3006,14 +3006,14 @@
                             <tableViewSection headerTitle="Do You Need To Meet The Singles?" id="kSb-BP-tjE">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="Trr-h7-D2J">
-                                        <rect key="frame" x="20" y="1500.6666641235352" width="374" height="51.666667938232422"/>
+                                        <rect key="frame" x="20" y="1499.3333282470703" width="374" height="51"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Trr-h7-D2J" id="HQB-fN-wQ5">
-                                            <rect key="frame" x="0.0" y="0.0" width="374" height="51.666667938232422"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="51"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Yes" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ayx-nV-Fdr">
-                                                    <rect key="frame" x="20" y="11.000000000000002" width="334" height="29.666666666666671"/>
+                                                    <rect key="frame" x="20" y="11" width="334" height="29"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -3032,7 +3032,7 @@
                             <tableViewSection headerTitle="Describe Yourself as a Shadchan" id="7Ry-MQ-2dN">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="HnT-vJ-fWg">
-                                        <rect key="frame" x="20" y="1591.3333320617676" width="374" height="108.33333587646484"/>
+                                        <rect key="frame" x="20" y="1589.3333282470703" width="374" height="108.33333587646484"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="HnT-vJ-fWg" id="swu-6K-VpL">
                                             <rect key="frame" x="0.0" y="0.0" width="374" height="108.33333587646484"/>
@@ -3205,7 +3205,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="W9r-OQ-00T">
-                                <rect key="frame" x="0.0" y="103" width="393" height="71"/>
+                                <rect key="frame" x="0.0" y="162" width="393" height="71"/>
                                 <segments>
                                     <segment title="ALL"/>
                                     <segment title="FT Learning"/>
@@ -3218,7 +3218,7 @@
                                 </connections>
                             </segmentedControl>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="e24-UQ-hU7">
-                                <rect key="frame" x="0.0" y="173" width="393" height="645"/>
+                                <rect key="frame" x="0.0" y="232" width="393" height="552"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" accessoryType="detailButton" indentationWidth="10" reuseIdentifier="ShadchanGirlCell" textLabel="hCM-Zb-H5E" detailTextLabel="iQ6-vJ-xbM" rowHeight="116" style="IBUITableViewCellStyleSubtitle" id="Ivt-2b-oCb">
@@ -3278,7 +3278,7 @@
                     <tabBarItem key="tabBarItem" title="Nasi List" image="house" catalog="system" id="cqA-fS-y1w"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="fHX-2Y-aH2">
-                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <rect key="frame" x="0.0" y="118" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -3299,7 +3299,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="7vL-9c-a1u">
-                                <rect key="frame" x="81.666666666666686" y="119" width="230" height="44"/>
+                                <rect key="frame" x="81.666666666666686" y="178" width="230" height="44"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6vT-t0-JiR" customClass="KeepSwipingButton" customModule="NasiShadchanHelper" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="107" height="44"/>
@@ -3375,7 +3375,7 @@
                     <tabBarItem key="tabBarItem" title="Shadchan" image="person.crop.circle.badge.checkmark.fill" catalog="system" id="0UC-aq-31w"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="SZb-w7-Qnq">
-                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <rect key="frame" x="0.0" y="118" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -3394,7 +3394,7 @@
                     <tabBarItem key="tabBarItem" title="admin" image="person.crop.square.filled.and.at.rectangle" catalog="system" id="gpQ-3I-QgA"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="oFZ-mF-5Qu">
-                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <rect key="frame" x="0.0" y="118" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -3413,7 +3413,7 @@
                     <tabBarItem key="tabBarItem" title="MyBoys" image="person.3.sequence.fill" catalog="system" id="aqL-IQ-zWm"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="hs2-XI-2eg">
-                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <rect key="frame" x="0.0" y="118" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -3434,7 +3434,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="Mhm-tm-ki8">
-                                <rect key="frame" x="81.666666666666686" y="119" width="230" height="44"/>
+                                <rect key="frame" x="81.666666666666686" y="178" width="230" height="44"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Yi-8Q-niu">
                                         <rect key="frame" x="0.0" y="0.0" width="107" height="44"/>
@@ -3455,7 +3455,7 @@
                                 </constraints>
                             </stackView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="fbs-Q2-QH7">
-                                <rect key="frame" x="0.0" y="163" width="393" height="606"/>
+                                <rect key="frame" x="0.0" y="222" width="393" height="513"/>
                                 <color key="backgroundColor" red="0.63223062100000005" green="0.63223062100000005" blue="0.63223062100000005" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="FZY-XR-FiQ">
                                     <size key="itemSize" width="128" height="128"/>
@@ -3505,7 +3505,7 @@
                     <tabBarItem key="tabBarItem" title="My Girls" image="person.crop.rectangle.badge.plus.fill" catalog="system" id="XcH-KF-YkM"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ApH-51-yVe">
-                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <rect key="frame" x="0.0" y="118" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -3524,7 +3524,7 @@
                     <tabBarItem key="tabBarItem" title="Item" id="gU3-q9-ZWX"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="QNA-J6-oug">
-                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <rect key="frame" x="0.0" y="118" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -3565,10 +3565,10 @@
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="linkColor">
-            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="secondaryLabelColor">
-            <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="secondarySystemGroupedBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -3577,37 +3577,37 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBrownColor">
-            <color red="0.63529411759999999" green="0.51764705879999995" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.63529411764705879" green="0.51764705882352946" blue="0.36862745098039218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray2Color">
-            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray3Color">
-            <color red="0.78039215689999997" green="0.78039215689999997" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.7803921568627451" green="0.7803921568627451" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray5Color">
-            <color red="0.8980392157" green="0.8980392157" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray6Color">
-            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGreenColor">
-            <color red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGroupedBackgroundColor">
-            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemOrangeColor">
-            <color red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPinkColor">
-            <color red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="tableCellGroupedBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="tintColor">
-            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

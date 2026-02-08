@@ -85,38 +85,142 @@ class AllDatesViewController: UIViewController, UITableViewDataSource, UITableVi
         })
     }
     
+    
+    // 2 separate fetch functions
+    // 1. to fetch the nasi girls
+    //2. to fetch the shadchanGirls
+    // MARK: - NasiGirls Fetch
     func fetchAndCreateNasiGirlsArray() {
-        self.view.showLoadingIndicator()
-         allNasiGirlsList.removeAll()
-         let allNasiGirlsRef = Database.database().reference().child("NasiGirlsList")
-          guard let myId = UserInfo.curentUser?.id else {return}
-          allNasiGirlsRef.observe(.childAdded, with: { (snapshot) in
-         
+        view.showLoadingIndicator()
+
+        allNasiGirlsList.removeAll()
+
+        let allNasiGirlsRef = Database.database().reference().child("NasiGirlsList")
+
+        // You had this guard; keeping it so behavior stays consistent.
+        guard UserInfo.curentUser?.id != nil else {
+            view.hideLoadingIndicator()
+            return
+        }
+
+        allNasiGirlsRef.observe(.childAdded, with: { [weak self] snapshot in
+            guard let self else { return }
+
             let nasiGirl = NasiGirl(snapshot: snapshot)
-              
-              nasiGirl.lastName = nasiGirl.lastNameOfGirl
-              nasiGirl.firstName = nasiGirl.firstNameOfGirl
-              nasiGirl.dateOfBirthString = nasiGirl.dateOfBirth
-              nasiGirl.ageString = String(nasiGirl.age)
-              
-              
-         self.allNasiGirlsList.append(nasiGirl)
-         self.allNasiGirlsList = self.allNasiGirlsList.sorted(by: { ($0.lastNameOfGirl) < ($1.lastNameOfGirl)
-             })
-             self.allNasiGirlsList = self.allNasiGirlsList.filter { (singleGirl) -> Bool in
-             return singleGirl.category != Constant.CategoryTypeName.CategoryEngaged1
-             }
-             self.allNasiGirlsList = self.allNasiGirlsList.sorted(by: { ($0.lastNameOfGirl ) < ($1.lastNameOfGirl ) })
-             DispatchQueue.main.async(execute: {
-              self.view.hideLoadingIndicator()
-              self.nasiGirlsToSelectArray = self.allNasiGirlsList
-                 print("the nasiGirls array is \(self.allNasiGirlsList)")
-                 
-                 
-              //self.collectionView.reloadData()
-             })
-          })
+
+            // ✅ No copying into protocol properties anymore.
+            // The "Girl" protocol properties should be computed:
+            // firstName -> firstNameOfGirl, lastName -> lastNameOfGirl,
+            // dateOfBirthString -> dateOfBirth, ageString -> String(age)
+
+            self.allNasiGirlsList.append(nasiGirl)
+
+            // Keep your existing behavior:
+            // 1) sort by lastNameOfGirl
+            // 2) filter out engaged category
+            // 3) sort again
+            self.allNasiGirlsList = self.allNasiGirlsList.sorted {
+                $0.lastNameOfGirl < $1.lastNameOfGirl
+            }
+
+            self.allNasiGirlsList = self.allNasiGirlsList.filter { singleGirl in
+                singleGirl.category != Constant.CategoryTypeName.CategoryEngaged1
+            }
+
+            self.allNasiGirlsList = self.allNasiGirlsList.sorted {
+                $0.lastNameOfGirl < $1.lastNameOfGirl
+            }
+
+            DispatchQueue.main.async {
+                self.view.hideLoadingIndicator()
+                self.nasiGirlsToSelectArray = self.allNasiGirlsList
+            }
+        })
     }
+
+    // MARK: - ShadchanGirls Fetch
+    func fetchAndCreatePrivateGirlsArray() {
+        let girlsListRef = Database.database().reference().child("PrivateGirlsList")
+
+        guard let myId = UserInfo.curentUser?.id else { return }
+
+        let currentUserGirlsListRef = girlsListRef.child(myId)
+
+        currentUserGirlsListRef.observe(.value, with: { [weak self] snapshot in
+            guard let self else { return }
+
+            var girlsArray: [ShadchanGirl] = []
+            var engagedGirlsArray: [ShadchanGirl] = []
+
+            for child in snapshot.children {
+                guard let childSnap = child as? DataSnapshot else { continue }
+
+                let shadchanGirl = ShadchanGirl(snapshot: childSnap)
+
+                // ✅ No copying into firstName/lastName/dateOfBirthString anymore.
+                // Those should be computed:
+                // firstName -> girlFirstName
+                // lastName -> girlLastName
+                // dateOfBirthString -> dobIntervalString
+
+                // Still compute age from dobIntervalString (your existing behavior)
+                let dateString = shadchanGirl.dobIntervalString
+                shadchanGirl.computedAgeString = Self.computeAgeString(fromDOBInterval: dateString)
+
+                if shadchanGirl.status == "available" {
+                    girlsArray.append(shadchanGirl)
+                } else if shadchanGirl.status == "engaged" {
+                    engagedGirlsArray.append(shadchanGirl)
+                }
+            }
+
+            // Keep your original outcome
+            self.shadchanGirlsToSelectArray = girlsArray
+            // engagedGirlsArray is currently unused; left in case you need it later
+        })
+    }
+ 
+
+    // MARK: - Helpers
+
+    private static func computeAgeString(fromDOBInterval dobString: String) -> String {
+        // Your original code used "YY/MM/dd" but your sample looked like "02/12/17"
+        // which typically means "MM/dd/yy". We’ll try a few common formats safely.
+        let formats = ["MM/dd/yy", "MM/dd/yyyy", "yy/MM/dd", "yyyy/MM/dd"]
+
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+
+        var dobDate: Date?
+        for f in formats {
+            formatter.dateFormat = f
+            if let d = formatter.date(from: dobString) {
+                dobDate = d
+                break
+            }
+        }
+
+        guard let dateOfBirth = dobDate else {
+            return "" // couldn’t parse; don’t lie
+        }
+
+        let today = Date()
+        let calendar = Calendar.current
+        let comps = calendar.dateComponents([.year, .month], from: dateOfBirth, to: today)
+
+        guard let years = comps.year else { return "" }
+        let months = comps.month ?? 0
+
+        let decimal = Double(months) / 12.0
+        let composite = Double(years) + decimal
+        let rounded = (composite * 10).rounded() / 10  // 1 decimal place, no custom extension needed
+
+        return String(format: "%.1f", rounded)
+    }
+
+
+    /*
     func fetchAndCreatePrivateGirlsArray() {
         let girlsListRef  = Database.database().reference().child("PrivateGirlsList")
         
@@ -136,9 +240,6 @@ class AllDatesViewController: UIViewController, UITableViewDataSource, UITableVi
                 let dateString = shadchanGirl.dobIntervalString
                 shadchanGirl.dateOfBirthString = dateString
                 print("the value of dateString is: \(dateString)")
-                
-                
-                
                 
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "YY/MM/dd"
@@ -169,6 +270,30 @@ class AllDatesViewController: UIViewController, UITableViewDataSource, UITableVi
             
             
         })
+    }
+     */
+    
+    // when user taps I combine the arrays
+    func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        
+        let controller = storyboard!.instantiateViewController(withIdentifier: "AddEditDateVC") as! AddEditDateVC
+        
+        // here is where I combine the arrays
+        var combinedArray: [any Girl] =
+            nasiGirlsToSelectArray + shadchanGirlsToSelectArray
+
+        
+        controller.isEditingDate = true
+        
+        var currentNasiDate: NasiDate!
+        currentNasiDate = selectedDatesArray[indexPath.row]
+        controller.selectedNasiDate = currentNasiDate
+        controller.boysToSelectArray = self.boysToSelectArray
+        
+        controller.girlsToSelectArray = combinedArray
+        combinedArray.sort {$0.lastName < $1.lastName}
+        controller.girlsToSelectArray = combinedArray
+        navigationController?.pushViewController(controller, animated: true)
     }
     
     func calculateAgeFrpm(dobString: String) -> Double {
@@ -413,25 +538,6 @@ class AllDatesViewController: UIViewController, UITableViewDataSource, UITableVi
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
-        
-        let controller = storyboard!.instantiateViewController(withIdentifier: "AddEditDateVC") as! AddEditDateVC
-        
-        controller.isEditingDate = true
-        
-        var currentNasiDate: NasiDate!
-        currentNasiDate = selectedDatesArray[indexPath.row]
-        
-        
-        controller.selectedNasiDate = currentNasiDate
-        controller.boysToSelectArray = self.boysToSelectArray
-        var  combinedArray = self.nasiGirlsToSelectArray + self.shadchanGirlsToSelectArray
-        
-        controller.girlsToSelectArray = combinedArray
-        combinedArray.sort {$0.lastName < $1.lastName}
-        controller.girlsToSelectArray = combinedArray
-        navigationController?.pushViewController(controller, animated: true)
-    }
     
     @IBAction func addDate(_ sender: Any) {
         addDateTapped()
@@ -441,7 +547,7 @@ class AllDatesViewController: UIViewController, UITableViewDataSource, UITableVi
         controller.isEditingDate == false
         controller.boysToSelectArray = self.boysToSelectArray
         
-        var combinedGirlsArray: [Girl] = self.nasiGirlsToSelectArray + self.shadchanGirlsToSelectArray
+        var combinedGirlsArray: [any Girl] = self.nasiGirlsToSelectArray + self.shadchanGirlsToSelectArray
         
         combinedGirlsArray.sort {$0.lastName < $1.lastName}
         controller.girlsToSelectArray = combinedGirlsArray
