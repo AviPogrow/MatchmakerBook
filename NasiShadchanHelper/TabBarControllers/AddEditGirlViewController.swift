@@ -250,6 +250,9 @@ class AddEditGirlViewController: FormViewController,CNContactPickerDelegate, Sca
          lifePlanSection.tag = "lifePlansSection"
          form +++ lifePlanSection
         
+        let lifePlanOptions = LifePlanTag.allCases.map(\.title)
+
+        /*
         let lifePlanOptions = [
             "FTL - 1-3",
             "FTL - 3-5",
@@ -261,6 +264,7 @@ class AddEditGirlViewController: FormViewController,CNContactPickerDelegate, Sca
             "FTW/College-Yeshiva Style",
             "FTW/College-Not Yeshiva Style"
         ]
+         */
 
          for option in lifePlanOptions {
              lifePlanSection <<< ImageCheckRow<String>() { row in

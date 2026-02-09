@@ -7,7 +7,146 @@
 //
 
 import UIKit
+import Firebase
 
+enum MockGirls {
+
+    // 👇 Keep this small and human-readable
+    private static let base: [ShadchanGirl] = [
+
+        ShadchanGirl(
+            girlCell: "5551234567",
+            girlLastName: "Test",
+            girlFirstName: "Mock One",
+            city: "Brooklyn",
+            dobIntervalString: "98/05/22",
+            dateCreated: "26/02/08",
+            dateLastUpdate: 0,
+            girlHeight: "5'4\"",
+            sendResumeEmail: "",
+            sendResumeText: "",
+            lifePlans: ["FTL - 3-5"],
+            status: "available",
+            datingHistory: "",
+            shadchanNotesNew: "",
+            notesImageURL: "",
+            resumeImageURL: "",
+            photoImageURL: "",
+            key: "base_1"
+        ),
+
+        ShadchanGirl(
+            girlCell: "5559876543",
+            girlLastName: "Sample",
+            girlFirstName: "Mock Two",
+            city: "Queens",
+            dobIntervalString: "00/08/08",
+            dateCreated: "26/02/08",
+            dateLastUpdate: 0,
+            girlHeight: "5'7\"",
+            sendResumeEmail: "",
+            sendResumeText: "",
+            lifePlans: ["FTL - 5", "PTL - Working"],
+            status: "available",
+            datingHistory: "",
+            shadchanNotesNew: "",
+            notesImageURL: "",
+            resumeImageURL: "",
+            photoImageURL: "",
+            key: "base_2"
+        )
+    ]
+
+    // 👇 This is what your VC uses
+    static let all: [ShadchanGirl] = {
+        let targetCount = 60
+        var result: [ShadchanGirl] = []
+        result.reserveCapacity(targetCount)
+
+        for i in 0..<targetCount {
+            let b = base[i % base.count]
+
+            let g = ShadchanGirl(
+                girlCell: b.girlCell,
+                girlLastName: b.girlLastName,
+                girlFirstName: "\(b.girlFirstName) \(i + 1)", // unique
+                city: b.city,
+                dobIntervalString: b.dobIntervalString,
+                dateCreated: b.dateCreated,
+                dateLastUpdate: b.dateLastUpdate,
+                girlHeight: b.girlHeight,
+                sendResumeEmail: b.sendResumeEmail,
+                sendResumeText: b.sendResumeText,
+                lifePlans: b.lifePlans,
+                status: b.status,
+                datingHistory: b.datingHistory,
+                shadchanNotesNew: b.shadchanNotesNew,
+                notesImageURL: b.notesImageURL,
+                resumeImageURL: b.resumeImageURL,
+                photoImageURL: b.photoImageURL,
+                key: "mock_\(i + 1)"
+            )
+
+            let age = g.calculateAgeFrom(dobString: g.dobIntervalString)
+            g.computedAgeString = age > 0 ? "\(Int(age.rounded()))" : ""
+
+            result.append(g)
+        }
+
+        return result
+    }()
+}
+
+/*
+enum MockGirls {
+
+    static let all: [ShadchanGirl] = [
+
+        ShadchanGirl(
+            girlCell: "5551234567",
+            girlLastName: "Test",
+            girlFirstName: "Mock One",
+            city: "Brooklyn",
+            dobIntervalString: "98/05/22",
+            dateCreated: "26/02/08",
+            dateLastUpdate: 0,
+            girlHeight: "5'4\"",
+            sendResumeEmail: "",
+            sendResumeText: "",
+            lifePlans: ["FTL - 3-5"],
+            status: "available",
+            datingHistory: "",
+            shadchanNotesNew: "",
+            notesImageURL: "",
+            resumeImageURL: "",
+            photoImageURL: "",
+            key: "mock_1"
+        ),
+
+        ShadchanGirl(
+            girlCell: "5559876543",
+            girlLastName: "Sample",
+            girlFirstName: "Mock Two",
+            city: "Queens",
+            dobIntervalString: "00/08/08",
+            dateCreated: "26/02/08",
+            dateLastUpdate: 0,
+            girlHeight: "5'7\"",
+            sendResumeEmail: "",
+            sendResumeText: "",
+            lifePlans: ["FTL - 5", "PTL - Working"],
+            status: "available",
+            datingHistory: "",
+            shadchanNotesNew: "",
+            notesImageURL: "",
+            resumeImageURL: "",
+            photoImageURL: "",
+            key: "mock_2"
+        )
+    ]
+}
+
+*/
 enum AgeTag: CaseIterable, Hashable {
     case nineteenToTwentyThree
     case twentyFourToTwentyEight
@@ -77,7 +216,6 @@ enum HeightTag: CaseIterable, Hashable {
         }
     }
 }
-
 enum LifePlanTag: CaseIterable, Hashable {
     case ftlOneToThree
     case ftlThreeToFive
@@ -89,27 +227,40 @@ enum LifePlanTag: CaseIterable, Hashable {
     case ftwCollegeYeshiva
     case ftwCollegeNotYeshiva
 
+    // ✅ Canonical strings used everywhere (chips, results, Firebase, filtering)
     var title: String {
         switch self {
-        case .ftlOneToThree:
-            return "FTL - 1-3"
-        case .ftlThreeToFive:
-            return "FTL - 3-5"
-        case .ftlFive:
-            return "FTL - 5"
-        case .ftlFiveToSeven:
-            return "FTL - 5-7"
-        case .ftlSevenPlus:
-            return "FTL - 7+"
-        case .ptlSchool:
-            return "PTL - S"
-        case .ptlWorking:
-            return "PTL - W"
-        case .ftwCollegeYeshiva:
-            return "FTW/S-YS"
-        case .ftwCollegeNotYeshiva:
-            return "FTW/S-NYS"
+        case .ftlOneToThree:        return "FTL - 1-3"
+        case .ftlThreeToFive:      return "FTL - 3-5"
+        case .ftlFive:             return "FTL - 5"
+        case .ftlFiveToSeven:      return "FTL - 5-7"
+        case .ftlSevenPlus:        return "FTL - 7+"
+        case .ptlSchool:           return "PTL - S"
+        case .ptlWorking:          return "PTL - W"
+        case .ftwCollegeYeshiva:   return "FTW/S-YS"
+        case .ftwCollegeNotYeshiva:return "FTW/S-NYS"
         }
+    }
+}
+
+//normalizes legacy life plan strings to the newer
+// strings used in chip titles
+enum LifePlanNormalizer {
+
+    static func normalize(_ s: String) -> String {
+        let trimmed = s.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        switch trimmed {
+        case "PTL - School": return "PTL - S"
+        case "PTL - Working": return "PTL - W"
+        case "FTW/College-Yeshiva Style": return "FTW/S-YS"
+        case "FTW/College-Not Yeshiva Style": return "FTW/S-NYS"
+        default: return trimmed
+        }
+    }
+
+    static func normalizeArray(_ arr: [String]) -> [String] {
+        arr.map(normalize)
     }
 }
 
@@ -294,12 +445,43 @@ class GirlsFilterSearchVC: UIViewController {
     ]
 
      private var results = (1...15).map { "Result \($0)" }
+     private let useFirebase = true
+
     
+    //MARk: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        allProfiles = makeMockProfiles()
-        filteredProfiles = allProfiles
+        //allProfiles = makeMockProfiles()
+        //filteredProfiles = allProfiles
+        
+        if useFirebase {
+            fetchGirlsFromFirebase { [weak self] girls in
+                guard let self else { return }
+                
+                self.allProfiles = girls.map { self.makeMockProfile(from: $0) }
+                self.filteredProfiles = self.allProfiles
+                
+                self.resultsTableView.reloadData()
+                self.updateEmptyState()
+                self.updateNavTitleAnimated()
+            }
+        } else {
+            print("✅ USING MOCKS")
+                   let girls = MockGirls.all
+                   print("MockGirls.count =", girls.count)
+
+                   self.allProfiles = girls.map { self.makeMockProfile(from: $0) }
+                   self.filteredProfiles = self.allProfiles
+                   print("Mapped profiles =", self.filteredProfiles.count)
+
+                   self.resultsTableView.reloadData()
+                   self.updateEmptyState()
+                   self.updateNavTitleAnimated()
+                
+            }
+        
+        
 
         view.backgroundColor = .systemBackground
 
@@ -337,6 +519,63 @@ class GirlsFilterSearchVC: UIViewController {
         setupUI()
         
       }
+    
+   
+    private func fetchGirlsFromFirebase(completion: @escaping ([ShadchanGirl]) -> Void) {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            completion([])
+            return
+        }
+
+        let ref = Database.database().reference()
+            .child("PrivateGirlsList")
+            .child(uid)
+
+        ref.observeSingleEvent(of: .value) { snapshot in
+            var girls: [ShadchanGirl] = []
+
+            for child in snapshot.children {
+                if let snap = child as? DataSnapshot {
+                    
+                let g = ShadchanGirl(snapshot: snap)
+                g.categories = LifePlanNormalizer.normalizeArray(g.categories)
+                 girls.append(g)
+                }
+            }
+
+            // Stable sorting helps your UI feel consistent
+            girls.sort {
+                if $0.girlFirstName != $1.girlFirstName { return $0.girlFirstName < $1.girlFirstName }
+                return $0.girlLastName < $1.girlLastName
+            }
+
+            completion(girls)
+        }
+    }
+
+    
+    private func makeMockProfile(from g: ShadchanGirl) -> MockProfile {
+        let ageDouble = g.calculateAgeFrom(dobString: g.dobIntervalString)
+        let ageInt = ageDouble > 0 ? Int(ageDouble.rounded()) : 0
+        let inches = HeightParser.parseInches(from: g.girlHeight) ?? 0
+
+        let plans = LifePlanNormalizer.normalizeArray(g.lifePlans)
+
+        let fullName = "\(g.girlFirstName) \(g.girlLastName)"
+            .replacingOccurrences(of: "  ", with: " ")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+
+        return MockProfile(
+            name: fullName,
+            age: ageInt,
+            heightInches: inches,
+            lifePlans: plans
+        )
+    }
+
+    
+
+    
     
     private func updateClearButtonEnabled() {
         let hasSelections = !selectedHeightTags.isEmpty || !selectedAgeTags.isEmpty || !selectedLifePlans.isEmpty

@@ -391,6 +391,10 @@ class ShadchanGirlMainVC: UIViewController,
         var currentGirl: ShadchanGirl!
             
         currentGirl = filteredShadchanGirlsList[indexPath.row]
+        
+        // clean up the life option strings to be backward compatible
+        currentGirl.categories = LifePlanNormalizer.normalizeArray(currentGirl.categories)
+
         controller.selectedShadchanGirl = currentGirl
         
          let currentGirlKey: String!
