@@ -97,56 +97,7 @@ enum MockGirls {
     }()
 }
 
-/*
-enum MockGirls {
 
-    static let all: [ShadchanGirl] = [
-
-        ShadchanGirl(
-            girlCell: "5551234567",
-            girlLastName: "Test",
-            girlFirstName: "Mock One",
-            city: "Brooklyn",
-            dobIntervalString: "98/05/22",
-            dateCreated: "26/02/08",
-            dateLastUpdate: 0,
-            girlHeight: "5'4\"",
-            sendResumeEmail: "",
-            sendResumeText: "",
-            lifePlans: ["FTL - 3-5"],
-            status: "available",
-            datingHistory: "",
-            shadchanNotesNew: "",
-            notesImageURL: "",
-            resumeImageURL: "",
-            photoImageURL: "",
-            key: "mock_1"
-        ),
-
-        ShadchanGirl(
-            girlCell: "5559876543",
-            girlLastName: "Sample",
-            girlFirstName: "Mock Two",
-            city: "Queens",
-            dobIntervalString: "00/08/08",
-            dateCreated: "26/02/08",
-            dateLastUpdate: 0,
-            girlHeight: "5'7\"",
-            sendResumeEmail: "",
-            sendResumeText: "",
-            lifePlans: ["FTL - 5", "PTL - Working"],
-            status: "available",
-            datingHistory: "",
-            shadchanNotesNew: "",
-            notesImageURL: "",
-            resumeImageURL: "",
-            photoImageURL: "",
-            key: "mock_2"
-        )
-    ]
-}
-
-*/
 enum AgeTag: CaseIterable, Hashable {
     case nineteenToTwentyThree
     case twentyFourToTwentyEight
@@ -286,6 +237,7 @@ enum TagCategory: Int, CaseIterable {
     }
 }
 
+//MARK: GirlsFilterSearchVC
 class GirlsFilterSearchVC: UIViewController {
     
     private lazy var emptyStateView: EmptyStateView = {
@@ -332,6 +284,12 @@ class GirlsFilterSearchVC: UIViewController {
         })
     }
 
+    private var girlsByKey: [String: ShadchanGirl] = [:]
+    private var allResults: [ResultProfile] = []
+    private var filteredResults: [ResultProfile] = []
+
+
+    
     private var allProfiles: [MockProfile] = []
     private var filteredProfiles: [MockProfile] = []
     
@@ -351,8 +309,9 @@ class GirlsFilterSearchVC: UIViewController {
         LifePlanTag.allCases.first { $0.title == title }
     }
 
+  
 
-
+/*
     private func makeMockProfiles() -> [MockProfile] {
         let names = ["Rivka", "Sara", "Leah", "Miriam", "Tamar", "Chana", "Esther", "Yael", "Aviva", "Dina"]
         
@@ -379,7 +338,7 @@ class GirlsFilterSearchVC: UIViewController {
         }
     }
 
-    
+    */
     private var selectedTagIDs = Set<UUID>()
     
     struct TagItem: Hashable {
@@ -449,46 +408,14 @@ class GirlsFilterSearchVC: UIViewController {
 
     
     //MARk: ViewDidLoad
+   
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //allProfiles = makeMockProfiles()
-        //filteredProfiles = allProfiles
-        
-        if useFirebase {
-            fetchGirlsFromFirebase { [weak self] girls in
-                guard let self else { return }
-                
-                self.allProfiles = girls.map { self.makeMockProfile(from: $0) }
-                self.filteredProfiles = self.allProfiles
-                
-                self.resultsTableView.reloadData()
-                self.updateEmptyState()
-                self.updateNavTitleAnimated()
-            }
-        } else {
-            print("✅ USING MOCKS")
-                   let girls = MockGirls.all
-                   print("MockGirls.count =", girls.count)
 
-                   self.allProfiles = girls.map { self.makeMockProfile(from: $0) }
-                   self.filteredProfiles = self.allProfiles
-                   print("Mapped profiles =", self.filteredProfiles.count)
-
-                   self.resultsTableView.reloadData()
-                   self.updateEmptyState()
-                   self.updateNavTitleAnimated()
-                
-            }
-        
-        
-
+        // --- UI basics ---
         view.backgroundColor = .systemBackground
 
-        navTitleView.configure(
-            title: "Search",
-            subtitle: "\(filteredProfiles.count) results"
-        )
+        navTitleView.configure(title: "Search", subtitle: nil)
         navigationItem.titleView = navTitleView
 
         navigationItem.leftBarButtonItem = UIBarButtonItem(
@@ -496,62 +423,169 @@ class GirlsFilterSearchVC: UIViewController {
             target: self,
             action: #selector(closeTapped)
         )
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
+
+        let addButton = UIBarButtonItem(
+            barButtonSystemItem: .add,
+            target: self,
+            action: #selector(addGirlTapped)
+        )
+
+        let clearButton = UIBarButtonItem(
             title: "Clear",
             style: .plain,
             target: self,
             action: #selector(clearTapped)
         )
-        navigationItem.rightBarButtonItem?.isEnabled = false
+        clearButton.isEnabled = false
 
-        
+        navigationItem.rightBarButtonItems = [addButton, clearButton]
+
+        // --- Search bar ---
         searchBar.delegate = self
+        searchBar.showsCancelButton = true
 
+        // --- Table ---
         resultsTableView.dataSource = self
         resultsTableView.delegate = self
-        
-        resultsTableView.register(ProfileResultCell.self,
-                             forCellReuseIdentifier: ProfileResultCell.reuseID)
-
+        resultsTableView.register(ProfileResultCell.self, forCellReuseIdentifier: ProfileResultCell.reuseID)
         resultsTableView.rowHeight = UITableView.automaticDimension
         resultsTableView.estimatedRowHeight = 76
 
+        // --- Layout ---
         setupUI()
-        
-      }
-    
-   
-    private func fetchGirlsFromFirebase(completion: @escaping ([ShadchanGirl]) -> Void) {
-        guard let uid = Auth.auth().currentUser?.uid else {
-            completion([])
-            return
-        }
 
-        let ref = Database.database().reference()
-            .child("PrivateGirlsList")
-            .child(uid)
-
-        ref.observeSingleEvent(of: .value) { snapshot in
-            var girls: [ShadchanGirl] = []
-
-            for child in snapshot.children {
-                if let snap = child as? DataSnapshot {
-                    
-                let g = ShadchanGirl(snapshot: snap)
-                g.categories = LifePlanNormalizer.normalizeArray(g.categories)
-                 girls.append(g)
-                }
-            }
-
-            // Stable sorting helps your UI feel consistent
-            girls.sort {
-                if $0.girlFirstName != $1.girlFirstName { return $0.girlFirstName < $1.girlFirstName }
-                return $0.girlLastName < $1.girlLastName
-            }
-
-            completion(girls)
+        // --- Data load (Firebase vs Mock) ---
+        if useFirebase {
+            loadGirls()     // uses fetchGirlsFromFirebase -> allResults -> applyFilters()
+        } else {
+            loadMocks()     // sets girlsByKey + allResults -> applyFilters()
         }
     }
+    private func loadMocks() {
+        print("✅ USING MOCKS")
+        let girls = MockGirls.all
+        print("MockGirls.count =", girls.count)
+
+        girlsByKey = Dictionary(uniqueKeysWithValues: girls.map { ($0.key, $0) })
+        allResults = girls.map { makeResult(from: $0) }
+
+        applyFilters()
+    }
+
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        loadGirls()
+    }
+    
+    @objc private func addGirlTapped() {
+        let vc = AddEditGirlViewController()
+        vc.isEditingGirl = false
+        vc.selectedShadchanGirl = ShadchanGirl(
+            girlCell: "",
+            girlLastName: "",
+            girlFirstName: "",
+            city: "",
+            dobIntervalString: "",
+            dateCreated: "",
+            dateLastUpdate: Int(Date().timeIntervalSince1970),
+            girlHeight: "",
+            sendResumeEmail: "",
+            sendResumeText: "",
+            lifePlans: [],
+            status: "available",
+            datingHistory: "",
+            shadchanNotesNew: "",
+            notesImageURL: "",
+            resumeImageURL: "",
+            photoImageURL: "",
+            key: ""
+        )
+
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    private func loadGirls() {
+        fetchGirlsFromFirebase { [weak self] girls in
+            guard let self else { return }
+
+            self.girlsByKey = Dictionary(uniqueKeysWithValues: girls.map { ($0.key, $0) })
+            self.allResults = girls.map { self.makeResult(from: $0) }
+
+            // ✅ Preserve current search text + chip selections
+            self.applyFilters()
+        }
+    }
+
+
+    private func makeResult(from g: ShadchanGirl) -> ResultProfile {
+        let ageDouble = g.calculateAgeFrom(dobString: g.dobIntervalString)
+        let ageInt = ageDouble > 0 ? Int(ageDouble.rounded()) : nil
+
+        let inches = HeightParser.parseInches(from: g.girlHeight)
+        let heightText: String = inches.map { "\($0 / 12)'\($0 % 12)\"" } ?? ""
+
+        let fullName = "\(g.girlFirstName) \(g.girlLastName)"
+            .replacingOccurrences(of: "  ", with: " ")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+
+        return ResultProfile(
+            id: g.key,
+            name: fullName,
+            age: ageInt,
+            heightInches: inches,
+            heightText: heightText,
+            city: g.city,
+            lifePlans: g.lifePlans,
+            photoURL: g.photoImageURL.isEmpty ? nil : g.photoImageURL
+        )
+    }
+
+ private func fetchGirlsFromFirebase(completion: @escaping ([ShadchanGirl]) -> Void) {
+     guard let uid = Auth.auth().currentUser?.uid else {
+         DispatchQueue.main.async { completion([]) }
+         return
+     }
+
+     let ref = Database.database().reference()
+         .child("PrivateGirlsList")
+         .child(uid)
+
+     ref.observeSingleEvent(of: .value) { snapshot in
+         var girls: [ShadchanGirl] = []
+         girls.reserveCapacity(Int(snapshot.childrenCount))
+
+         for child in snapshot.children {
+             guard let snap = child as? DataSnapshot else { continue }
+
+             let g = ShadchanGirl(snapshot: snap)
+
+             // Normalize + de-dupe legacy categories/lifePlans
+             let normalized = LifePlanNormalizer.normalizeArray(g.categories)
+             g.categories = Array(NSOrderedSet(array: normalized)) as? [String] ?? normalized
+
+             girls.append(g)
+         }
+
+         // Stable, case-insensitive sorting
+         girls.sort {
+             let aFirst = $0.girlFirstName.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+             let bFirst = $1.girlFirstName.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+             if aFirst != bFirst { return aFirst < bFirst }
+
+             let aLast = $0.girlLastName.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+             let bLast = $1.girlLastName.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+             return aLast < bLast
+         }
+
+         DispatchQueue.main.async {
+             completion(girls)
+         }
+     }
+ }
+
+ 
+   
 
     
     private func makeMockProfile(from g: ShadchanGirl) -> MockProfile {
@@ -578,32 +612,47 @@ class GirlsFilterSearchVC: UIViewController {
     
     
     private func updateClearButtonEnabled() {
-        let hasSelections = !selectedHeightTags.isEmpty || !selectedAgeTags.isEmpty || !selectedLifePlans.isEmpty
-        navigationItem.rightBarButtonItem?.isEnabled = hasSelections
+        let hasTagSelections =
+            !selectedHeightTags.isEmpty ||
+            !selectedAgeTags.isEmpty ||
+            !selectedLifePlans.isEmpty
+
+        let hasSearchText = !currentSearchText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+
+        let shouldEnableClear = hasTagSelections || hasSearchText
+
+        // Assuming your rightBarButtonItems = [Add, Clear]
+        navigationItem.rightBarButtonItems?.last?.isEnabled = shouldEnableClear
+    }
+
+    
+    @objc private func clearTapped() {
+        // 1) Clear tag selections
+        selectedHeightTags.removeAll()
+        selectedAgeTags.removeAll()
+        selectedLifePlans.removeAll()
+
+        chipsCollectionView.indexPathsForSelectedItems?.forEach {
+            chipsCollectionView.deselectItem(at: $0, animated: true)
+        }
+
+        // 2) Clear search text too (recommended)
+        currentSearchText = ""
+        searchBar.text = ""
+        searchBar.resignFirstResponder()
+
+        // 3) Reset data
+        filteredResults = allResults
+
+        // 4) Reload + update UI
+        resultsTableView.reloadData()
+        updateEmptyState()
+        updateResultsHeader()
+        updateNavTitleAnimated()
+        updateClearButtonEnabled()
     }
     
-     @objc private func clearTapped() {
-         selectedHeightTags.removeAll()
-         selectedAgeTags.removeAll()
-         selectedLifePlans.removeAll()
 
-         chipsCollectionView.indexPathsForSelectedItems?.forEach {
-             chipsCollectionView.deselectItem(at: $0, animated: true)
-         }
-
-         // Reset data
-         filteredProfiles = allProfiles
-
-         // Reload table
-         resultsTableView.reloadData()
-
-         // 👇 Update empty state HERE
-         updateEmptyState()
-
-         // Other UI cleanup
-         updateNavTitleAnimated()
-         updateClearButtonEnabled()
-     }
 
     //MARK: Filter Summary Label
     // ex: Height: 2 Age: 2 Plans: 4
@@ -714,20 +763,36 @@ class GirlsFilterSearchVC: UIViewController {
     @objc private func closeTapped() {
           dismiss(animated: true)
       }
+    
+    
 
+    private var currentSearchText: String = ""
+    private func updateResultsHeader() {
+        let q = currentSearchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        if q.isEmpty {
+            resultsHeaderLabel.text = "Results (\(filteredProfiles.count))"
+        } else {
+            resultsHeaderLabel.text = "Results (\(filteredProfiles.count)) • “\(q)”"
+        }
+    }
 }
-
 extension GirlsFilterSearchVC: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        // Placeholder behavior for now:
-        if searchText.isEmpty {
-            results = (1...25).map { "Result \($0)" }
-        } else {
-            results = (1...25).map { "Result \($0)" }.filter { $0.localizedCaseInsensitiveContains(searchText) }
-        }
-        resultsTableView.reloadData()
+        currentSearchText = searchText
+        applyFilters()   // reuse your existing pipeline
     }
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+         searchBar.resignFirstResponder()
+     }
+
+     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+         currentSearchText = ""
+         searchBar.text = ""
+         searchBar.resignFirstResponder()
+         applyFilters()
+     }
+   
 }
 // MARK: - UITableViewDataSource / Delegate
 
@@ -745,28 +810,38 @@ extension GirlsFilterSearchVC: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        filteredProfiles.count
+        
+         return   filteredResults.count
+        
     }
       
     
     func tableView(_ tableView: UITableView,
-                             cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+                   cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-         let cell = tableView.dequeueReusableCell(withIdentifier: ProfileResultCell.reuseID,
-                                                  for: indexPath) as! ProfileResultCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: ProfileResultCell.reuseID,
+                                                 for: indexPath) as! ProfileResultCell
 
-         let profile = filteredProfiles[indexPath.row] // or whatever your data array is
-         cell.configure(profile: profile)
+        let r = filteredResults[indexPath.row]
+        cell.configure(result: r)
 
-         return cell
-     }
+        return cell
+    }
 
-     
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        // Later: open profile / detail
+
+        let r = filteredResults[indexPath.row]
+        guard let girl = girlsByKey[r.id] else { return }
+
+        let vc = AddEditGirlViewController()
+        vc.isEditingGirl = true
+        vc.selectedShadchanGirl = girl
+        navigationController?.pushViewController(vc, animated: true)
     }
+
+
 }
 // MARK: - UICollectionViewDataSource / DelegateFlowLayout
 
@@ -919,50 +994,63 @@ extension GirlsFilterSearchVC: UICollectionViewDataSource, UICollectionViewDeleg
         }
     }
     
+     
     
-
      private func applyFilters() {
-         
+         let searchText = currentSearchText.trimmingCharacters(in: .whitespacesAndNewlines)
+         let q = searchText.lowercased()
 
-         // iterate over all the profiles
-         let newFiltered = allProfiles.filter { p in
-             
+         let newFiltered = allResults.filter { r in
+
+             // --- Height chips ---
              if !selectedHeightTags.isEmpty {
-                 let matches = selectedHeightTags.contains { $0.inchRange.contains(p.heightInches) }
-                 if !matches { return false }
-             }
-             if !selectedAgeTags.isEmpty {
-                 let matches = selectedAgeTags.contains { $0.ageRange.contains(p.age) }
+                 guard let inches = r.heightInches else { return false }
+                 let matches = selectedHeightTags.contains { $0.inchRange.contains(inches) }
                  if !matches { return false }
              }
 
+             // --- Age chips ---
+             if !selectedAgeTags.isEmpty {
+                 guard let age = r.age else { return false }
+                 let matches = selectedAgeTags.contains { $0.ageRange.contains(age) }
+                 if !matches { return false }
+             }
+
+             // --- Life plan chips ---
              if !selectedLifePlans.isEmpty {
                  let selectedTitles = Set(selectedLifePlans.map { $0.title })
-
-                 let profileTitles = Set(p.lifePlans)
+                 let profileTitles = Set(r.lifePlans)
                  if selectedTitles.isDisjoint(with: profileTitles) { return false }
+             }
+
+             // --- Word-start search ---
+             if !q.isEmpty {
+                 let searchable =
+                     r.name + " " +
+                     r.city + " " +
+                     r.lifePlans.joined(separator: " ")
+
+                 let tokens = searchable
+                     .lowercased()
+                     .split { !$0.isLetter && !$0.isNumber }
+                     .map(String.init)
+
+                 let matches = tokens.contains { $0.hasPrefix(q) }
+                 if !matches { return false }
              }
 
              return true
          }
-         print("applyFilters fired. selectedAgeTags:", selectedAgeTags.map(\.title), "result:", newFiltered.count)
 
-         
-         // 1. Update the data
-         filteredProfiles = newFiltered
-
-         // 2. Reload the table
+         filteredResults = newFiltered
          resultsTableView.reloadData()
-
-         // 3. NOW update empty state 👈 THIS IS THE LINE
          updateEmptyState()
-
-         // 4. Other UI updates
+         updateResultsHeader()
          updateNavTitleAnimated()
          updateClearButtonEnabled()
      }
 
-     private func reselectPreviouslySelectedChips() {
+    private func reselectPreviouslySelectedChips() {
          
         // iterate over all the chips sections by iterating over
         // TagCategory.allCasess.count which is 3
@@ -1324,45 +1412,43 @@ final class ProfileResultCell: UITableViewCell {
         chipsStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
     }
     
-    
-     func configure(profile: MockProfile) {
-         
-         // Clear old chips (important for reused cells)
-          chipsStack.arrangedSubviews.forEach { v in
-              chipsStack.removeArrangedSubview(v)
-              v.removeFromSuperview()
-          }
+     func configure(result: ResultProfile) {
 
-         // ---- Title line: Name • Age • Height ----
-         let ageText = String(profile.age)
+         chipsStack.arrangedSubviews.forEach { v in
+             chipsStack.removeArrangedSubview(v)
+             v.removeFromSuperview()
+         }
 
-         let inches = profile.heightInches
-         let heightText = "\(inches / 12)'\(inches % 12)\""
+         let ageText = result.age.map(String.init) ?? ""
+         let heightText = result.heightText
 
-         titleLabel.text = "\(profile.name) • \(ageText) • \(heightText)"
+         let pieces = [result.name,
+                       ageText.isEmpty ? nil : ageText,
+                       heightText.isEmpty ? nil : heightText]
+             .compactMap { $0 }
 
-         // ---- Life plan chips (max 3 + “+N more”) ----
-         let maxChips = 4
-         let plans = profile.lifePlans
+         titleLabel.text = pieces.joined(separator: " • ")
+
+         let maxChips = 3
+         let plans = result.lifePlans
          let shown = Array(plans.prefix(maxChips))
          let remaining = plans.count - shown.count
 
          for plan in shown {
-             // Uncomment when ResultChipView is ready
-              chipsStack.addArrangedSubview(
-                  ResultChipView(text: plan, accent: TagCategory.lifePlans.accentColor)
-              )
+             chipsStack.addArrangedSubview(
+                 ResultChipView(text: plan, accent: TagCategory.lifePlans.accentColor)
+             )
          }
-
          if remaining > 0 {
-              chipsStack.addArrangedSubview(
-                ResultChipView(text: "+\(remaining)", accent: TagCategory.lifePlans.accentColor)
-              )
+             chipsStack.addArrangedSubview(
+                 ResultChipView(text: "+\(remaining) more", accent: TagCategory.lifePlans.accentColor)
+             )
          }
 
-         // ---- Image (mock placeholder) ----
          photoView.image = UIImage(systemName: "person.crop.square")
      }
+
+     
 }
 
 //MARK Result Profile
