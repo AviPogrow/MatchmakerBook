@@ -418,11 +418,7 @@ class GirlsFilterSearchVC: UIViewController {
         navTitleView.configure(title: "Search", subtitle: nil)
         navigationItem.titleView = navTitleView
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: .close,
-            target: self,
-            action: #selector(closeTapped)
-        )
+     
 
         let addButton = UIBarButtonItem(
             barButtonSystemItem: .add,
