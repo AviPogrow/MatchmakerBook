@@ -97,7 +97,6 @@ enum MockGirls {
     }()
 }
 
-
 enum AgeTag: CaseIterable, Hashable {
     case nineteenToTwentyThree
     case twentyFourToTwentyEight
@@ -113,6 +112,7 @@ enum AgeTag: CaseIterable, Hashable {
             return "29+"
         }
     }
+    
     var ageRange: ClosedRange<Int> {
         switch self {
         case .nineteenToTwentyThree:
@@ -215,8 +215,6 @@ enum LifePlanNormalizer {
     }
 }
 
-
-
 enum TagCategory: Int, CaseIterable {
     case height, age, lifePlans
 
@@ -242,6 +240,14 @@ class GirlsFilterSearchVC: UIViewController {
     
     private lazy var emptyStateView: EmptyStateView = {
         let v = EmptyStateView()
+        
+        // empty state view doesn't
+        // describe what to do when clear is tapped
+        // it just declares a callback closure
+        // but here we fill in what should happen
+        // and that is the clear tapped function
+        // is triggered which resets alll the tags
+        // and the search field etc.
         v.onClearTapped = { [weak self] in
             self?.clearTapped()
         }
@@ -287,9 +293,6 @@ class GirlsFilterSearchVC: UIViewController {
     private var girlsByKey: [String: ShadchanGirl] = [:]
     private var allResults: [ResultProfile] = []
     private var filteredResults: [ResultProfile] = []
-
-
-    
     private var allProfiles: [MockProfile] = []
     private var filteredProfiles: [MockProfile] = []
     
@@ -417,9 +420,6 @@ class GirlsFilterSearchVC: UIViewController {
 
         navTitleView.configure(title: "Search", subtitle: nil)
         navigationItem.titleView = navTitleView
-
-     
-
         let addButton = UIBarButtonItem(
             barButtonSystemItem: .add,
             target: self,
@@ -603,10 +603,6 @@ class GirlsFilterSearchVC: UIViewController {
         )
     }
 
-    
-
-    
-    
     private func updateClearButtonEnabled() {
         let hasTagSelections =
             !selectedHeightTags.isEmpty ||
@@ -621,7 +617,8 @@ class GirlsFilterSearchVC: UIViewController {
         navigationItem.rightBarButtonItems?.last?.isEnabled = shouldEnableClear
     }
 
-    
+    // this function gets invoked from the clear button
+    // but also it gets invoked from the emty results view
     @objc private func clearTapped() {
         // 1) Clear tag selections
         selectedHeightTags.removeAll()
@@ -648,8 +645,6 @@ class GirlsFilterSearchVC: UIViewController {
         updateClearButtonEnabled()
     }
     
-
-
     //MARK: Filter Summary Label
     // ex: Height: 2 Age: 2 Plans: 4
     private func filterSummaryText() -> String? {
@@ -679,6 +674,7 @@ class GirlsFilterSearchVC: UIViewController {
 
     
     final class NavTitleView: UIView {
+       
         private let titleLabel: UILabel = {
             let l = UILabel()
             l.font = .systemFont(ofSize: 17, weight: .semibold)
@@ -760,18 +756,17 @@ class GirlsFilterSearchVC: UIViewController {
           dismiss(animated: true)
       }
     
-    
-
     private var currentSearchText: String = ""
     private func updateResultsHeader() {
         let q = currentSearchText.trimmingCharacters(in: .whitespacesAndNewlines)
         if q.isEmpty {
-            resultsHeaderLabel.text = "Results (\(filteredProfiles.count))"
+            resultsHeaderLabel.text = "Results (\(filteredResults.count))"
         } else {
-            resultsHeaderLabel.text = "Results (\(filteredProfiles.count)) • “\(q)”"
+            resultsHeaderLabel.text = "Results (\(filteredResults.count)) • “\(q)”"
         }
     }
 }
+
 extension GirlsFilterSearchVC: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -808,10 +803,8 @@ extension GirlsFilterSearchVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
          return   filteredResults.count
-        
     }
       
-    
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
@@ -824,7 +817,6 @@ extension GirlsFilterSearchVC: UITableViewDataSource, UITableViewDelegate {
         return cell
     }
 
-
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
@@ -836,12 +828,12 @@ extension GirlsFilterSearchVC: UITableViewDataSource, UITableViewDelegate {
         vc.selectedShadchanGirl = girl
         navigationController?.pushViewController(vc, animated: true)
     }
-
-
 }
+
 // MARK: - UICollectionViewDataSource / DelegateFlowLayout
 
 extension GirlsFilterSearchVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+   
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         TagCategory.allCases.count
     }
@@ -979,14 +971,14 @@ extension GirlsFilterSearchVC: UICollectionViewDataSource, UICollectionViewDeleg
     }
     
     private func updateEmptyState() {
-        if filteredProfiles.isEmpty {
+        if filteredResults.isEmpty {
             resultsTableView.backgroundView = emptyStateView
             resultsTableView.separatorStyle = .none
-            resultsHeaderLabel.text = "Results (0)"
+            
         } else {
             resultsTableView.backgroundView = nil
             resultsTableView.separatorStyle = .singleLine
-            resultsHeaderLabel.text = "Results (\(filteredProfiles.count))"
+           
         }
     }
     
@@ -1172,10 +1164,10 @@ final class ChipCell: UICollectionViewCell {
     override var isSelected: Bool {
         didSet { applySelectionStyle(selected: isSelected) }
     }
-
-
 }
-
+// the chips collectionView has three sections
+// At the top of each section of the tag chips you see
+// Age - Height - Life Plans
 final class ChipHeaderView: UICollectionReusableView {
     static let reuseID = "ChipHeaderView"
 
@@ -1198,11 +1190,17 @@ final class ChipHeaderView: UICollectionReusableView {
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
-    func configure(title: String) { label.text = title }
+    func configure(title: String) {
+        label.text = title }
 }
 
 final class EmptyStateView: UIView {
 
+    // this is a call back closure
+    // it gets triggered when the
+    // clear button is tapped
+    // it gets defined when we
+    // set up the empty state view
     var onClearTapped: (() -> Void)?
 
     private let titleLabel: UILabel = {
@@ -1443,8 +1441,6 @@ final class ProfileResultCell: UITableViewCell {
 
          photoView.image = UIImage(systemName: "person.crop.square")
      }
-
-     
 }
 
 //MARK Result Profile
