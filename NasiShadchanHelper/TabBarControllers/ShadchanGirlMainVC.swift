@@ -386,9 +386,7 @@ class ShadchanGirlMainVC: UIViewController,
          searchBar.isHidden = true
             
          let controller =  AddEditGirlViewController()
-    
-
-        var currentGirl: ShadchanGirl!
+          var currentGirl: ShadchanGirl!
             
         currentGirl = filteredShadchanGirlsList[indexPath.row]
         
@@ -400,6 +398,7 @@ class ShadchanGirlMainVC: UIViewController,
          let currentGirlKey: String!
         currentGirlKey = currentGirl.key
         controller.selectedShadchanGirl.key = currentGirlKey
+        
         var girlsNamesString: String = ""
          
          let filteredGirlsDatingList = filterByGirlId(datingHistory: allGirlDatingHistoryArray, girlId: currentGirlKey)

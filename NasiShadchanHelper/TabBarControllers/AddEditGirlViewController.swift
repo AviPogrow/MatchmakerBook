@@ -126,10 +126,11 @@ class AddEditGirlViewController: FormViewController,CNContactPickerDelegate, Sca
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        showAddGirlOptions()
-        navigationItem.title = "Profile Details"
         
-        if selectedShadchanGirl != nil {
+       
+        
+        if isEditingGirl {
+            navigationItem.title = "Edit Profile"
             let barButtonDelete = UIBarButtonItem(title: "Delete", style: .plain, target: self, action: #selector(handleDelete))
             barButtonDelete.tintColor = UIColor.red
             
@@ -137,19 +138,18 @@ class AddEditGirlViewController: FormViewController,CNContactPickerDelegate, Sca
             
             navigationItem.rightBarButtonItems = [barButtonSave, barButtonDelete]
             
+            
         }
         else {
-            
+            navigationItem.title = "Add Profile Details"
+            showAddGirlOptions()
+            initNewNasiGirl()
+
             let barButtonSave = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(saveGirlToFirebase))
             navigationItem.rightBarButtonItem = barButtonSave
         }
         
         self.tableView.backgroundColor = UIColor.white
-        if selectedShadchanGirl == nil {
-            isEditingGirl = false
-            initNewNasiGirl()
-        }
-        
         
         //MARK: Girls Name
         form +++ Section("Girls Name")
@@ -538,9 +538,6 @@ class AddEditGirlViewController: FormViewController,CNContactPickerDelegate, Sca
         }
     }
 
-    
-   
-    
     func heightTag(from heightString: String) -> String? {
         
         let clean = heightString
@@ -589,14 +586,7 @@ class AddEditGirlViewController: FormViewController,CNContactPickerDelegate, Sca
     }
 
   
-    
-    func handleAddManually() {
-      //  let addEditController = AddEditGirlViewController()
-      //  label.isHidden = true
-     //   navigationController?.pushViewController(addEditController, animated: true)
-     //   searchBar.isHidden = true
-        
-    }
+   
     func importFromContacts() {
         let store = CNContactStore()
         switch
@@ -692,9 +682,9 @@ func importContact(_ contact: CNContact){
 }
     @objc func showAddGirlOptions() {
         let alert = UIAlertController(title: "Add Girl", message: "Choose how you'd like to add a girl", preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Add Manually", style: .default, handler: { (_) in
-            self.handleAddManually()
-        }))
+        //alert.addAction(UIAlertAction(title: "Add Manually", style: .default, handler: { (_) in
+          //  self.handleAddManually()
+        //}))
         
         alert.addAction(UIAlertAction(title: "Import From Contacts", style: .default, handler: { (_) in
             self.importFromContacts()
@@ -873,14 +863,7 @@ func importContact(_ contact: CNContact){
         selectedShadchanGirl.lifePlans = values
     }
 
-    
-    @objc func handleAdd() {
-        let AddEditController = AddEditGirlViewController()
-        
-        navigationController?.pushViewController(AddEditController, animated: true)
-    }
-    
-   
+
     func initNewNasiGirl() {
         let dateCreated  = Date()
     
