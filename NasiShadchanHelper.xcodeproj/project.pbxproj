@@ -105,6 +105,8 @@
 		CB219D4E2D8C82EB00D439B6 /* Untitled.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB219D4D2D8C82E900D439B6 /* Untitled.swift */; };
 		CB3EED4F2F3E1C8D006B392B /* ProfileSearchFilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3EED4E2F3E1C8D006B392B /* ProfileSearchFilterVC.swift */; };
 		CB4E5B732F2BECD00042A61A /* GirlsFilterSearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4E5B722F2BECD00042A61A /* GirlsFilterSearchVC.swift */; };
+		CB90DEE12F438CBA002F7FEA /* OCRReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB90DEE02F438CBA002F7FEA /* OCRReviewViewController.swift */; };
+		CB90DEE32F439B07002F7FEA /* ResumeScanStartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB90DEE22F439B07002F7FEA /* ResumeScanStartViewController.swift */; };
 		CBE7B7222E2BEC9100AE2CEB /* ScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE7B7212E2BEC9100AE2CEB /* ScannerViewController.swift */; };
 		CE3AC07824536729006B9FEA /* CategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3AC07724536729006B9FEA /* CategoriesViewController.swift */; };
 		CE3AC07B24536729006B9FEA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE3AC07924536729006B9FEA /* Main.storyboard */; };
@@ -247,6 +249,8 @@
 		CB219D4D2D8C82E900D439B6 /* Untitled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Untitled.swift; sourceTree = "<group>"; };
 		CB3EED4E2F3E1C8D006B392B /* ProfileSearchFilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSearchFilterVC.swift; sourceTree = "<group>"; };
 		CB4E5B722F2BECD00042A61A /* GirlsFilterSearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GirlsFilterSearchVC.swift; sourceTree = "<group>"; };
+		CB90DEE02F438CBA002F7FEA /* OCRReviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRReviewViewController.swift; sourceTree = "<group>"; };
+		CB90DEE22F439B07002F7FEA /* ResumeScanStartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResumeScanStartViewController.swift; sourceTree = "<group>"; };
 		CBE7B7212E2BEC9100AE2CEB /* ScannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerViewController.swift; sourceTree = "<group>"; };
 		CE3AC07024536729006B9FEA /* NasiShadchanHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NasiShadchanHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE3AC07724536729006B9FEA /* CategoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewController.swift; sourceTree = "<group>"; };
@@ -448,12 +452,14 @@
 				5228CB1D27A5D02E00EDF103 /* AddEditBoyViewController.swift */,
 				52A357A12A151D260064860F /* ShadchanGirlMainVC.swift */,
 				CB4E5B722F2BECD00042A61A /* GirlsFilterSearchVC.swift */,
+				CB90DEE22F439B07002F7FEA /* ResumeScanStartViewController.swift */,
 				CB3EED4E2F3E1C8D006B392B /* ProfileSearchFilterVC.swift */,
 				521924EC2A1909DE00A9DBA4 /* ShadchanGirlsCategoriesVC.swift */,
 				5299A1CB2A1BD62500F653F3 /* ShadchanGirlSubcategoryVC.swift */,
 				521D605529B7763A000E91DC /* BoyCategoriesVC.swift */,
 				529D21AC2A05F70100D1500D /* BoySubCategoriesVC.swift */,
 				52DB326029997D0D00AC5F87 /* AddEditGirlViewController.swift */,
+				CB90DEE02F438CBA002F7FEA /* OCRReviewViewController.swift */,
 				5290DBB7293E3FAE004F6A04 /* HomeViewController.swift */,
 				528F5E2429619AFC00DE5223 /* CategoryViewController.swift */,
 				52DB32562996CD2B00AC5F87 /* SubCategoryVC.swift */,
@@ -975,6 +981,7 @@
 				520578D5299BBA2500B732A0 /* MatchView.swift in Sources */,
 				CEC468DB245A217F0071EC85 /* ResumeViewController.swift in Sources */,
 				CB4E5B732F2BECD00042A61A /* GirlsFilterSearchVC.swift in Sources */,
+				CB90DEE32F439B07002F7FEA /* ResumeScanStartViewController.swift in Sources */,
 				5228CB14279C6FCB00EDF103 /* DatesTableCell.swift in Sources */,
 				CE3AC07824536729006B9FEA /* CategoriesViewController.swift in Sources */,
 				521D605629B7763A000E91DC /* BoyCategoriesVC.swift in Sources */,
@@ -1013,6 +1020,7 @@
 				1851798A2525FAF20099D65E /* ProgressIndicator.swift in Sources */,
 				5228CB2327B1876300EDF103 /* DescriptionCollectionViewCell.swift in Sources */,
 				52E486C62B23831B00CA43CE /* SelectableViewController.swift in Sources */,
+				CB90DEE12F438CBA002F7FEA /* OCRReviewViewController.swift in Sources */,
 				CE3AC0AC2454650F006B9FEA /* SingleTableViewCell.swift in Sources */,
 				529D21AF2A06D41900D1500D /* BoyCollectionViewCell.swift in Sources */,
 				CE525A702461B55300CBEC41 /* UIImage+Resize.swift in Sources */,
@@ -1230,7 +1238,7 @@
 				CODE_SIGN_ENTITLEMENTS = NasiShadchanHelper/NasiShadchanHelper.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 58.7;
+				CURRENT_PROJECT_VERSION = 58.7.1;
 				DEVELOPMENT_TEAM = P77A2352BM;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = NasiShadchanHelper/Info.plist;
@@ -1239,7 +1247,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 58.7;
+				MARKETING_VERSION = 58.7.1;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.AviPogrow.NasiShadchanHelper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1259,7 +1267,7 @@
 				CODE_SIGN_ENTITLEMENTS = NasiShadchanHelper/NasiShadchanHelper.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 58.7;
+				CURRENT_PROJECT_VERSION = 58.7.1;
 				DEVELOPMENT_TEAM = P77A2352BM;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = NasiShadchanHelper/Info.plist;
@@ -1268,7 +1276,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 58.7;
+				MARKETING_VERSION = 58.7.1;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.AviPogrow.NasiShadchanHelper;
 				PRODUCT_NAME = "$(TARGET_NAME)";

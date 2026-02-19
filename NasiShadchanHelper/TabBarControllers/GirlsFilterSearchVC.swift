@@ -237,6 +237,11 @@ enum TagCategory: Int, CaseIterable {
 
 //MARK: GirlsFilterSearchVC
 class GirlsFilterSearchVC: UIViewController {
+    private var chipsHeightConstraint: NSLayoutConstraint!
+    private var chipsCollapsed = false
+    private let chipsExpandedHeight: CGFloat = 220
+    private let chipsCollapsedHeight: CGFloat = 44   // or 0 if you want fully hidden
+
     
     private lazy var emptyStateView: EmptyStateView = {
         let v = EmptyStateView()
@@ -262,12 +267,41 @@ class GirlsFilterSearchVC: UIViewController {
         return l
     }()
 
+    private lazy var filtersToggleButton: UIButton = {
+        let b = UIButton(type: .system)
+        b.setTitle("Hide Filters", for: .normal)
+        b.titleLabel?.font = .systemFont(ofSize: 14, weight: .semibold)
+        b.addTarget(self, action: #selector(toggleFiltersTapped), for: .touchUpInside)
+        return b
+    }()
+    
+    @objc private func toggleFiltersTapped() {
+        chipsCollapsed.toggle()
+
+        chipsHeightConstraint.constant = chipsCollapsed ? chipsCollapsedHeight : chipsExpandedHeight
+        filtersToggleButton.setTitle(chipsCollapsed ? "Show Filters" : "Hide Filters", for: .normal)
+
+        UIView.animate(withDuration: 0.25, delay: 0, options: [.curveEaseInOut]) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
     private lazy var resultsHeaderView: UIView = {
+        
+    
         let v = UIView()
         v.backgroundColor = .systemBackground
 
         v.addSubview(resultsHeaderLabel)
         resultsHeaderLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        v.addSubview(filtersToggleButton)
+        filtersToggleButton.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            filtersToggleButton.trailingAnchor.constraint(equalTo: v.trailingAnchor, constant: -16),
+            filtersToggleButton.centerYAnchor.constraint(equalTo: resultsHeaderLabel.centerYAnchor)
+        ])
 
         NSLayoutConstraint.activate([
             resultsHeaderLabel.leadingAnchor.constraint(equalTo: v.leadingAnchor, constant: 16),
@@ -420,6 +454,7 @@ class GirlsFilterSearchVC: UIViewController {
 
         navTitleView.configure(title: "Search", subtitle: nil)
         navigationItem.titleView = navTitleView
+        
         let addButton = UIBarButtonItem(
             barButtonSystemItem: .add,
             target: self,
@@ -431,8 +466,18 @@ class GirlsFilterSearchVC: UIViewController {
             style: .plain,
             target: self,
             action: #selector(clearTapped)
-        )
+       )
         clearButton.isEnabled = false
+        
+        let extractButton = UIBarButtonItem(
+            title: "Extract",
+            style: .plain,
+            target: self,
+            action: #selector(extractTapped)
+        )
+        
+        extractButton.isEnabled = true
+    
 
         navigationItem.rightBarButtonItems = [addButton, clearButton]
 
@@ -446,6 +491,11 @@ class GirlsFilterSearchVC: UIViewController {
         resultsTableView.register(ProfileResultCell.self, forCellReuseIdentifier: ProfileResultCell.reuseID)
         resultsTableView.rowHeight = UITableView.automaticDimension
         resultsTableView.estimatedRowHeight = 76
+        
+        //resultsTableView.separatorStyle = .none
+        //resultsTableView.backgroundColor = .systemGroupedBackground
+        //resultsTableView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 16, right: 0)
+
 
         // --- Layout ---
         setupUI()
@@ -457,6 +507,14 @@ class GirlsFilterSearchVC: UIViewController {
             loadMocks()     // sets girlsByKey + allResults -> applyFilters()
         }
     }
+    
+    @objc private func extractTapped() {
+        //let vc = OCRReviewViewController()
+        let vc = ResumeScanStartViewController()
+        navigationController?.pushViewController(vc, animated: true)
+        
+    }
+    
     private func loadMocks() {
         print("✅ USING MOCKS")
         let girls = MockGirls.all
@@ -533,7 +591,8 @@ class GirlsFilterSearchVC: UIViewController {
             heightText: heightText,
             city: g.city,
             lifePlans: g.lifePlans,
-            photoURL: g.photoImageURL.isEmpty ? nil : g.photoImageURL
+            photoURL: g.photoImageURL.isEmpty ? nil : g.photoImageURL,
+            notes: g.shadchanNotesNew
         )
     }
 
@@ -730,26 +789,28 @@ class GirlsFilterSearchVC: UIViewController {
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         chipsCollectionView.translatesAutoresizingMaskIntoConstraints = false
         resultsTableView.translatesAutoresizingMaskIntoConstraints = false
-        
+
+        // ✅ Create the height constraint FIRST (outside activate)
+        chipsHeightConstraint = chipsCollectionView.heightAnchor.constraint(equalToConstant: chipsExpandedHeight)
+
         NSLayoutConstraint.activate([
-                   // Search bar pinned to safe area top
-                   searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-                   searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                   searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            // Search bar
+            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-                   // Chips row under search bar
-                   chipsCollectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 8),
-                   chipsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                   chipsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                   chipsCollectionView.heightAnchor.constraint(equalToConstant: 220),
+            // Chips
+            chipsCollectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 8),
+            chipsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            chipsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            chipsHeightConstraint, // ✅ activate the stored constraint here
 
-                   // Results fill remaining space
-                   resultsTableView.topAnchor.constraint(equalTo: chipsCollectionView.bottomAnchor, constant: 8),
-                   resultsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                   resultsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-                   resultsTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-               ])
-
+            // Results
+            resultsTableView.topAnchor.constraint(equalTo: chipsCollectionView.bottomAnchor, constant: 8),
+            resultsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            resultsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            resultsTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 
     @objc private func closeTapped() {
@@ -810,9 +871,13 @@ extension GirlsFilterSearchVC: UITableViewDataSource, UITableViewDelegate {
 
         let cell = tableView.dequeueReusableCell(withIdentifier: ProfileResultCell.reuseID,
                                                  for: indexPath) as! ProfileResultCell
+        //cell.backgroundColor = .clear
+        //cell.contentView.backgroundColor = .clear
 
+       
         let r = filteredResults[indexPath.row]
-        cell.configure(result: r)
+        cell.configure(result: r, row: indexPath.row)
+
 
         return cell
     }
@@ -1016,7 +1081,8 @@ extension GirlsFilterSearchVC: UICollectionViewDataSource, UICollectionViewDeleg
                  let searchable =
                      r.name + " " +
                      r.city + " " +
-                     r.lifePlans.joined(separator: " ")
+                     r.lifePlans.joined(separator: " ") + " " +
+                     r.notes
 
                  let tokens = searchable
                      .lowercased()
@@ -1335,6 +1401,140 @@ final class ResultChipView: UIView {
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 }
+/*
+final class ProfileResultCell: UITableViewCell {
+    static let reuseID = "ProfileResultCell"
+
+    private let cardView: UIView = {
+        let v = UIView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.backgroundColor = .secondarySystemBackground
+        v.layer.cornerRadius = 16
+        v.layer.masksToBounds = true
+        return v
+    }()
+
+    private let photoView: UIImageView = {
+        let iv = UIImageView()
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.contentMode = .scaleAspectFill
+        iv.clipsToBounds = true
+        iv.backgroundColor = .tertiarySystemFill
+        iv.layer.cornerRadius = 10
+        return iv
+    }()
+
+    private let titleLabel: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.font = .systemFont(ofSize: 14, weight: .semibold)
+        l.numberOfLines = 1
+        l.lineBreakMode = .byTruncatingTail
+        return l
+    }()
+
+    private let chipsStack: UIStackView = {
+        let s = UIStackView()
+        s.translatesAutoresizingMaskIntoConstraints = false
+        s.axis = .horizontal
+        s.alignment = .center
+        s.spacing = 4
+        return s
+    }()
+
+    private var imageTask: URLSessionDataTask?
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+
+        selectionStyle = .none
+        backgroundColor = .clear
+        contentView.backgroundColor = .clear
+        
+        titleLabel.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+        chipsStack.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+
+        contentView.addSubview(cardView)
+
+        let vStack = UIStackView(arrangedSubviews: [titleLabel, chipsStack])
+        vStack.translatesAutoresizingMaskIntoConstraints = false
+        vStack.axis = .vertical
+        vStack.spacing = 8
+        vStack.alignment = .leading
+
+        cardView.addSubview(photoView)
+        cardView.addSubview(vStack)
+
+        // Card insets (THIS is what creates the “card spacing”)
+        NSLayoutConstraint.activate([
+            cardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 6),
+            cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -6),
+            cardView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 6),
+            cardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -6),
+
+            photoView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 6),
+            photoView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 12),
+            photoView.widthAnchor.constraint(equalToConstant: 52),
+            photoView.heightAnchor.constraint(equalToConstant: 52),
+
+            vStack.leadingAnchor.constraint(equalTo: photoView.trailingAnchor, constant:4),
+            vStack.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -4),
+            vStack.centerYAnchor.constraint(equalTo: photoView.centerYAnchor),
+
+            cardView.bottomAnchor.constraint(greaterThanOrEqualTo: photoView.bottomAnchor, constant: 12),
+        ])
+    }
+
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageTask?.cancel()
+        imageTask = nil
+        photoView.image = nil
+        chipsStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
+    }
+
+    func configure(result: ResultProfile, row: Int) {
+        // Clear old chips
+        chipsStack.arrangedSubviews.forEach { v in
+            chipsStack.removeArrangedSubview(v)
+            v.removeFromSuperview()
+        }
+
+        let ageText = result.age.map(String.init) ?? ""
+        let heightText = result.heightText
+
+        let pieces = [result.name,
+                      ageText.isEmpty ? nil : ageText,
+                      heightText.isEmpty ? nil : heightText]
+            .compactMap { $0 }
+
+        titleLabel.text = pieces.joined(separator: " • ")
+
+        // result chips (same as you had)
+        let maxChips = 3
+        let plans = result.lifePlans
+        let shown = Array(plans.prefix(maxChips))
+        let remaining = plans.count - shown.count
+
+        for plan in shown {
+            chipsStack.addArrangedSubview(
+                ResultChipView(text: plan, accent: TagCategory.lifePlans.accentColor)
+            )
+        }
+        if remaining > 0 {
+            chipsStack.addArrangedSubview(
+                ResultChipView(text: "+\(remaining) more", accent: TagCategory.lifePlans.accentColor)
+            )
+        }
+
+        // Placeholder cycling (design mode)
+        photoView.image = DefaultImageCycler.image(forRow: row)
+            ?? UIImage(systemName: "person.crop.square")
+    }
+}
+*/
 
 final class ProfileResultCell: UITableViewCell {
     static let reuseID = "ProfileResultCell"
@@ -1381,6 +1581,12 @@ final class ProfileResultCell: UITableViewCell {
 
         contentView.addSubview(photoView)
         contentView.addSubview(vStack)
+        
+        contentView.layer.cornerRadius = 14
+        contentView.layer.masksToBounds = true
+        //contentView.backgroundColor = .secondarySystemBackground
+
+        
 
         NSLayoutConstraint.activate([
             photoView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
@@ -1406,7 +1612,7 @@ final class ProfileResultCell: UITableViewCell {
         chipsStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
     }
     
-     func configure(result: ResultProfile) {
+    func configure(result: ResultProfile, row: Int) {
 
          chipsStack.arrangedSubviews.forEach { v in
              chipsStack.removeArrangedSubview(v)
@@ -1438,10 +1644,31 @@ final class ProfileResultCell: UITableViewCell {
                  ResultChipView(text: "+\(remaining) more", accent: TagCategory.lifePlans.accentColor)
              )
          }
-
-         photoView.image = UIImage(systemName: "person.crop.square")
-     }
+         //photoView.image = UIImage(named: "defaultProfile")
+        photoView.image = DefaultImageCycler.image(forRow: row)
+                ?? UIImage(systemName: "person.crop.square")
+        
+        photoView.layer.borderWidth = 2
+        photoView.layer.borderColor = UIColor.systemBlue.cgColor
+        photoView.layer.borderColor = TagCategory.age.accentColor.cgColor
+        }
 }
+ 
+
+enum DefaultImageCycler {
+    static let count = 12
+
+    static func imageName(forRow row: Int) -> String {
+        let index = (row % count) + 1
+        return "defaultProfile\(index)"
+    }
+
+    static func image(forRow row: Int) -> UIImage? {
+        UIImage(named: imageName(forRow: row))
+    }
+}
+
+
 
 //MARK Result Profile
 struct MockProfile {
@@ -1468,6 +1695,8 @@ struct ResultProfile: Identifiable, Hashable {
     let city: String
     let lifePlans: [String]
     let photoURL: String?
+    let notes: String
+    
 }
 
 enum HeightParser {

@@ -138,6 +138,7 @@ class ScannerViewController: UITableViewController, VNDocumentCameraViewControll
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         let headerView = createLargeHeaderView()
         tableView.tableHeaderView = headerView
         
@@ -212,7 +213,7 @@ class ScannerViewController: UITableViewController, VNDocumentCameraViewControll
             // and extracts the data points we need using various
             // parsing techniques
             girlsName = self.extractName(from: rawRecognizedText) ?? ""
-            var splitName = self.splitLineIntoFirstAndLastName(girlsName) ?? ("","")
+            var splitName = self.splitFirstEverythingLast(girlsName) ?? ("","")
             self.firstName = splitName.0
             self.lastName = splitName.1
             
@@ -250,6 +251,58 @@ class ScannerViewController: UITableViewController, VNDocumentCameraViewControll
     }
     
     
+    func extractName(from text: String) -> String? {
+        
+        let lines = text.components(separatedBy: .newlines)
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
+
+        // Find the first line that doesn't look like DOB, phone, or address
+        for line in lines {
+            if !line.lowercased().contains("dob"),
+               !line.contains("@"),
+               (line.range(of: "\\d", options: .regularExpression) == nil) { // no numbers
+                return line
+            }
+        }
+
+        return nil
+    }
+    
+    // takes a line of string text and splits it
+    func splitLineIntoFirstAndLastName(_ line: String) -> (first: String, last: String)? {
+        let parts = line.split(separator: " ")
+        guard parts.count > 1 else { return nil }
+        
+        var firstName: String = ""
+        var lastName: String = ""
+        
+        for (index, part) in parts.enumerated() {
+            if index == 0 {
+                firstName = String(part)
+            }
+            if index == 1 {
+                lastName = String(part)
+            }
+        }
+        return (first: firstName, last: lastName)
+    }
+    
+    func splitFirstEverythingLast(_ line: String) -> (first: String, last: String)? {
+        let cleaned = line
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: "[()]", with: "", options: .regularExpression) // remove standalone ( )
+            .replacingOccurrences(of: "\\s+", with: " ", options: .regularExpression) // collapse spaces
+            .trimmingCharacters(in: CharacterSet(charactersIn: ",;:"))
+
+        var parts = cleaned.split(separator: " ").map(String.init)
+        guard parts.count >= 2 else { return nil }
+
+        let last = parts.removeLast()
+        let first = parts.joined(separator: " ")
+
+        return (first: first, last: last)
+    }
     
     @objc func presentDocumentScanner() {
         guard VNDocumentCameraViewController.isSupported else { return }
@@ -378,42 +431,6 @@ class ScannerViewController: UITableViewController, VNDocumentCameraViewControll
     
    
     
-    func extractName(from text: String) -> String? {
-        
-        let lines = text.components(separatedBy: .newlines)
-            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-            .filter { !$0.isEmpty }
-
-        // Find the first line that doesn't look like DOB, phone, or address
-        for line in lines {
-            if !line.lowercased().contains("dob"),
-               !line.contains("@"),
-               (line.range(of: "\\d", options: .regularExpression) == nil) { // no numbers
-                return line
-            }
-        }
-
-        return nil
-    }
-    
-    // takes a line of string text and splits it
-    func splitLineIntoFirstAndLastName(_ line: String) -> (first: String, last: String)? {
-        let parts = line.split(separator: " ")
-        guard parts.count > 1 else { return nil }
-        
-        var firstName: String = ""
-        var lastName: String = ""
-        
-        for (index, part) in parts.enumerated() {
-            if index == 0 {
-                firstName = String(part)
-            }
-            if index == 1 {
-                lastName = String(part)
-            }
-        }
-        return (first: firstName, last: lastName)
-    }
     /*
     func extractName(from text: String) -> String? {
         let tagger = NLTagger(tagSchemes: [.nameType])

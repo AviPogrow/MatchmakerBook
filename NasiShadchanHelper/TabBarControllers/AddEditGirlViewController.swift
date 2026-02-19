@@ -131,7 +131,7 @@ class AddEditGirlViewController: FormViewController,CNContactPickerDelegate, Sca
         
         if isEditingGirl {
             navigationItem.title = "Edit Profile"
-            let barButtonDelete = UIBarButtonItem(title: "Delete", style: .plain, target: self, action: #selector(handleDelete))
+            let barButtonDelete = UIBarButtonItem(title: "Delete", style: .plain, target: self, action: #selector(deleteTapped))
             barButtonDelete.tintColor = UIColor.red
             
             let barButtonSave = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(saveGirlToFirebase))
@@ -944,7 +944,74 @@ func importContact(_ contact: CNContact){
     
 
   
-        
+    @objc private func deleteTapped() {
+        let name = "\(selectedShadchanGirl.girlFirstName) \(selectedShadchanGirl.girlLastName)"
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+
+        let message = name.isEmpty
+            ? "This will permanently remove this record. This action cannot be undone."
+            : "This will permanently delete \(name). This action cannot be undone."
+
+        let alert = UIAlertController(
+            title: "Delete Girl?",
+            message: message,
+            preferredStyle: .alert
+        )
+
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+
+        alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+            self?.performDelete()
+        })
+
+        present(alert, animated: true)
+    }
+    
+    private func performDelete() {
+        guard isEditingGirl else { return }
+
+        // Best case: you have a ref from the snapshot
+        if let ref = selectedShadchanGirl.ref {
+            ref.removeValue { [weak self] error, _ in
+                guard let self else { return }
+                if let error {
+                    self.presentDeleteError(error)
+                    return
+                }
+                self.navigationController?.popToRootViewController(animated: true)
+            }
+            return
+        }
+
+        // Fallback: build the ref from uid + key
+        guard let uid = Auth.auth().currentUser?.uid, !selectedShadchanGirl.key.isEmpty else { return }
+
+        let ref = Database.database().reference()
+            .child("PrivateGirlsList")
+            .child(uid)
+            .child(selectedShadchanGirl.key)
+
+        ref.removeValue { [weak self] error, _ in
+            guard let self else { return }
+            if let error {
+                self.presentDeleteError(error)
+                return
+            }
+            self.navigationController?.popToRootViewController(animated: true)
+        }
+    }
+
+    private func presentDeleteError(_ error: Error) {
+        let alert = UIAlertController(
+            title: "Couldn’t Delete",
+            message: error.localizedDescription,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
+    
+    
     @objc func handleDelete() {
         selectedShadchanGirl.ref?.removeValue()
         self.navigationController?.popToRootViewController(animated: true)

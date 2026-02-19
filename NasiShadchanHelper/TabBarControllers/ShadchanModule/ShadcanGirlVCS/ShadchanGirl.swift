@@ -17,8 +17,6 @@ class ShadchanGirl: NSObject, Girl {
     var girlFirstName = ""
     var dobIntervalString = ""
     var computedAgeString: String = ""
-    
-   
     // protocol mapping
     var firstName: String { girlFirstName }
     var lastName: String { girlLastName }
@@ -36,7 +34,8 @@ class ShadchanGirl: NSObject, Girl {
     var  ref: DatabaseReference?
     var  key: String = ""
     var status = "available"
-  
+    var shadchanNotesNew = ""
+    
     var city = ""
     var girlHeight = ""
     var girlCell = ""
@@ -46,7 +45,7 @@ class ShadchanGirl: NSObject, Girl {
     var dateCreated = ""
     var  dateLastUpdate: Int   = 0
     var datingHistory = ""
-    var shadchanNotesNew = ""
+    
     
     // media
     var notesImageURL = ""
