@@ -237,12 +237,23 @@ enum TagCategory: Int, CaseIterable {
 
 //MARK: GirlsFilterSearchVC
 class GirlsFilterSearchVC: UIViewController {
+    
     private var chipsHeightConstraint: NSLayoutConstraint!
     private var chipsCollapsed = false
-    private let chipsExpandedHeight: CGFloat = 220
+    private let chipsExpandedHeight: CGFloat = 160
     private let chipsCollapsedHeight: CGFloat = 44   // or 0 if you want fully hidden
-
+    // private var filtersExpandedHeight: CGFloat = 180   // your normal expanded height (or compute)
+    //private let filtersPeekHeight: CGFloat = 52        // single-row-ish ribbon while keyboard is up
+    private var areChipsCollapsed = false
+    private var keyboardHeight: CGFloat = 0
+    private var wasFiltersExpandedBeforeKeyboard: Bool = true
     
+    
+    
+    // Add this near your VC properties:
+    private var noteSnippetById: [String: NSAttributedString] = [:]
+    
+    private var titleAttrById: [String: NSAttributedString] = [:]
     private lazy var emptyStateView: EmptyStateView = {
         let v = EmptyStateView()
         
@@ -258,7 +269,7 @@ class GirlsFilterSearchVC: UIViewController {
         }
         return v
     }()
-
+    
     private lazy var resultsHeaderLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: 14, weight: .semibold)
@@ -266,7 +277,7 @@ class GirlsFilterSearchVC: UIViewController {
         l.text = "Results"
         return l
     }()
-
+    
     private lazy var filtersToggleButton: UIButton = {
         let b = UIButton(type: .system)
         b.setTitle("Hide Filters", for: .normal)
@@ -275,47 +286,41 @@ class GirlsFilterSearchVC: UIViewController {
         return b
     }()
     
+    
     @objc private func toggleFiltersTapped() {
-        chipsCollapsed.toggle()
-
-        chipsHeightConstraint.constant = chipsCollapsed ? chipsCollapsedHeight : chipsExpandedHeight
-        filtersToggleButton.setTitle(chipsCollapsed ? "Show Filters" : "Hide Filters", for: .normal)
-
-        UIView.animate(withDuration: 0.25, delay: 0, options: [.curveEaseInOut]) {
-            self.view.layoutIfNeeded()
-        }
+        
+        setChipsCollapsed(!areChipsCollapsed, animated: true)
+    
     }
     
     private lazy var resultsHeaderView: UIView = {
-        
-    
         let v = UIView()
         v.backgroundColor = .systemBackground
-
+        
         v.addSubview(resultsHeaderLabel)
         resultsHeaderLabel.translatesAutoresizingMaskIntoConstraints = false
         
         v.addSubview(filtersToggleButton)
         filtersToggleButton.translatesAutoresizingMaskIntoConstraints = false
-
+        
         NSLayoutConstraint.activate([
             filtersToggleButton.trailingAnchor.constraint(equalTo: v.trailingAnchor, constant: -16),
             filtersToggleButton.centerYAnchor.constraint(equalTo: resultsHeaderLabel.centerYAnchor)
         ])
-
+        
         NSLayoutConstraint.activate([
             resultsHeaderLabel.leadingAnchor.constraint(equalTo: v.leadingAnchor, constant: 16),
             resultsHeaderLabel.trailingAnchor.constraint(equalTo: v.trailingAnchor, constant: -16),
             resultsHeaderLabel.topAnchor.constraint(equalTo: v.topAnchor, constant: 6),
             resultsHeaderLabel.bottomAnchor.constraint(equalTo: v.bottomAnchor, constant: -6)
         ])
-
+        
         return v
     }()
-
+    
     private func updateNavTitleAnimated() {
         let subtitle = filterSummaryText() ?? "\(filteredProfiles.count) results"
-
+        
         UIView.transition(with: navTitleView,
                           duration: 0.25,
                           options: [.transitionCrossDissolve, .allowUserInteraction],
@@ -323,7 +328,7 @@ class GirlsFilterSearchVC: UIViewController {
             self.navTitleView.configure(title: "Search", subtitle: subtitle)
         })
     }
-
+    
     private var girlsByKey: [String: ShadchanGirl] = [:]
     private var allResults: [ResultProfile] = []
     private var filteredResults: [ResultProfile] = []
@@ -337,45 +342,15 @@ class GirlsFilterSearchVC: UIViewController {
     private func heightTag(from title: String) -> HeightTag? {
         HeightTag.allCases.first { $0.title == title }
     }
-
+    
     private func ageTag(from title: String) -> AgeTag? {
         AgeTag.allCases.first { $0.title == title }
     }
-
+    
     private func lifePlanTag(from title: String) -> LifePlanTag? {
         LifePlanTag.allCases.first { $0.title == title }
     }
-
-  
-
-/*
-    private func makeMockProfiles() -> [MockProfile] {
-        let names = ["Rivka", "Sara", "Leah", "Miriam", "Tamar", "Chana", "Esther", "Yael", "Aviva", "Dina"]
-        
-        let lifePlanTitles = LifePlanTag.allCases.map { $0.title }
-
-        func randomLifePlans() -> [String] {
-            let count = Int.random(in: 1...3)
-            return Array(lifePlanTitles.shuffled().prefix(count))
-        }
-
-        // Heights roughly 4'10" (58) to 5'10" (70)
-        func randomHeightInches() -> Int { Int.random(in: 58...70) }
-
-        // Ages roughly 19 to 35
-        func randomAge() -> Int { Int.random(in: 19...35) }
-
-        return (1...80).map { i in
-            MockProfile(
-                name: "\(names.randomElement()!) \(i)",
-                age: randomAge(),
-                heightInches: randomHeightInches(),
-                lifePlans: randomLifePlans()
-            )
-        }
-    }
-
-    */
+    
     private var selectedTagIDs = Set<UUID>()
     
     struct TagItem: Hashable {
@@ -384,16 +359,25 @@ class GirlsFilterSearchVC: UIViewController {
         let title: String
     }
     
-
+    
     // MARK: - UI
     private let searchBar: UISearchBar = {
-         let sb = UISearchBar()
-         sb.placeholder = "Search"
-         sb.autocapitalizationType = .none
-         sb.autocorrectionType = .no
-         return sb
-     }()
-    
+        let sb = UISearchBar(frame: .zero)
+        sb.searchBarStyle = .minimal
+        sb.placeholder = "Search"
+        sb.autocapitalizationType = .none
+        sb.autocorrectionType = .no
+        
+        let tf = sb.searchTextField
+        tf.backgroundColor = .secondarySystemBackground
+        tf.layer.cornerRadius = 10
+        tf.layer.masksToBounds = true
+        
+        return sb
+    }()
+
+   
+
     private lazy var chipsCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -401,33 +385,38 @@ class GirlsFilterSearchVC: UIViewController {
         layout.minimumLineSpacing = 8
         layout.sectionInset = UIEdgeInsets(top: 4, left: 16, bottom: 12, right: 16)
         layout.headerReferenceSize = CGSize(width: 0, height: 28)
-
+        
+        // ✅ IMPORTANT: fixed 3-column grid (no self-sizing)
+        layout.estimatedItemSize = .zero
+        
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.translatesAutoresizingMaskIntoConstraints = false
         cv.backgroundColor = .clear
         cv.dataSource = self
         cv.delegate = self
         cv.allowsSelection = true
         cv.allowsMultipleSelection = true
-
-
+        cv.showsVerticalScrollIndicator = false
+        
         cv.register(ChipCell.self, forCellWithReuseIdentifier: ChipCell.reuseID)
-        cv.register(ChipHeaderView.self,
-                    forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                    withReuseIdentifier: ChipHeaderView.reuseID)
-
+        cv.register(
+            ChipHeaderView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: ChipHeaderView.reuseID
+        )
         return cv
     }()
-
+    
     private let resultsTableView: UITableView = {
-         let tv = UITableView(frame: .zero, style: .plain)
-         tv.keyboardDismissMode = .onDrag
-         tv.tableFooterView = UIView()
-         return tv
-     }()
-   
+        let tv = UITableView(frame: .zero, style: .plain)
+        tv.keyboardDismissMode = .onDrag
+        tv.tableFooterView = UIView()
+        return tv
+    }()
+    
     private let navTitleView = NavTitleView()
-
-     
+    
+    
     private lazy var tagsByCategory: [TagCategory: [TagItem]] = [
         .height: HeightTag.allCases.map {
             TagItem(category: .height, title: $0.title)
@@ -439,67 +428,70 @@ class GirlsFilterSearchVC: UIViewController {
             TagItem(category: .lifePlans, title: $0.title)
         }
     ]
-
-     private var results = (1...15).map { "Result \($0)" }
-     private let useFirebase = true
-
+    
+    private var results = (1...15).map { "Result \($0)" }
+    private let useFirebase = true
+    
     
     //MARk: ViewDidLoad
-   
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        
+            searchBar.delegate = self
+            //startKeyboardObservers()
+        
         // --- UI basics ---
         view.backgroundColor = .systemBackground
+        
+        navigationItem.largeTitleDisplayMode = .never
+        navigationItem.titleView = searchBar
 
-        navTitleView.configure(title: "Search", subtitle: nil)
-        navigationItem.titleView = navTitleView
+        
         
         let addButton = UIBarButtonItem(
             barButtonSystemItem: .add,
             target: self,
             action: #selector(addGirlTapped)
         )
-
+        
         let clearButton = UIBarButtonItem(
             title: "Clear",
             style: .plain,
             target: self,
             action: #selector(clearTapped)
-       )
-        clearButton.isEnabled = false
-        
-        let extractButton = UIBarButtonItem(
-            title: "Extract",
-            style: .plain,
-            target: self,
-            action: #selector(extractTapped)
         )
-        
-        extractButton.isEnabled = true
-    
-
+        clearButton.isEnabled = true
         navigationItem.rightBarButtonItems = [addButton, clearButton]
-
+        
+        //let extractButton = UIBarButtonItem(
+       //     title: "Extract",
+       //     style: .plain,
+       //     target: self,
+       //     action: #selector(extractTapped)
+       // )
+        
+        //extractButton.isEnabled = true
         // --- Search bar ---
         searchBar.delegate = self
         searchBar.showsCancelButton = true
-
+        
         // --- Table ---
         resultsTableView.dataSource = self
         resultsTableView.delegate = self
         resultsTableView.register(ProfileResultCell.self, forCellReuseIdentifier: ProfileResultCell.reuseID)
         resultsTableView.rowHeight = UITableView.automaticDimension
-        resultsTableView.estimatedRowHeight = 76
+        resultsTableView.estimatedRowHeight = 88
         
         //resultsTableView.separatorStyle = .none
         //resultsTableView.backgroundColor = .systemGroupedBackground
         //resultsTableView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 16, right: 0)
-
-
+        
+        
         // --- Layout ---
         setupUI()
-
+        
         // --- Data load (Firebase vs Mock) ---
         if useFirebase {
             loadGirls()     // uses fetchGirlsFromFirebase -> allResults -> applyFilters()
@@ -507,6 +499,123 @@ class GirlsFilterSearchVC: UIViewController {
             loadMocks()     // sets girlsByKey + allResults -> applyFilters()
         }
     }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        guard let navBar = navigationController?.navigationBar else { return }
+        
+        let totalRightButtons = navigationItem.rightBarButtonItems?.count ?? 0
+        
+        // Rough width per UIBarButtonItem
+        let estimatedButtonWidth: CGFloat = 44
+        
+        let totalRightWidth = CGFloat(totalRightButtons) * estimatedButtonWidth
+        
+        let horizontalPadding: CGFloat = 16
+        
+        let width = navBar.bounds.width
+            - totalRightWidth
+            - horizontalPadding * 2
+        
+        searchBar.frame = CGRect(x: 0, y: 0, width: max(160, width), height: 36)
+    }
+    
+    private func setChipsCollapsed(_ collapsed: Bool, animated: Bool = true) {
+        
+        // 1️⃣ Update state
+        areChipsCollapsed = collapsed
+        
+        // 2️⃣ Update height
+        chipsHeightConstraint.constant = collapsed ? chipsCollapsedHeight : chipsExpandedHeight
+        
+        // 3️⃣ Update button title
+        filtersToggleButton.setTitle(
+            collapsed ? "Show Filters" : "Hide Filters",
+            for: .normal
+        )
+
+        let changes = {
+            self.view.layoutIfNeeded()
+        }
+
+        if animated {
+            UIView.animate(withDuration: 0.22, delay: 0, options: [.curveEaseInOut]) {
+                changes()
+            }
+        } else {
+            changes()
+        }
+    }
+    
+    private func startKeyboardObservers() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillShow(_:)),
+                                               name: UIResponder.keyboardWillShowNotification,
+                                               object: nil)
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillHide(_:)),
+                                               name: UIResponder.keyboardWillHideNotification,
+                                               object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc private func keyboardWillShow(_ note: Notification) {
+        guard let info = note.userInfo else { return }
+
+        let endFrame = (info[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue ?? .zero
+        keyboardHeight = endFrame.height
+
+        // Remember what filters height/state was BEFORE keyboard
+        wasFiltersExpandedBeforeKeyboard = chipsHeightConstraint.constant > 0
+
+        applyKeyboardLayout(using: info, keyboardShowing: true)
+    }
+
+    @objc private func keyboardWillHide(_ note: Notification) {
+        guard let info = note.userInfo else { return }
+        keyboardHeight = 0
+        applyKeyboardLayout(using: info, keyboardShowing: false)
+    }
+
+    private func applyKeyboardLayout(using info: [AnyHashable: Any], keyboardShowing: Bool) {
+        let duration = (info[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0.25
+        let curveRaw = (info[UIResponder.keyboardAnimationCurveUserInfoKey] as? NSNumber)?.intValue ?? 7
+        let options = UIView.AnimationOptions(rawValue: UInt(curveRaw << 16))
+
+        // 1) Collapse / restore chips
+        if keyboardShowing {
+        //    chipsHeightConstraint.constant = filtersPeekHeight
+        //    chipsCollectionView.alpha = 1 // keep visible as “peek”
+        } else {
+          //  chipsHeightConstraint.constant = wasFiltersExpandedBeforeKeyboard ? filtersExpandedHeight : 0
+         //   chipsCollectionView.alpha = (chipsHeightConstraint.constant == 0) ? 0 : 1
+        }
+
+        // 2) Push results above keyboard by adjusting inset
+        let bottomSafe = view.safeAreaInsets.bottom
+        let bottomInset = keyboardShowing ? max(0, keyboardHeight - bottomSafe) : 0
+
+        resultsTableView.contentInset.bottom = bottomInset
+        resultsTableView.scrollIndicatorInsets.bottom = bottomInset
+
+        // Optional: keep current scroll position feeling stable
+        // resultsTableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+
+        UIView.animate(withDuration: duration,
+                       delay: 0,
+                       options: [options, .beginFromCurrentState],
+                       animations: {
+            self.view.layoutIfNeeded()
+        })
+    }
+
+    
+
     
     @objc private func extractTapped() {
         //let vc = OCRReviewViewController()
@@ -673,7 +782,7 @@ class GirlsFilterSearchVC: UIViewController {
         let shouldEnableClear = hasTagSelections || hasSearchText
 
         // Assuming your rightBarButtonItems = [Add, Clear]
-        navigationItem.rightBarButtonItems?.last?.isEnabled = shouldEnableClear
+        navigationItem.rightBarButtonItems?.last?.isEnabled = true  //shouldEnableClear
     }
 
     // this function gets invoked from the clear button
@@ -782,34 +891,40 @@ class GirlsFilterSearchVC: UIViewController {
 
     // GOAL: Search by text OR tags, results update live as user interacts
     private func setupUI() {
-        view.addSubview(searchBar)
+        
         view.addSubview(chipsCollectionView)
         view.addSubview(resultsTableView)
+        
+        //searchBar.backgroundColor = .yellow
+        //chipsCollectionView.backgroundColor = .orange
 
         searchBar.translatesAutoresizingMaskIntoConstraints = false
+        searchBar.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        searchBar.layer.cornerRadius = 10
+        searchBar.clipsToBounds = true
+        searchBar.searchTextField.font = .systemFont(ofSize: 17)
+        searchBar.showsCancelButton = false
         chipsCollectionView.translatesAutoresizingMaskIntoConstraints = false
         resultsTableView.translatesAutoresizingMaskIntoConstraints = false
 
         // ✅ Create the height constraint FIRST (outside activate)
         chipsHeightConstraint = chipsCollectionView.heightAnchor.constraint(equalToConstant: chipsExpandedHeight)
+        
+        chipsHeightConstraint.isActive = true
+
 
         NSLayoutConstraint.activate([
-            // Search bar
-            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-
-            // Chips
-            chipsCollectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 8),
+            // Chips (top of content now)
+            chipsCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
             chipsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             chipsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            chipsHeightConstraint, // ✅ activate the stored constraint here
+            chipsHeightConstraint,
 
             // Results
             resultsTableView.topAnchor.constraint(equalTo: chipsCollectionView.bottomAnchor, constant: 8),
             resultsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             resultsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            resultsTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            resultsTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
 
@@ -834,16 +949,30 @@ extension GirlsFilterSearchVC: UISearchBarDelegate {
         currentSearchText = searchText
         applyFilters()   // reuse your existing pipeline
     }
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-         searchBar.resignFirstResponder()
-     }
+    
 
-     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-         currentSearchText = ""
-         searchBar.text = ""
-         searchBar.resignFirstResponder()
-         applyFilters()
-     }
+        func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+            setChipsCollapsed(true)
+        }
+
+        func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+            // expand back only if search is empty (optional rule)
+            if (searchBar.text ?? "").isEmpty {
+                setChipsCollapsed(false)
+            }
+        }
+
+        func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+            searchBar.resignFirstResponder()
+        }
+
+        func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+            searchBar.text = ""
+            searchBar.resignFirstResponder()
+            setChipsCollapsed(false)
+            applyFilters()
+        }
+    
    
 }
 // MARK: - UITableViewDataSource / Delegate
@@ -871,13 +1000,20 @@ extension GirlsFilterSearchVC: UITableViewDataSource, UITableViewDelegate {
 
         let cell = tableView.dequeueReusableCell(withIdentifier: ProfileResultCell.reuseID,
                                                  for: indexPath) as! ProfileResultCell
-        //cell.backgroundColor = .clear
-        //cell.contentView.backgroundColor = .clear
+        
 
        
+        //let r = filteredResults[indexPath.row]
+        //let snippet = noteSnippetById[r.id]   // your cache from applyFilters()
+        //cell.configure(result: r, row: indexPath.row, snippet: snippet)
+        
         let r = filteredResults[indexPath.row]
-        cell.configure(result: r, row: indexPath.row)
-
+        cell.configure(
+            result: r,
+            row: indexPath.row,
+            title: titleAttrById[r.id],
+            snippet: noteSnippetById[r.id]
+        )
 
         return cell
     }
@@ -895,18 +1031,21 @@ extension GirlsFilterSearchVC: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
+
+
 // MARK: - UICollectionViewDataSource / DelegateFlowLayout
 
 extension GirlsFilterSearchVC: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        TagCategory.allCases.count
-    }
+   func numberOfSections(in collectionView: UICollectionView) -> Int {
+            TagCategory.allCases.count
+        }
+    
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let cat = TagCategory(rawValue: section)!
-        return tagsByCategory[cat]?.count ?? 0
-    }
+           let cat = TagCategory(rawValue: section)!
+           return tagsByCategory[cat]?.count ?? 0
+       }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
@@ -945,6 +1084,7 @@ extension GirlsFilterSearchVC: UICollectionViewDataSource, UICollectionViewDeleg
         return cell
     }
     
+    /*
      func collectionView(_ collectionView: UICollectionView,
                          layout collectionViewLayout: UICollectionViewLayout,
                          sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -974,6 +1114,29 @@ extension GirlsFilterSearchVC: UICollectionViewDataSource, UICollectionViewDeleg
 
          return CGSize(width: finalWidth, height: height)
      }
+    */
+    // ✅ Fixed 3 chips per row across all categories (including lifePlans)
+      func collectionView(_ collectionView: UICollectionView,
+                          layout collectionViewLayout: UICollectionViewLayout,
+                          sizeForItemAt indexPath: IndexPath) -> CGSize {
+
+          guard let flow = collectionViewLayout as? UICollectionViewFlowLayout else {
+              return CGSize(width: 100, height: 32)
+          }
+
+          let columns: CGFloat = 3
+          let itemHeight: CGFloat = 32
+
+          let totalSpacing =
+              flow.sectionInset.left +
+              flow.sectionInset.right +
+              (columns - 1) * flow.minimumInteritemSpacing
+
+          let availableWidth = collectionView.bounds.width - totalSpacing
+          let itemWidth = floor(availableWidth / columns)
+
+          return CGSize(width: itemWidth, height: itemHeight)
+      }
 
     func collectionView(_ collectionView: UICollectionView,
                         viewForSupplementaryElementOfKind kind: String,
@@ -1047,63 +1210,197 @@ extension GirlsFilterSearchVC: UICollectionViewDataSource, UICollectionViewDeleg
         }
     }
     
-     
     
-     private func applyFilters() {
-         let searchText = currentSearchText.trimmingCharacters(in: .whitespacesAndNewlines)
-         let q = searchText.lowercased()
 
-         let newFiltered = allResults.filter { r in
+    private func makeNotesSnippet(notes: String, query: String, window: Int = 44) -> NSAttributedString? {
+        let q = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !q.isEmpty else { return nil }
 
-             // --- Height chips ---
-             if !selectedHeightTags.isEmpty {
-                 guard let inches = r.heightInches else { return false }
-                 let matches = selectedHeightTags.contains { $0.inchRange.contains(inches) }
-                 if !matches { return false }
-             }
+        let queryTokens = q.lowercased()
+            .split { !$0.isLetter && !$0.isNumber }
+            .map(String.init)
+        guard !queryTokens.isEmpty else { return nil }
 
-             // --- Age chips ---
-             if !selectedAgeTags.isEmpty {
-                 guard let age = r.age else { return false }
-                 let matches = selectedAgeTags.contains { $0.ageRange.contains(age) }
-                 if !matches { return false }
-             }
+        let lowerNotes = notes.lowercased()
+        var best: Range<String.Index>?
 
-             // --- Life plan chips ---
-             if !selectedLifePlans.isEmpty {
-                 let selectedTitles = Set(selectedLifePlans.map { $0.title })
-                 let profileTitles = Set(r.lifePlans)
-                 if selectedTitles.isDisjoint(with: profileTitles) { return false }
-             }
+        for tok in queryTokens where !tok.isEmpty {
+            if let r = lowerNotes.range(of: tok) {
+                if best == nil || r.lowerBound < best!.lowerBound {
+                    best = r
+                }
+            }
+        }
+        guard let match = best else { return nil }
 
-             // --- Word-start search ---
-             if !q.isEmpty {
-                 let searchable =
-                     r.name + " " +
-                     r.city + " " +
-                     r.lifePlans.joined(separator: " ") + " " +
-                     r.notes
+        let start = lowerNotes.index(match.lowerBound, offsetBy: -window, limitedBy: lowerNotes.startIndex) ?? lowerNotes.startIndex
+        let end   = lowerNotes.index(match.upperBound, offsetBy: window, limitedBy: lowerNotes.endIndex) ?? lowerNotes.endIndex
 
-                 let tokens = searchable
-                     .lowercased()
-                     .split { !$0.isLetter && !$0.isNumber }
-                     .map(String.init)
+        let sDist = lowerNotes.distance(from: lowerNotes.startIndex, to: start)
+        let eDist = lowerNotes.distance(from: lowerNotes.startIndex, to: end)
 
-                 let matches = tokens.contains { $0.hasPrefix(q) }
-                 if !matches { return false }
-             }
+        let os = notes.index(notes.startIndex, offsetBy: sDist, limitedBy: notes.endIndex) ?? notes.startIndex
+        let oe = notes.index(notes.startIndex, offsetBy: eDist, limitedBy: notes.endIndex) ?? notes.endIndex
 
-             return true
-         }
+        var snippet = String(notes[os..<oe]).trimmingCharacters(in: .whitespacesAndNewlines)
+        if os > notes.startIndex { snippet = "… " + snippet }
+        if oe < notes.endIndex { snippet += " …" }
 
-         filteredResults = newFiltered
-         resultsTableView.reloadData()
-         updateEmptyState()
-         updateResultsHeader()
-         updateNavTitleAnimated()
-         updateClearButtonEnabled()
-     }
+        // ---- Styling ----
+        let baseFont = UIFont.systemFont(ofSize: 13)
+        let boldFont = UIFont.systemFont(ofSize: 13, weight: .semibold)
 
+        let attr = NSMutableAttributedString()
+
+        // Prefix label
+        let prefix = NSAttributedString(
+            string: "Notes: ",
+            attributes: [
+                .font: UIFont.systemFont(ofSize: 12, weight: .medium),
+                .foregroundColor: UIColor.tertiaryLabel
+            ]
+        )
+        attr.append(prefix)
+
+        // Snippet body
+        let bodyStartIndex = attr.length
+
+        let body = NSMutableAttributedString(string: snippet, attributes: [
+            .font: baseFont,
+            .foregroundColor: UIColor.secondaryLabel
+        ])
+
+        attr.append(body)
+
+        // Highlight matches in snippet body
+        let snippetLower = snippet.lowercased()
+        for tok in queryTokens {
+            var range = snippetLower.startIndex..<snippetLower.endIndex
+            while let r = snippetLower.range(of: tok, range: range) {
+                let nsRange = NSRange(r, in: snippetLower)
+                let adjustedRange = NSRange(location: bodyStartIndex + nsRange.location,
+                                            length: nsRange.length)
+
+                attr.addAttributes([
+                    .font: boldFont,
+                    .foregroundColor: UIColor.label
+                ], range: adjustedRange)
+
+                range = r.upperBound..<snippetLower.endIndex
+            }
+        }
+
+        return attr
+    }
+
+
+    private func applyFilters() {
+        let searchText = currentSearchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        let q = searchText.lowercased()
+
+        titleAttrById.removeAll(keepingCapacity: true)
+        noteSnippetById.removeAll(keepingCapacity: true)
+
+        let baseTitleFont = UIFont.systemFont(ofSize: 17, weight: .regular)
+        let highlightTitleFont = UIFont.systemFont(ofSize: 17, weight: .semibold)
+
+        let baseTitleColor = UIColor.secondaryLabel
+        let highlightTitleColor = UIColor.label
+
+        let newFiltered = allResults.filter { r in
+
+            // --- Height chips ---
+            if !selectedHeightTags.isEmpty {
+                guard let inches = r.heightInches else { return false }
+                let matches = selectedHeightTags.contains { $0.inchRange.contains(inches) }
+                if !matches { return false }
+            }
+
+            // --- Age chips ---
+            if !selectedAgeTags.isEmpty {
+                guard let age = r.age else { return false }
+                let matches = selectedAgeTags.contains { $0.ageRange.contains(age) }
+                if !matches { return false }
+            }
+
+            // --- Life plan chips ---
+            if !selectedLifePlans.isEmpty {
+                let selectedTitles = Set(selectedLifePlans.map { $0.title })
+                let profileTitles = Set(r.lifePlans)
+                if selectedTitles.isDisjoint(with: profileTitles) { return false }
+            }
+
+            // --- Search (includes notes) ---
+            if !q.isEmpty {
+                let searchable =
+                    r.name + " " +
+                    r.city + " " +
+                    r.lifePlans.joined(separator: " ") + " " +
+                    r.notes
+
+                let tokens = searchable
+                    .lowercased()
+                    .split { !$0.isLetter && !$0.isNumber }
+                    .map(String.init)
+
+                // keep your existing behavior: the whole query must match start of SOME word
+                let matches = tokens.contains { $0.hasPrefix(q) }
+                if !matches { return false }
+
+                // Build top row text (Name • Age • Height • City)
+                let ageText = r.age.map(String.init) ?? ""
+                let heightText = r.heightText
+                let pieces = [
+                    r.name,
+                    ageText.isEmpty ? nil : ageText,
+                    heightText.isEmpty ? nil : heightText,
+                    r.city.isEmpty ? nil : r.city
+                ].compactMap { $0 }
+
+                let titleText = pieces.joined(separator: " • ")
+                titleAttrById[r.id] = highlightMatches(
+                    in: titleText,
+                    query: q,
+                    baseFont: baseTitleFont,
+                    highlightFont: highlightTitleFont,
+                    baseColor: baseTitleColor,
+                    highlightColor: highlightTitleColor
+                )
+
+                // Notes snippet (only if match occurs in notes)
+                if let snippet = makeNotesSnippet(notes: r.notes, query: q) {
+                    noteSnippetById[r.id] = snippet
+                }
+            } else {
+                // No search: still cache a softened title (optional)
+                let ageText = r.age.map(String.init) ?? ""
+                let heightText = r.heightText
+                let pieces = [
+                    r.name,
+                    ageText.isEmpty ? nil : ageText,
+                    heightText.isEmpty ? nil : heightText,
+                    r.city.isEmpty ? nil : r.city
+                ].compactMap { $0 }
+
+                let titleText = pieces.joined(separator: " • ")
+                titleAttrById[r.id] = NSAttributedString(string: titleText, attributes: [
+                    .font: baseTitleFont,
+                    .foregroundColor: UIColor.label  // up to you; can use secondaryLabel too
+                ])
+            }
+
+            return true
+        }
+
+        filteredResults = newFiltered
+        resultsTableView.reloadData()
+        updateEmptyState()
+        updateResultsHeader()
+        updateNavTitleAnimated()
+        updateClearButtonEnabled()
+    }
+
+   
     private func reselectPreviouslySelectedChips() {
          
         // iterate over all the chips sections by iterating over
@@ -1136,101 +1433,104 @@ extension GirlsFilterSearchVC: UICollectionViewDataSource, UICollectionViewDeleg
 }
 // MARK: - ChipCell
 
-final class ChipCell: UICollectionViewCell {
-    static let reuseID = "ChipCell"
 
-    private let dotView: UIView = {
-        let v = UIView()
-        v.translatesAutoresizingMaskIntoConstraints = false
-        v.layer.cornerRadius = 4
-        v.layer.masksToBounds = true
-        return v
-    }()
+ final class ChipCell: UICollectionViewCell {
+     static let reuseID = "ChipCell"
 
-    private let label: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = .systemFont(ofSize: 15, weight: .medium)
-        l.textAlignment = .left
-        l.textColor = .label
-        l.numberOfLines = 2
-        l.lineBreakMode = .byWordWrapping
+     private let dotView: UIView = {
+         let v = UIView()
+         v.translatesAutoresizingMaskIntoConstraints = false
+         v.layer.cornerRadius = 4
+         v.layer.masksToBounds = true
+         return v
+     }()
 
-        return l
-    }()
+     private let label: UILabel = {
+         let l = UILabel()
+         l.translatesAutoresizingMaskIntoConstraints = false
+         l.font = .systemFont(ofSize: 15, weight: .medium)
+         l.textAlignment = .left
+         l.textColor = .label
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+         // ✅ one line + shrink (no truncation)
+         l.numberOfLines = 1
+         l.lineBreakMode = .byClipping
+         l.adjustsFontSizeToFitWidth = true
+         l.minimumScaleFactor = 0.78
 
-        contentView.backgroundColor = .secondarySystemBackground
-        contentView.layer.cornerRadius = 16
-        contentView.layer.masksToBounds = true
+         return l
+     }()
 
-        // Selected background view (UIKit will show this automatically when selected)
-        let selectedBG = UIView()
-        selectedBG.backgroundColor = .tertiarySystemFill
-        selectedBG.layer.cornerRadius = 16
-        selectedBG.layer.masksToBounds = true
-        selectedBackgroundView = selectedBG
+     override init(frame: CGRect) {
+         super.init(frame: frame)
 
-        contentView.addSubview(dotView)
-        contentView.addSubview(label)
+         contentView.backgroundColor = .secondarySystemBackground
+         contentView.layer.cornerRadius = 16
+         contentView.layer.masksToBounds = true
 
-        NSLayoutConstraint.activate([
-            // Dot
-            dotView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
-            dotView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            dotView.widthAnchor.constraint(equalToConstant: 8),
-            dotView.heightAnchor.constraint(equalToConstant: 8),
+         // Selected background view (UIKit may show it automatically on selection)
+         let selectedBG = UIView()
+         selectedBG.backgroundColor = .tertiarySystemFill
+         selectedBG.layer.cornerRadius = 16
+         selectedBG.layer.masksToBounds = true
+         selectedBackgroundView = selectedBG
 
-    
-            // Label
-            label.leadingAnchor.constraint(equalTo: dotView.trailingAnchor, constant: 8),
-            label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
-            label.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8)
+         contentView.addSubview(dotView)
+         contentView.addSubview(label)
 
-        ])
-    }
+         NSLayoutConstraint.activate([
+             dotView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
+             dotView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+             dotView.widthAnchor.constraint(equalToConstant: 8),
+             dotView.heightAnchor.constraint(equalToConstant: 8),
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+             label.leadingAnchor.constraint(equalTo: dotView.trailingAnchor, constant: 8),
+             label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
+             label.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+             label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8)
+         ])
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        label.text = nil
-        dotView.backgroundColor = nil
-    }
-    
-    // for each chip cell we need to set the text
-    // the accent color of the dotView
-    // the border color and thickness of the chipView
-    func configure(text: String, accentColor: UIColor, selected: Bool) {
-        label.text = text
-        dotView.backgroundColor = accentColor
-        applySelectionStyle(selected: selected)
-    }
+         // Helps the label compress horizontally (so shrink-to-fit actually happens)
+         label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+         label.setContentHuggingPriority(.defaultLow, for: .horizontal)
+     }
 
-    private func applySelectionStyle(selected: Bool) {
-        if selected {
-            contentView.layer.borderWidth = 2
-            contentView.layer.borderColor = dotView.backgroundColor?.cgColor
-            contentView.backgroundColor = UIColor.tertiarySystemFill
-        } else {
-            contentView.layer.borderWidth = 0
-            contentView.layer.borderColor = nil
-            contentView.backgroundColor = UIColor.secondarySystemBackground
-        }
-        dotView.transform = selected ? CGAffineTransform(scaleX: 1.2, y: 1.2) : .identity
+     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
-    }
-    // this tells us if a collection view is selected
-    // based on that bool we set the border and dot view color and size
-    override var isSelected: Bool {
-        didSet { applySelectionStyle(selected: isSelected) }
-    }
-}
+     override func prepareForReuse() {
+         super.prepareForReuse()
+         label.text = nil
+         dotView.backgroundColor = nil
+         contentView.layer.borderWidth = 0
+         contentView.layer.borderColor = nil
+         dotView.transform = .identity
+     }
+
+     func configure(text: String, accentColor: UIColor, selected: Bool) {
+         label.text = text
+         dotView.backgroundColor = accentColor
+         applySelectionStyle(selected: selected)
+     }
+
+     private func applySelectionStyle(selected: Bool) {
+         if selected {
+             contentView.layer.borderWidth = 2
+             contentView.layer.borderColor = dotView.backgroundColor?.cgColor
+             contentView.backgroundColor = .tertiarySystemFill
+         } else {
+             contentView.layer.borderWidth = 0
+             contentView.layer.borderColor = nil
+             contentView.backgroundColor = .secondarySystemBackground
+         }
+         dotView.transform = selected ? CGAffineTransform(scaleX: 1.2, y: 1.2) : .identity
+     }
+
+     override var isSelected: Bool {
+         didSet { applySelectionStyle(selected: isSelected) }
+     }
+ }
+ 
+
 // the chips collectionView has three sections
 // At the top of each section of the tag chips you see
 // Age - Height - Life Plans
@@ -1401,18 +1701,9 @@ final class ResultChipView: UIView {
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 }
-/*
+
 final class ProfileResultCell: UITableViewCell {
     static let reuseID = "ProfileResultCell"
-
-    private let cardView: UIView = {
-        let v = UIView()
-        v.translatesAutoresizingMaskIntoConstraints = false
-        v.backgroundColor = .secondarySystemBackground
-        v.layer.cornerRadius = 16
-        v.layer.masksToBounds = true
-        return v
-    }()
 
     private let photoView: UIImageView = {
         let iv = UIImageView()
@@ -1423,131 +1714,16 @@ final class ProfileResultCell: UITableViewCell {
         iv.layer.cornerRadius = 10
         return iv
     }()
-
-    private let titleLabel: UILabel = {
+    private let snippetLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
-        l.font = .systemFont(ofSize: 14, weight: .semibold)
-        l.numberOfLines = 1
+        l.font = .systemFont(ofSize: 13)
+        l.textColor = .secondaryLabel
+        l.numberOfLines = 2
         l.lineBreakMode = .byTruncatingTail
         return l
     }()
 
-    private let chipsStack: UIStackView = {
-        let s = UIStackView()
-        s.translatesAutoresizingMaskIntoConstraints = false
-        s.axis = .horizontal
-        s.alignment = .center
-        s.spacing = 4
-        return s
-    }()
-
-    private var imageTask: URLSessionDataTask?
-
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-
-        selectionStyle = .none
-        backgroundColor = .clear
-        contentView.backgroundColor = .clear
-        
-        titleLabel.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
-        chipsStack.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-
-        contentView.addSubview(cardView)
-
-        let vStack = UIStackView(arrangedSubviews: [titleLabel, chipsStack])
-        vStack.translatesAutoresizingMaskIntoConstraints = false
-        vStack.axis = .vertical
-        vStack.spacing = 8
-        vStack.alignment = .leading
-
-        cardView.addSubview(photoView)
-        cardView.addSubview(vStack)
-
-        // Card insets (THIS is what creates the “card spacing”)
-        NSLayoutConstraint.activate([
-            cardView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 6),
-            cardView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -6),
-            cardView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 6),
-            cardView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -6),
-
-            photoView.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 6),
-            photoView.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 12),
-            photoView.widthAnchor.constraint(equalToConstant: 52),
-            photoView.heightAnchor.constraint(equalToConstant: 52),
-
-            vStack.leadingAnchor.constraint(equalTo: photoView.trailingAnchor, constant:4),
-            vStack.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -4),
-            vStack.centerYAnchor.constraint(equalTo: photoView.centerYAnchor),
-
-            cardView.bottomAnchor.constraint(greaterThanOrEqualTo: photoView.bottomAnchor, constant: 12),
-        ])
-    }
-
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        imageTask?.cancel()
-        imageTask = nil
-        photoView.image = nil
-        chipsStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
-    }
-
-    func configure(result: ResultProfile, row: Int) {
-        // Clear old chips
-        chipsStack.arrangedSubviews.forEach { v in
-            chipsStack.removeArrangedSubview(v)
-            v.removeFromSuperview()
-        }
-
-        let ageText = result.age.map(String.init) ?? ""
-        let heightText = result.heightText
-
-        let pieces = [result.name,
-                      ageText.isEmpty ? nil : ageText,
-                      heightText.isEmpty ? nil : heightText]
-            .compactMap { $0 }
-
-        titleLabel.text = pieces.joined(separator: " • ")
-
-        // result chips (same as you had)
-        let maxChips = 3
-        let plans = result.lifePlans
-        let shown = Array(plans.prefix(maxChips))
-        let remaining = plans.count - shown.count
-
-        for plan in shown {
-            chipsStack.addArrangedSubview(
-                ResultChipView(text: plan, accent: TagCategory.lifePlans.accentColor)
-            )
-        }
-        if remaining > 0 {
-            chipsStack.addArrangedSubview(
-                ResultChipView(text: "+\(remaining) more", accent: TagCategory.lifePlans.accentColor)
-            )
-        }
-
-        // Placeholder cycling (design mode)
-        photoView.image = DefaultImageCycler.image(forRow: row)
-            ?? UIImage(systemName: "person.crop.square")
-    }
-}
-*/
-
-final class ProfileResultCell: UITableViewCell {
-    static let reuseID = "ProfileResultCell"
-
-    private let photoView: UIImageView = {
-        let iv = UIImageView()
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.contentMode = .scaleAspectFill
-        iv.clipsToBounds = true
-        iv.backgroundColor = .tertiarySystemFill
-        iv.layer.cornerRadius = 10
-        return iv
-    }()
 
     private let titleLabel: UILabel = {
         let l = UILabel()
@@ -1573,14 +1749,22 @@ final class ProfileResultCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
 
-        let vStack = UIStackView(arrangedSubviews: [titleLabel, chipsStack])
+        
+       
+
+        let vStack = UIStackView(arrangedSubviews: [titleLabel, chipsStack,snippetLabel])
         vStack.translatesAutoresizingMaskIntoConstraints = false
         vStack.axis = .vertical
         vStack.spacing = 8
         vStack.alignment = .leading
+        
+        titleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
+        snippetLabel.setContentCompressionResistancePriority(.required, for: .vertical)
 
         contentView.addSubview(photoView)
         contentView.addSubview(vStack)
+        snippetLabel.isHidden = true
+
         
         contentView.layer.cornerRadius = 14
         contentView.layer.masksToBounds = true
@@ -1596,10 +1780,15 @@ final class ProfileResultCell: UITableViewCell {
 
             vStack.leadingAnchor.constraint(equalTo: photoView.trailingAnchor, constant: 12),
             vStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            vStack.centerYAnchor.constraint(equalTo: photoView.centerYAnchor),
 
+            // ✅ NEW: let content drive height
+            vStack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            vStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
+
+            // ✅ Keep photo from stretching cell too short
             contentView.bottomAnchor.constraint(greaterThanOrEqualTo: photoView.bottomAnchor, constant: 10),
         ])
+
     }
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -1609,12 +1798,86 @@ final class ProfileResultCell: UITableViewCell {
         imageTask?.cancel()
         imageTask = nil
         photoView.image = nil
+        snippetLabel.text = nil
+        snippetLabel.attributedText = nil
+        snippetLabel.isHidden = true
+
+        
         chipsStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
     }
     
-    func configure(result: ResultProfile, row: Int) {
+    
+    func configure(
+        result: ResultProfile,
+        row: Int,
+        title: NSAttributedString?,
+        snippet: NSAttributedString?
+    ) {
+        // Clear chips
+        chipsStack.arrangedSubviews.forEach { v in
+            chipsStack.removeArrangedSubview(v)
+            v.removeFromSuperview()
+        }
 
-         chipsStack.arrangedSubviews.forEach { v in
+        // ---- Title (soft base + highlighted matches, provided by VC) ----
+        if let title {
+            titleLabel.attributedText = title
+        } else {
+            // Fallback (should rarely happen)
+            let ageText = result.age.map(String.init) ?? ""
+            let heightText = result.heightText
+
+            let pieces = [
+                result.name,
+                ageText.isEmpty ? nil : ageText,
+                heightText.isEmpty ? nil : heightText,
+                result.city.isEmpty ? nil : result.city
+            ].compactMap { $0 }
+
+            titleLabel.text = pieces.joined(separator: " • ")
+            titleLabel.textColor = .secondaryLabel
+            titleLabel.font = .systemFont(ofSize: 17, weight: .regular)
+        }
+
+        // ---- Life plan chips ----
+        let maxChips = 3
+        let plans = result.lifePlans
+        let shown = Array(plans.prefix(maxChips))
+        let remaining = plans.count - shown.count
+
+        for plan in shown {
+            chipsStack.addArrangedSubview(
+                ResultChipView(text: plan, accent: TagCategory.lifePlans.accentColor)
+            )
+        }
+
+        if remaining > 0 {
+            chipsStack.addArrangedSubview(
+                ResultChipView(text: "+\(remaining) more", accent: TagCategory.lifePlans.accentColor)
+            )
+        }
+
+        // ---- Notes snippet (Xcode-style) ----
+        if let snippet {
+            snippetLabel.attributedText = snippet
+            snippetLabel.isHidden = false
+        } else {
+            snippetLabel.attributedText = nil
+            snippetLabel.isHidden = true
+        }
+
+        // ---- Photo ----
+        photoView.image = DefaultImageCycler.image(forRow: row)
+            ?? UIImage(systemName: "person.crop.square")
+
+        photoView.layer.borderWidth = 2
+        photoView.layer.borderColor = TagCategory.age.accentColor.cgColor
+    }
+
+    /*
+    func configure(result: ResultProfile, row: Int, snippet: NSAttributedString?) {
+    
+        chipsStack.arrangedSubviews.forEach { v in
              chipsStack.removeArrangedSubview(v)
              v.removeFromSuperview()
          }
@@ -1644,6 +1907,16 @@ final class ProfileResultCell: UITableViewCell {
                  ResultChipView(text: "+\(remaining) more", accent: TagCategory.lifePlans.accentColor)
              )
          }
+        if let snippet {
+            snippetLabel.attributedText = snippet
+            snippetLabel.isHidden = false
+        } else {
+            snippetLabel.attributedText = nil
+            snippetLabel.isHidden = true
+        }
+
+        
+        
          //photoView.image = UIImage(named: "defaultProfile")
         photoView.image = DefaultImageCycler.image(forRow: row)
                 ?? UIImage(systemName: "person.crop.square")
@@ -1652,6 +1925,7 @@ final class ProfileResultCell: UITableViewCell {
         photoView.layer.borderColor = UIColor.systemBlue.cgColor
         photoView.layer.borderColor = TagCategory.age.accentColor.cgColor
         }
+     */
 }
  
 
@@ -1717,6 +1991,46 @@ enum HeightParser {
 
         return feet * 12 + inches
     }
+}
+private func highlightMatches(
+    in text: String,
+    query: String,
+    baseFont: UIFont,
+    highlightFont: UIFont,
+    baseColor: UIColor,
+    highlightColor: UIColor
+) -> NSAttributedString {
+
+    let attr = NSMutableAttributedString(string: text, attributes: [
+        .font: baseFont,
+        .foregroundColor: baseColor
+    ])
+
+    let q = query.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard !q.isEmpty else { return attr }
+
+    let tokens = q.lowercased()
+        .split { !$0.isLetter && !$0.isNumber }
+        .map(String.init)
+        .filter { !$0.isEmpty }
+
+    guard !tokens.isEmpty else { return attr }
+
+    let lower = text.lowercased()
+
+    for tok in tokens {
+        var searchRange = lower.startIndex..<lower.endIndex
+        while let r = lower.range(of: tok, range: searchRange) {
+            let ns = NSRange(r, in: lower)
+            attr.addAttributes([
+                .font: highlightFont,
+                .foregroundColor: highlightColor
+            ], range: ns)
+            searchRange = r.upperBound..<lower.endIndex
+        }
+    }
+
+    return attr
 }
 
 
