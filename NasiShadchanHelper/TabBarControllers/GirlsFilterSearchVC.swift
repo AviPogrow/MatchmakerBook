@@ -286,6 +286,21 @@ class GirlsFilterSearchVC: UIViewController {
         return b
     }()
     
+    private func setFiltersToggleTitle(_ title: String, animated: Bool) {
+        guard animated else {
+            filtersToggleButton.setTitle(title, for: .normal)
+            return
+        }
+
+        UIView.transition(
+            with: filtersToggleButton,
+            duration: 0.18,
+            options: [.transitionCrossDissolve, .allowUserInteraction]
+        ) {
+            self.filtersToggleButton.setTitle(title, for: .normal)
+            self.filtersToggleButton.layoutIfNeeded()
+        }
+    }
     
     @objc private func toggleFiltersTapped() {
         
@@ -521,6 +536,7 @@ class GirlsFilterSearchVC: UIViewController {
         searchBar.frame = CGRect(x: 0, y: 0, width: max(160, width), height: 36)
     }
     
+    /*
     private func setChipsCollapsed(_ collapsed: Bool, animated: Bool = true) {
         
         // 1️⃣ Update state
@@ -538,6 +554,27 @@ class GirlsFilterSearchVC: UIViewController {
         let changes = {
             self.view.layoutIfNeeded()
         }
+
+        if animated {
+            UIView.animate(withDuration: 0.22, delay: 0, options: [.curveEaseInOut]) {
+                changes()
+            }
+        } else {
+            changes()
+        }
+    }
+     */
+   
+
+    private func setChipsCollapsed(_ collapsed: Bool, animated: Bool = true) {
+        areChipsCollapsed = collapsed
+
+        chipsHeightConstraint.constant = collapsed ? chipsCollapsedHeight : chipsExpandedHeight
+
+        let newTitle = collapsed ? "Show Filters" : "Hide Filters"
+        setFiltersToggleTitle(newTitle, animated: animated)
+
+        let changes = { self.view.layoutIfNeeded() }
 
         if animated {
             UIView.animate(withDuration: 0.22, delay: 0, options: [.curveEaseInOut]) {

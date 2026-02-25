@@ -15,85 +15,93 @@ import ViewRow
 import Contacts
 import ContactsUI
 
-
-class AddEditGirlViewController: FormViewController,CNContactPickerDelegate, ScannerViewControllerDelegate {
+class AddEditGirlViewController: FormViewController,CNContactPickerDelegate, ResumeScanVCDelegate {
     
     enum ProfileFormTag: String {
         case age
         case dateOfBirth
     }
-    //MARK: DidScanAndParse
-    func didScanAndParseResume(dict: [String: String]) {
-        let firstName = dict["firstName"]
-        let lastName = dict["lastName"]
-        let phoneNumber = dict["telephone"]
-        let city = dict["city"]
-        let dob = dict["dob"]
-        let height = dict["height"]
-        let heightInInches = dict["heightInInches"] ?? ""
-        
-        // get a reference to the date of birth row
-        let dobRow: DateRow? = form.rowBy(tag: "dob") as? DateRow
-        // if it is not nil
-        if let dobRow = dobRow {
-            let dobString = dob ?? ""
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "YY/MM/dd"
-            let dateOfBirth: Date! = dateFormatter.date(from: dobString)
-            dobRow.value  = dateOfBirth
-            dobRow.updateCell()
-            let birthday = dobRow.value!
-            let ageDouble = calculateAgeFrom(dob: birthday)
-            let ageInt = Int(ageDouble)
-            var ageTag = tagForGirlAge(ageInt)
-            let ageString = "\(ageDouble)"
-            
-            
-            // get reference to the age row and update
-            let ageRow: PhoneRow? = form.rowBy(tag: "age") as? PhoneRow
-            if let ageRow = ageRow {
-                ageRow.value = ageString
-                ageRow.cell.layer.borderColor = UIColor.systemBlue.cgColor
-                ageRow.updateCell()
-            }
-            //let ageEntered = Int(row.value ?? "0") ?? 0
-         let tagRow: LabelRow? = form.rowBy(tag: "ageTagRow")  as? LabelRow
-            if let tagRow = tagRow {
-           tagRow.value = ageTag
-            tagRow.hidden = false
-            tagRow.updateCell()
-            }
-        }
-        
-    if let heightRow = form.rowBy(tag: "height") as? ActionSheetRow<String>,
-           let height = dict["height"] {
-            heightRow.value = height          // must match one of the options strings
-            heightRow.updateCell()
-        }
-        
-        let firstNameRow: TextRow? = form.rowBy(tag: "firstName") as? TextRow
-        if let firstNameRow = firstNameRow {
-        firstNameRow.value = firstName
-        firstNameRow.updateCell()
-        }
-        let secondNameRow: TextRow? = form.rowBy(tag: "lastName") as? TextRow
-        if let secondNameRow = secondNameRow {
-            secondNameRow.value = lastName
-            secondNameRow.updateCell()
-        }
-        let cellRow: PhoneRow? = form.rowBy(tag: "cell") as? PhoneRow
-        if let cellRow = cellRow {
-            cellRow.value = phoneNumber
-            cellRow.updateCell()
-        }
-        let cityRow: TextRow? = form.rowBy(tag: "city") as? TextRow
-        if let cityRow = cityRow {
-            cityRow.value = city
-            cityRow.updateCell()
-        }
-       
-        
-    }
+    
+    
+     // MARK: - DidScanAndParse (ISO version)
+     func didScanAndParseResume(dict: [String: String]) {
+
+         // 0) Clean inputs
+         func clean(_ key: String) -> String {
+             (dict[key] ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+         }
+
+         let firstName = clean("firstName")
+         let lastName  = clean("lastName")
+         let phone     = clean("telephone")
+         let city      = clean("city")
+         let height    = clean("height")
+         let rawDOB    = clean("dob")
+
+         // -------------------------
+         // 1) UPDATE MODEL
+         // -------------------------
+         if !firstName.isEmpty { selectedShadchanGirl.girlFirstName = firstName }
+         if !lastName.isEmpty  { selectedShadchanGirl.girlLastName  = lastName }
+         if !phone.isEmpty     { selectedShadchanGirl.girlCell      = phone }
+         if !city.isEmpty      { selectedShadchanGirl.city          = city }
+         if !height.isEmpty    { selectedShadchanGirl.girlHeight    = height }
+
+         // -------------------------
+         // 2) UPDATE UI (Eureka rows)
+         // -------------------------
+         if let r = form.rowBy(tag: "firstName") as? TextRow, !firstName.isEmpty {
+             r.value = firstName
+             r.updateCell()
+         }
+
+         if let r = form.rowBy(tag: "lastName") as? TextRow, !lastName.isEmpty {
+             r.value = lastName
+             r.updateCell()
+         }
+
+         if let r = form.rowBy(tag: "cell") as? PhoneRow, !phone.isEmpty {
+             r.value = phone
+             r.updateCell()
+         }
+
+         if let r = form.rowBy(tag: "city") as? TextRow, !city.isEmpty {
+             r.value = city
+             r.updateCell()
+         }
+
+         if let r = form.rowBy(tag: "height") as? ActionSheetRow<String>, !height.isEmpty {
+             r.value = height
+             r.updateCell()
+         }
+
+         // -------------------------
+         // 3) DOB -> ISO normalize -> applyDOB (handles DOB row + Age row)
+         // -------------------------
+         if !rawDOB.isEmpty,
+            let iso = ISODateOnly.normalizeToISO(rawDOB),
+            let dobDate = ISODateOnly.dateForDateRow(fromISO: iso) {
+
+             // self-heal model immediately
+             selectedShadchanGirl.dobIntervalString = iso
+
+             // applyDOB will:
+             // - store ISO in model (again, ok)
+             // - set DateRow value safely
+             // - update Age IntRow
+             applyDOB(dobDate)
+
+             // Optional: update age tag row (if you use it)
+             let ageYears = calculateAgeYears(fromDOBISO: iso)
+             let ageTag = tagForGirlAge(ageYears)
+             if let tagRow = form.rowBy(tag: "ageTagRow") as? LabelRow {
+                 tagRow.value = ageTag
+                 tagRow.hidden = false
+                 tagRow.updateCell()
+             }
+         }
+     }
+     
     func tagForGirlAge(_ age: Int) -> String {
         switch age {
         case 19...23:
@@ -125,9 +133,9 @@ class AddEditGirlViewController: FormViewController,CNContactPickerDelegate, Sca
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         
-       
+        
+        
         
         if isEditingGirl {
             navigationItem.title = "Edit Profile"
@@ -144,7 +152,7 @@ class AddEditGirlViewController: FormViewController,CNContactPickerDelegate, Sca
             navigationItem.title = "Add Profile Details"
             showAddGirlOptions()
             initNewNasiGirl()
-
+            
             let barButtonSave = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(saveGirlToFirebase))
             navigationItem.rightBarButtonItem = barButtonSave
         }
@@ -199,13 +207,13 @@ class AddEditGirlViewController: FormViewController,CNContactPickerDelegate, Sca
             }
         }
         form +++ Section("Girls Age")
-            <<< makeAgeRow()
-
-        form +++ Section()
-            <<< makeDOBRow()
-
+        <<< makeAgeRow()
         
-         //MARK: Height
+        form +++ Section()
+        <<< makeDOBRow()
+        
+        
+        //MARK: Height
         //section 2
         form
         +++
@@ -242,44 +250,44 @@ class AddEditGirlViewController: FormViewController,CNContactPickerDelegate, Sca
         }
         
         
-         let lifePlanSection = SelectableSection<ImageCheckRow<String>>(
-             "Life Plans - Check All That Apply",
-             selectionType: .multipleSelection
-         )
+        let lifePlanSection = SelectableSection<ImageCheckRow<String>>(
+            "Life Plans - Check All That Apply",
+            selectionType: .multipleSelection
+        )
         
-         lifePlanSection.tag = "lifePlansSection"
-         form +++ lifePlanSection
+        lifePlanSection.tag = "lifePlansSection"
+        form +++ lifePlanSection
         
         let lifePlanOptions = LifePlanTag.allCases.map(\.title)
-
+        
         /*
-        let lifePlanOptions = [
-            "FTL - 1-3",
-            "FTL - 3-5",
-            "FTL - 5",
-            "FTL - 5-7",
-            "FTL - 7+",
-            "PTL - School",
-            "PTL - Working",
-            "FTW/College-Yeshiva Style",
-            "FTW/College-Not Yeshiva Style"
-        ]
+         let lifePlanOptions = [
+         "FTL - 1-3",
+         "FTL - 3-5",
+         "FTL - 5",
+         "FTL - 5-7",
+         "FTL - 7+",
+         "PTL - School",
+         "PTL - Working",
+         "FTW/College-Yeshiva Style",
+         "FTW/College-Not Yeshiva Style"
+         ]
          */
-
-         for option in lifePlanOptions {
-             lifePlanSection <<< ImageCheckRow<String>() { row in
-                 row.title = option
-                 row.selectableValue = option
-
-                 let selectedPlans = selectedShadchanGirl.lifePlans
-                 row.value = selectedPlans.contains(option) ? option : nil
-             }
-             .cellSetup { cell, _ in
-                 cell.trueImage = UIImage(named: "selectedRectangle")!
-                 cell.falseImage = UIImage(named: "unselectedRectangle")!
-                 cell.accessoryType = .checkmark
-             }
-         }
+        
+        for option in lifePlanOptions {
+            lifePlanSection <<< ImageCheckRow<String>() { row in
+                row.title = option
+                row.selectableValue = option
+                
+                let selectedPlans = selectedShadchanGirl.lifePlans
+                row.value = selectedPlans.contains(option) ? option : nil
+            }
+            .cellSetup { cell, _ in
+                cell.trueImage = UIImage(named: "selectedRectangle")!
+                cell.falseImage = UIImage(named: "unselectedRectangle")!
+                cell.accessoryType = .checkmark
+            }
+        }
         form +++ Section("Send Resume/Contact Info")
         <<< TextRow() {
             $0.tag = "email"
@@ -437,12 +445,18 @@ class AddEditGirlViewController: FormViewController,CNContactPickerDelegate, Sca
                 cell.view!.addSubview(label)
                 
             }
-        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) { //presentDocumentScanner()
+        //handleScanResumeWithDocScanner()
+    }
+    
+    
     // MARK: - DOB <-> Age Sync (drop-in)
     // Put these inside AddEditGirlViewController
-
+    
     private let dobFormat = "YY/MM/dd" // keep for now
-
+    
     private func makeDateFormatter() -> DateFormatter {
         let df = DateFormatter()
         df.locale = Locale(identifier: "en_US_POSIX")
@@ -450,29 +464,40 @@ class AddEditGirlViewController: FormViewController,CNContactPickerDelegate, Sca
         df.dateFormat = dobFormat
         return df
     }
+    
+    
+     private func applyDOB(_ date: Date) {
+         if isSyncingDOBAndAge { return }
+         isSyncingDOBAndAge = true
+         defer { isSyncingDOBAndAge = false }
 
-    private func applyDOB(_ date: Date) {
-        if isSyncingDOBAndAge { return }
-        isSyncingDOBAndAge = true
-        defer { isSyncingDOBAndAge = false }
+         // model (store ISO)
+         let iso = ISODateOnly.iso(from: date)
+         selectedShadchanGirl.dobIntervalString = iso
 
-        // model
-        let df = makeDateFormatter()
-        selectedShadchanGirl.dobIntervalString = df.string(from: date)
+         // DOB row UI (noon-local)
+         if let dobRow = form.rowBy(tag: "dob") as? DateRow {
+             dobRow.value = ISODateOnly.dateForDateRow(fromISO: iso)
+             dobRow.updateCell()
+         }
 
-        // DOB row UI
-        if let dobRow = form.rowBy(tag: "dob") as? DateRow {
-            dobRow.value = date
-            dobRow.updateCell()
-        }
-
-        // Age row UI
-        let ageDouble = calculateAgeFrom(dob: date)
-        if let ageRow = form.rowBy(tag: "age") as? IntRow {
-            ageRow.value = Int(ageDouble.rounded(.down))
-            ageRow.updateCell()
-        }
+         // Age row UI
+         let ageYears = calculateAgeYears(fromDOBISO: iso)
+         if let ageRow = form.rowBy(tag: "age") as? IntRow {
+             ageRow.value = (ageYears > 0) ? ageYears : nil
+             ageRow.updateCell()
+         }
+     }
+     
+    func calculateAgeYears(fromDOBISO iso: String) -> Int {
+        guard let date = ISODateOnly.dateForDateRow(fromISO: iso) else { return 0 }
+        let cal = Calendar.current
+        let today = Date()
+        let years = cal.dateComponents([.year], from: date, to: today).year ?? 0
+        return max(years, 0)
     }
+    
+  
 
     private func applyAge(_ ageEntered: Int) {
         if isSyncingDOBAndAge { return }
@@ -480,55 +505,66 @@ class AddEditGirlViewController: FormViewController,CNContactPickerDelegate, Sca
         defer { isSyncingDOBAndAge = false }
 
         let dob = dobByAddingYears(numberOfYears: ageEntered)
+        let iso = ISODateOnly.iso(from: dob)
+        selectedShadchanGirl.dobIntervalString = iso
 
-        // model
-        let df = makeDateFormatter()
-        selectedShadchanGirl.dobIntervalString = df.string(from: dob)
-
-        // DOB row UI
         if let dobRow = form.rowBy(tag: "dob") as? DateRow {
-            dobRow.value = dob
+            dobRow.value = ISODateOnly.dateForDateRow(fromISO: iso)
             dobRow.updateCell()
         }
 
-        // Age row UI (optional: keep what user typed, but updating is fine)
         if let ageRow = form.rowBy(tag: "age") as? IntRow {
             ageRow.value = ageEntered
             ageRow.updateCell()
         }
     }
+    
+   // MARK: - Age Row (IntRow)
+private func makeAgeRow() -> IntRow {
+    return IntRow() { row in
+        row.tag = "age"
+        row.title = "Age"
+        row.placeholder = "Enter Girl's Age"
 
-    // MARK: - Age Row (IntRow)
-    private func makeAgeRow() -> IntRow {
-        return IntRow() { row in
-            row.tag = "age"
-            row.title = "Age"
-            row.placeholder = "Enter Girls Age"
-
-            // initial value from model DOB string
-            let dobString = selectedShadchanGirl.dobIntervalString
-            let girlAgeDouble = selectedShadchanGirl.calculateAgeFrom(dobString: dobString)
-            let girlAgeInt = Int(girlAgeDouble.rounded(.down))
-            row.value = (girlAgeInt > 0) ? girlAgeInt : nil
-
-            row.onChange { [unowned self] row in
-                if self.isSyncingDOBAndAge { return }
-                guard let age = row.value, age > 0 else { return }
-                self.applyAge(age)
+        // Initial value from model DOB string (backward compatible)
+        let rawDOB = selectedShadchanGirl.dobIntervalString
+        if let iso = ISODateOnly.normalizeToISO(rawDOB) {
+            // self-heal in-memory (optional but recommended)
+            if iso != rawDOB {
+                selectedShadchanGirl.dobIntervalString = iso
             }
+
+            let ageYears = calculateAgeYears(fromDOBISO: iso)
+            row.value = (ageYears > 0) ? ageYears : nil
+        } else {
+            row.value = nil
+        }
+
+        row.onChange { [unowned self] row in
+            if self.isSyncingDOBAndAge { return }
+            guard let age = row.value, age > 0 else { return }
+            self.applyAge(age)
         }
     }
-
+}
+    
     // MARK: - DOB Row
+    
     private func makeDOBRow() -> DateRow {
-        return DateRow() { row in
+        DateRow() { row in
             row.tag = "dob"
             row.title = "Date of Birth"
             row.maximumDate = Date()
 
-            let df = makeDateFormatter()
-            let dobString = selectedShadchanGirl.dobIntervalString
-            row.value = df.date(from: dobString) // nil is fine; row will show empty
+            if let iso = ISODateOnly.normalizeToISO(selectedShadchanGirl.dobIntervalString),
+               let date = ISODateOnly.dateForDateRow(fromISO: iso) {
+
+                // optional: self-heal model if it was legacy
+                selectedShadchanGirl.dobIntervalString = iso
+                row.value = date
+            } else {
+                row.value = nil
+            }
 
             row.onChange { [unowned self] row in
                 if self.isSyncingDOBAndAge { return }
@@ -537,7 +573,7 @@ class AddEditGirlViewController: FormViewController,CNContactPickerDelegate, Sca
             }
         }
     }
-
+    
     func heightTag(from heightString: String) -> String? {
         
         let clean = heightString
@@ -557,17 +593,17 @@ class AddEditGirlViewController: FormViewController,CNContactPickerDelegate, Sca
         let totalInches = feet * 12 + inches
         
         
-    
-    switch totalInches {
-    case 0..<60:   return "Under 5'0\""
-    case 60...61: return "5'0\" - 5'2\""
-    case 62...65: return "5'2\" - 5'5\""
-    case 66...68:   return "5'6\" - 5'8\'"
-    case 68...100:    return "5'9+\""
-    default:      return nil
         
+        switch totalInches {
+        case 0..<60:   return "Under 5'0\""
+        case 60...61: return "5'0\" - 5'2\""
+        case 62...65: return "5'2\" - 5'5\""
+        case 66...68:   return "5'6\" - 5'8\'"
+        case 68...100:    return "5'9+\""
+        default:      return nil
+            
+        }
     }
-}
     func colorForHeightTag(_ tag: String) -> UIColor {
         switch tag {
         case "Under 5'0":
@@ -584,24 +620,24 @@ class AddEditGirlViewController: FormViewController,CNContactPickerDelegate, Sca
             return UIColor.systemGray
         }
     }
-
-  
-   
+    
+    
+    
     func importFromContacts() {
         let store = CNContactStore()
         switch
         CNContactStore.authorizationStatus(for: .contacts) {
-        
+            
         case .authorized:
             self.presentContactPicker()
-                        
+            
         case .notDetermined:
-        //request access
-        store.requestAccess(for: .contacts) { (granted, error) in
+            //request access
+            store.requestAccess(for: .contacts) { (granted, error) in
                 if granted {
                     self.presentContactPicker()
                 } else {
-                      self.showAccessDeniedAlert()
+                    self.showAccessDeniedAlert()
                 }
             }
         default :
@@ -620,70 +656,70 @@ class AddEditGirlViewController: FormViewController,CNContactPickerDelegate, Sca
         }))
         present(alert, animated: true)
     }
+    
+    
+    func presentContactPicker() {
         
-    
-func presentContactPicker() {
-    
-    let contactPickerVC = CNContactPickerViewController()
-    
-    contactPickerVC.delegate = self
-    contactPickerVC.displayedPropertyKeys =
-    [CNContactGivenNameKey,
-     CNContactFamilyNameKey,
-     CNContactPhoneNumbersKey,
-    CNContactEmailAddressesKey]
-    present(contactPickerVC, animated: true)
-     
-}
-func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
-  importContact(contact)
-}
-func contactPickerDidCancel(_ picker: CNContactPickerViewController) {
-    dismiss(animated: true)
-}
-func importContact(_ contact: CNContact){
-    let firstName = "\(contact.givenName)"
-    let lastName = "\(contact.familyName)"
-    let phoneNumbers = contact.phoneNumbers.map({$0.value as CNPhoneNumber})
-    let cellNumber = "\(phoneNumbers.first!.stringValue)"
-    let emails = contact.emailAddresses.map({$0.value as String})
-    let email = "\(emails.first!)"
-    
-    let address = contact.postalAddresses.first?.value as? CNPostalAddress
-    let city = "\(address?.city ?? "Not Found")"
-    
-    let height = "\(contact.note ?? "No Note")"
-    
-    print("imported contact: \(firstName), \(phoneNumbers), \(emails)")
-    
-    let firstNameRow: TextRow? = form.rowBy(tag: "firstName") as? TextRow
-    if let firstNameRow = firstNameRow {
-        // Set the value of the TextRow
-        firstNameRow.value = firstName
-      // Update the UI to reflect the change
-        firstNameRow.updateCell()
+        let contactPickerVC = CNContactPickerViewController()
+        
+        contactPickerVC.delegate = self
+        contactPickerVC.displayedPropertyKeys =
+        [CNContactGivenNameKey,
+         CNContactFamilyNameKey,
+         CNContactPhoneNumbersKey,
+         CNContactEmailAddressesKey]
+        present(contactPickerVC, animated: true)
+        
     }
-    let secondNameRow: TextRow? = form.rowBy(tag: "lastName") as? TextRow
-    if let secondNameRow = secondNameRow {
-        secondNameRow.value = lastName
-        secondNameRow.updateCell()
+    func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
+        importContact(contact)
     }
-    let cellRow: PhoneRow? = form.rowBy(tag: "cell") as? PhoneRow
-    if let cellRow = cellRow {
-        cellRow.value = cellNumber
-        cellRow.updateCell()
+    func contactPickerDidCancel(_ picker: CNContactPickerViewController) {
+        dismiss(animated: true)
     }
-    let cityRow: TextRow? = form.rowBy(tag: "city") as? TextRow
-    if let cityRow = cityRow {
-        cityRow.value = city
-        cityRow.updateCell()
+    func importContact(_ contact: CNContact){
+        let firstName = "\(contact.givenName)"
+        let lastName = "\(contact.familyName)"
+        let phoneNumbers = contact.phoneNumbers.map({$0.value as CNPhoneNumber})
+        let cellNumber = "\(phoneNumbers.first!.stringValue)"
+        let emails = contact.emailAddresses.map({$0.value as String})
+        let email = "\(emails.first!)"
+        
+        let address = contact.postalAddresses.first?.value as? CNPostalAddress
+        let city = "\(address?.city ?? "Not Found")"
+        
+        let height = "\(contact.note ?? "No Note")"
+        
+        print("imported contact: \(firstName), \(phoneNumbers), \(emails)")
+        
+        let firstNameRow: TextRow? = form.rowBy(tag: "firstName") as? TextRow
+        if let firstNameRow = firstNameRow {
+            // Set the value of the TextRow
+            firstNameRow.value = firstName
+            // Update the UI to reflect the change
+            firstNameRow.updateCell()
+        }
+        let secondNameRow: TextRow? = form.rowBy(tag: "lastName") as? TextRow
+        if let secondNameRow = secondNameRow {
+            secondNameRow.value = lastName
+            secondNameRow.updateCell()
+        }
+        let cellRow: PhoneRow? = form.rowBy(tag: "cell") as? PhoneRow
+        if let cellRow = cellRow {
+            cellRow.value = cellNumber
+            cellRow.updateCell()
+        }
+        let cityRow: TextRow? = form.rowBy(tag: "city") as? TextRow
+        if let cityRow = cityRow {
+            cityRow.value = city
+            cityRow.updateCell()
+        }
+        
     }
-    
-}
     @objc func showAddGirlOptions() {
         let alert = UIAlertController(title: "Add Girl", message: "Choose how you'd like to add a girl", preferredStyle: .actionSheet)
         //alert.addAction(UIAlertAction(title: "Add Manually", style: .default, handler: { (_) in
-          //  self.handleAddManually()
+        //  self.handleAddManually()
         //}))
         
         alert.addAction(UIAlertAction(title: "Import From Contacts", style: .default, handler: { (_) in
@@ -700,27 +736,28 @@ func importContact(_ contact: CNContact){
     
     
     @objc func handleScanResumeWithBasicCamera() {
-        let resumeScannerVC = ResumeScannerViewController()
-        self.navigationController?.pushViewController(resumeScannerVC, animated: true)
-       }
+    //    let resumeScannerVC = ResumeScannerViewController()
+    //    self.navigationController?.pushViewController(resumeScannerVC, animated: true)
+    }
+    
     @objc func handleScanResumeWithDocScanner() {
-        let docScannerVC = ScannerViewController()
-        docScannerVC.delegate = self
-        self.navigationController?.pushViewController(docScannerVC, animated: true)
-       }
-    
-    
-    func dobByAddingYears(numberOfYears: Int) -> Date {
-        let currentDate = Date()
         
-        let calendar = Calendar.current
-        var dateComponents = DateComponents()
-        dateComponents.year = -numberOfYears
-        dateComponents.month = -6
-        let pastDate = calendar.date(byAdding: dateComponents, to: currentDate)
-        let timenterval = pastDate?.timeIntervalSinceNow
-        
-        return pastDate!
+    let scanVC = ResumeScanVC()
+    scanVC.delegate = self
+    navigationController?.pushViewController(scanVC, animated: true)
+   }
+    
+    func dobByAddingYears(numberOfYears age: Int) -> Date {
+        let cal = Calendar.current
+        let currentYear = cal.component(.year, from: Date())
+
+        var comps = DateComponents()
+        comps.year = currentYear - age
+        comps.month = 1
+        comps.day = 1
+        comps.hour = 12
+
+        return cal.date(from: comps)!
     }
     
     
@@ -863,36 +900,31 @@ func importContact(_ contact: CNContact){
         selectedShadchanGirl.lifePlans = values
     }
 
-
     func initNewNasiGirl() {
-        let dateCreated  = Date()
-    
-    let updateTimeStamp = Int(Date().timeIntervalSince1970)
-        let dateFormatter = DateFormatter()
-        // Set Date Format
-        dateFormatter.dateFormat = "YY/MM/dd"
-        let dateCreatedString = dateFormatter.string(from: dateCreated)
-    
-    
-        self.selectedShadchanGirl =
-        ShadchanGirl(girlCell: "",
-        girlLastName: "",
-        girlFirstName: "",
-        city: "",
-        dobIntervalString: "",
-        dateCreated: dateCreatedString,
-        dateLastUpdate: updateTimeStamp,
-        girlHeight: "",
-        sendResumeEmail: "",
-        sendResumeText: "",
-        lifePlans:[],
-        status: "available",
-        datingHistory:"",
-        shadchanNotesNew: "",
-        notesImageURL: "",
-        resumeImageURL: "",
-        photoImageURL: "")
-       
+        let now = Date()
+        let updateTimeStamp = Int(now.timeIntervalSince1970)
+
+        let dateCreatedISO = ISODateOnly.iso(from: now) // "yyyy-MM-dd"
+
+        self.selectedShadchanGirl = ShadchanGirl(
+            girlCell: "",
+            girlLastName: "",
+            girlFirstName: "",
+            city: "",
+            dobIntervalString: "",          // ISO when set
+            dateCreated: dateCreatedISO,    // ✅ was "YY/MM/dd"
+            dateLastUpdate: updateTimeStamp,
+            girlHeight: "",
+            sendResumeEmail: "",
+            sendResumeText: "",
+            lifePlans: [],
+            status: "available",
+            datingHistory: "",
+            shadchanNotesNew: "",
+            notesImageURL: "",
+            resumeImageURL: "",
+            photoImageURL: ""
+        )
     }
     
     @objc func saveGirlToFirebase() {
