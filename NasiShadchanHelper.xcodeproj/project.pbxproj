@@ -68,7 +68,6 @@
 		528F5E2529619AFC00DE5223 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 528F5E2429619AFC00DE5223 /* CategoryViewController.swift */; };
 		5290DBB8293E3FAE004F6A04 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5290DBB7293E3FAE004F6A04 /* HomeViewController.swift */; };
 		5290DBBA293E86AF004F6A04 /* CategoryHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5290DBB9293E86AF004F6A04 /* CategoryHeader.swift */; };
-		5290EBDA2922E36E0008C57D /* AllGirlsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5290EBD92922E36E0008C57D /* AllGirlsVC.swift */; };
 		5290EBDC2923BFB10008C57D /* ShadchanGirl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5290EBDB2923BFB10008C57D /* ShadchanGirl.swift */; };
 		5299A1CC2A1BD62500F653F3 /* ShadchanGirlSubcategoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5299A1CB2A1BD62500F653F3 /* ShadchanGirlSubcategoryVC.swift */; };
 		5299DCE029A6827F00050586 /* FirstDateAppVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5299DCDF29A6827F00050586 /* FirstDateAppVC.swift */; };
@@ -85,7 +84,6 @@
 		52A04EF529A55E9B00C490B0 /* ShadchanRedd.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A04EF429A55E9B00C490B0 /* ShadchanRedd.swift */; };
 		52A04EF729A66FF600C490B0 /* AllReddsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A04EF629A66FF600C490B0 /* AllReddsVC.swift */; };
 		52A357A02A13C4F40064860F /* ShadchanBoyMainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A3579F2A13C4F40064860F /* ShadchanBoyMainVC.swift */; };
-		52A357A22A151D260064860F /* ShadchanGirlMainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A357A12A151D260064860F /* ShadchanGirlMainVC.swift */; };
 		52A41BC6277F3BF700FE7C7A /* NasiBoy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A41BC5277F3BF700FE7C7A /* NasiBoy.swift */; };
 		52C18059280203B3005D3827 /* ShadchanUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C18058280203B3005D3827 /* ShadchanUser.swift */; };
 		52C5ECBF2B02917A00341298 /* AddEditDateVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C5ECBE2B02917A00341298 /* AddEditDateVC.swift */; };
@@ -101,16 +99,14 @@
 		52E486C82B23836D00CA43CE /* ImagePresentedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E486C72B23836D00CA43CE /* ImagePresentedCell.swift */; };
 		52E486CA2B23852F00CA43CE /* PresenterRowSampleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 52E486C92B23852F00CA43CE /* PresenterRowSampleCell.xib */; };
 		96ACF15F0CF663BA7761302B /* Pods_NasiShadchanHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B189A994D2AB087E2C0A61C4 /* Pods_NasiShadchanHelper.framework */; };
-		CB219D4E2D8C82EB00D439B6 /* Untitled.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB219D4D2D8C82E900D439B6 /* Untitled.swift */; };
+		CB219D4E2D8C82EB00D439B6 /* DatingRelationship.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */; };
 		CB3EED4F2F3E1C8D006B392B /* ProfileSearchFilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3EED4E2F3E1C8D006B392B /* ProfileSearchFilterVC.swift */; };
 		CB4E5B732F2BECD00042A61A /* GirlsFilterSearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4E5B722F2BECD00042A61A /* GirlsFilterSearchVC.swift */; };
 		CB90DEE12F438CBA002F7FEA /* OCRReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB90DEE02F438CBA002F7FEA /* OCRReviewViewController.swift */; };
-		CB90DEE32F439B07002F7FEA /* ResumeScanStartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB90DEE22F439B07002F7FEA /* ResumeScanStartViewController.swift */; };
 		CB90DEE52F4A0E3F002F7FEA /* ResumeScanVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB90DEE42F4A0E3F002F7FEA /* ResumeScanVC.swift */; };
 		CB90DEE72F4A0F30002F7FEA /* ParsedResumeReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB90DEE62F4A0F30002F7FEA /* ParsedResumeReviewViewController.swift */; };
 		CB90DEE92F4A1725002F7FEA /* ResumeParser .swift in Sources */ = {isa = PBXBuildFile; fileRef = CB90DEE82F4A171E002F7FEA /* ResumeParser .swift */; };
 		CB9E7D632F4E193A00B43E38 /* DateISO.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9E7D622F4E192F00B43E38 /* DateISO.swift */; };
-		CBE7B7222E2BEC9100AE2CEB /* ScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE7B7212E2BEC9100AE2CEB /* ScannerViewController.swift */; };
 		CE3AC07824536729006B9FEA /* CategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3AC07724536729006B9FEA /* CategoriesViewController.swift */; };
 		CE3AC07B24536729006B9FEA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE3AC07924536729006B9FEA /* Main.storyboard */; };
 		CE3AC07D24536765006B9FEA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE3AC07C24536765006B9FEA /* Assets.xcassets */; };
@@ -214,7 +210,6 @@
 		528F5E2429619AFC00DE5223 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
 		5290DBB7293E3FAE004F6A04 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		5290DBB9293E86AF004F6A04 /* CategoryHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryHeader.swift; sourceTree = "<group>"; };
-		5290EBD92922E36E0008C57D /* AllGirlsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllGirlsVC.swift; sourceTree = "<group>"; };
 		5290EBDB2923BFB10008C57D /* ShadchanGirl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadchanGirl.swift; sourceTree = "<group>"; };
 		5299A1CB2A1BD62500F653F3 /* ShadchanGirlSubcategoryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadchanGirlSubcategoryVC.swift; sourceTree = "<group>"; };
 		5299DCDF29A6827F00050586 /* FirstDateAppVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstDateAppVC.swift; sourceTree = "<group>"; };
@@ -231,7 +226,6 @@
 		52A04EF429A55E9B00C490B0 /* ShadchanRedd.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadchanRedd.swift; sourceTree = "<group>"; };
 		52A04EF629A66FF600C490B0 /* AllReddsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllReddsVC.swift; sourceTree = "<group>"; };
 		52A3579F2A13C4F40064860F /* ShadchanBoyMainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadchanBoyMainVC.swift; sourceTree = "<group>"; };
-		52A357A12A151D260064860F /* ShadchanGirlMainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadchanGirlMainVC.swift; sourceTree = "<group>"; };
 		52A41BC5277F3BF700FE7C7A /* NasiBoy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NasiBoy.swift; sourceTree = "<group>"; };
 		52C18058280203B3005D3827 /* ShadchanUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadchanUser.swift; sourceTree = "<group>"; };
 		52C5ECBE2B02917A00341298 /* AddEditDateVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditDateVC.swift; sourceTree = "<group>"; };
@@ -248,16 +242,14 @@
 		52E486C92B23852F00CA43CE /* PresenterRowSampleCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PresenterRowSampleCell.xib; sourceTree = "<group>"; };
 		6D9723C87BE9B49E0B7C2C30 /* Pods-NasiShadchanHelper.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NasiShadchanHelper.release.xcconfig"; path = "Target Support Files/Pods-NasiShadchanHelper/Pods-NasiShadchanHelper.release.xcconfig"; sourceTree = "<group>"; };
 		B189A994D2AB087E2C0A61C4 /* Pods_NasiShadchanHelper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NasiShadchanHelper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		CB219D4D2D8C82E900D439B6 /* Untitled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Untitled.swift; sourceTree = "<group>"; };
+		CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatingRelationship.swift; sourceTree = "<group>"; };
 		CB3EED4E2F3E1C8D006B392B /* ProfileSearchFilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSearchFilterVC.swift; sourceTree = "<group>"; };
 		CB4E5B722F2BECD00042A61A /* GirlsFilterSearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GirlsFilterSearchVC.swift; sourceTree = "<group>"; };
 		CB90DEE02F438CBA002F7FEA /* OCRReviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRReviewViewController.swift; sourceTree = "<group>"; };
-		CB90DEE22F439B07002F7FEA /* ResumeScanStartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResumeScanStartViewController.swift; sourceTree = "<group>"; };
 		CB90DEE42F4A0E3F002F7FEA /* ResumeScanVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResumeScanVC.swift; sourceTree = "<group>"; };
 		CB90DEE62F4A0F30002F7FEA /* ParsedResumeReviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsedResumeReviewViewController.swift; sourceTree = "<group>"; };
 		CB90DEE82F4A171E002F7FEA /* ResumeParser .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ResumeParser .swift"; sourceTree = "<group>"; };
 		CB9E7D622F4E192F00B43E38 /* DateISO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateISO.swift; sourceTree = "<group>"; };
-		CBE7B7212E2BEC9100AE2CEB /* ScannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerViewController.swift; sourceTree = "<group>"; };
 		CE3AC07024536729006B9FEA /* NasiShadchanHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NasiShadchanHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE3AC07724536729006B9FEA /* CategoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewController.swift; sourceTree = "<group>"; };
 		CE3AC07A24536729006B9FEA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -321,7 +313,6 @@
 				1825F9A8252C5F7B00448269 /* LoginParentVC */,
 				1825F99A252C3C4200448269 /* Login */,
 				1825F99B252C3C4C00448269 /* SignUp */,
-				CBE7B7212E2BEC9100AE2CEB /* ScannerViewController.swift */,
 			);
 			path = AuthViewControllers;
 			sourceTree = "<group>";
@@ -452,15 +443,14 @@
 			children = (
 				CB9E7D622F4E192F00B43E38 /* DateISO.swift */,
 				CB90DEE82F4A171E002F7FEA /* ResumeParser .swift */,
-				CB219D4D2D8C82E900D439B6 /* Untitled.swift */,
+				CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */,
 				3D9DA71B25A7827F0056F656 /* MyTabBarController.swift */,
 				5257776529A12432002C13D4 /* AdminLoginController.swift */,
 				52A3579F2A13C4F40064860F /* ShadchanBoyMainVC.swift */,
 				5228CB0F279C492A00EDF103 /* AllDatesViewController.swift */,
 				5228CB1D27A5D02E00EDF103 /* AddEditBoyViewController.swift */,
-				52A357A12A151D260064860F /* ShadchanGirlMainVC.swift */,
 				CB4E5B722F2BECD00042A61A /* GirlsFilterSearchVC.swift */,
-				CB90DEE22F439B07002F7FEA /* ResumeScanStartViewController.swift */,
+				5290EBDB2923BFB10008C57D /* ShadchanGirl.swift */,
 				CB3EED4E2F3E1C8D006B392B /* ProfileSearchFilterVC.swift */,
 				521924EC2A1909DE00A9DBA4 /* ShadchanGirlsCategoriesVC.swift */,
 				5299A1CB2A1BD62500F653F3 /* ShadchanGirlSubcategoryVC.swift */,
@@ -545,8 +535,6 @@
 		5290EBD82922E3290008C57D /* ShadcanGirlVCS */ = {
 			isa = PBXGroup;
 			children = (
-				5290EBD92922E36E0008C57D /* AllGirlsVC.swift */,
-				5290EBDB2923BFB10008C57D /* ShadchanGirl.swift */,
 			);
 			path = ShadcanGirlVCS;
 			sourceTree = "<group>";
@@ -967,7 +955,7 @@
 				52E486C42B23829300CA43CE /* PresenterRowSampleCell.swift in Sources */,
 				52A04EEF29A3A6A700C490B0 /* MatchIdea.swift in Sources */,
 				520578DE299E6F8C00B732A0 /* GirlCollectionViewCell.swift in Sources */,
-				CB219D4E2D8C82EB00D439B6 /* Untitled.swift in Sources */,
+				CB219D4E2D8C82EB00D439B6 /* DatingRelationship.swift in Sources */,
 				52DB32572996CD2B00AC5F87 /* SubCategoryVC.swift in Sources */,
 				5299DCF629A7CD3500050586 /* SecondDatesDetailVC.swift in Sources */,
 				52DB32592997A53E00AC5F87 /* GirlGroup.swift in Sources */,
@@ -979,7 +967,6 @@
 				52A41BC6277F3BF700FE7C7A /* NasiBoy.swift in Sources */,
 				5290DBBA293E86AF004F6A04 /* CategoryHeader.swift in Sources */,
 				529A47A127F64EB00026A67E /* ErekaVC.swift in Sources */,
-				CBE7B7222E2BEC9100AE2CEB /* ScannerViewController.swift in Sources */,
 				52E486C82B23836D00CA43CE /* ImagePresentedCell.swift in Sources */,
 				5299A1CC2A1BD62500F653F3 /* ShadchanGirlSubcategoryVC.swift in Sources */,
 				52C5ECBF2B02917A00341298 /* AddEditDateVC.swift in Sources */,
@@ -990,11 +977,9 @@
 				520578D5299BBA2500B732A0 /* MatchView.swift in Sources */,
 				CEC468DB245A217F0071EC85 /* ResumeViewController.swift in Sources */,
 				CB4E5B732F2BECD00042A61A /* GirlsFilterSearchVC.swift in Sources */,
-				CB90DEE32F439B07002F7FEA /* ResumeScanStartViewController.swift in Sources */,
 				5228CB14279C6FCB00EDF103 /* DatesTableCell.swift in Sources */,
 				CE3AC07824536729006B9FEA /* CategoriesViewController.swift in Sources */,
 				521D605629B7763A000E91DC /* BoyCategoriesVC.swift in Sources */,
-				5290EBDA2922E36E0008C57D /* AllGirlsVC.swift in Sources */,
 				CE428D54248142B500C34EAB /* ShadchanListDetailViewController.swift in Sources */,
 				3D9DA71C25A7827F0056F656 /* MyTabBarController.swift in Sources */,
 				1865CB3F2542AC5900B1272A /* GirlsDetailTableCell.swift in Sources */,
@@ -1042,7 +1027,6 @@
 				5228CB2127AF015100EDF103 /* ContactsViewController.swift in Sources */,
 				CB90DEE92F4A1725002F7FEA /* ResumeParser .swift in Sources */,
 				5299DCE029A6827F00050586 /* FirstDateAppVC.swift in Sources */,
-				52A357A22A151D260064860F /* ShadchanGirlMainVC.swift in Sources */,
 				52444B022A26D0F900F54E32 /* AppDelegate.swift in Sources */,
 				FFD6A6BD2B2D1AC400459D61 /* SelectBoyVC.swift in Sources */,
 				3DC1849F258C13AD00B529F0 /* NasiGirl.swift in Sources */,

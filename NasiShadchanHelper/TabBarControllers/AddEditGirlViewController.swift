@@ -454,19 +454,7 @@ class AddEditGirlViewController: FormViewController,CNContactPickerDelegate, Res
     
     // MARK: - DOB <-> Age Sync (drop-in)
     // Put these inside AddEditGirlViewController
-    
-    private let dobFormat = "YY/MM/dd" // keep for now
-    
-    private func makeDateFormatter() -> DateFormatter {
-        let df = DateFormatter()
-        df.locale = Locale(identifier: "en_US_POSIX")
-        df.timeZone = TimeZone(secondsFromGMT: 0)
-        df.dateFormat = dobFormat
-        return df
-    }
-    
-    
-     private func applyDOB(_ date: Date) {
+    private func applyDOB(_ date: Date) {
          if isSyncingDOBAndAge { return }
          isSyncingDOBAndAge = true
          defer { isSyncingDOBAndAge = false }
@@ -735,10 +723,7 @@ private func makeAgeRow() -> IntRow {
     }
     
     
-    @objc func handleScanResumeWithBasicCamera() {
-    //    let resumeScannerVC = ResumeScannerViewController()
-    //    self.navigationController?.pushViewController(resumeScannerVC, animated: true)
-    }
+   
     
     @objc func handleScanResumeWithDocScanner() {
         

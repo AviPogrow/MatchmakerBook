@@ -479,15 +479,7 @@ class GirlsFilterSearchVC: UIViewController {
         )
         clearButton.isEnabled = true
         navigationItem.rightBarButtonItems = [addButton, clearButton]
-        
-        //let extractButton = UIBarButtonItem(
-       //     title: "Extract",
-       //     style: .plain,
-       //     target: self,
-       //     action: #selector(extractTapped)
-       // )
-        
-        //extractButton.isEnabled = true
+      
         // --- Search bar ---
         searchBar.delegate = self
         searchBar.showsCancelButton = true
@@ -651,16 +643,6 @@ class GirlsFilterSearchVC: UIViewController {
         })
     }
 
-    
-
-    
-    @objc private func extractTapped() {
-        //let vc = OCRReviewViewController()
-        let vc = ResumeScanStartViewController()
-        navigationController?.pushViewController(vc, animated: true)
-        
-    }
-    
     private func loadMocks() {
         print("✅ USING MOCKS")
         let girls = MockGirls.all

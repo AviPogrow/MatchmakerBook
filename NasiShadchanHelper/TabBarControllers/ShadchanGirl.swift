@@ -110,8 +110,8 @@ class ShadchanGirl: NSObject, Girl {
         self.resumeImageURL = resumeImageURL ?? ""
         self.photoImageURL = photoImageURL ?? ""
         
-        let age = calculateAgeFrom(dobString: self.dobIntervalString)
-        self.computedAgeString = age > 0 ? "\(age)" : ""
+        let ageYears = calculateAgeYears(fromDOBString: self.dobIntervalString)
+        self.computedAgeString = ageYears > 0 ? "\(ageYears)" : ""
     }
     
     // MARK: Initialize with data from user input
@@ -183,33 +183,31 @@ class ShadchanGirl: NSObject, Girl {
     }
 
  
-    
+  // MARK: - Age (ISO + backward compatible, integer years)
+
+  func calculateAgeYears(fromDOBString dobString: String) -> Int {
+      guard let iso = ISODateOnly.normalizeToISO(dobString),
+            let dob = ISODateOnly.dateForDateRow(fromISO: iso) else {
+          return 0
+      }
+      return calculateAgeYears(from: dob)
+  }
+
+  func calculateAgeYears(from dob: Date) -> Int {
+      let cal = Calendar.current
+      let today = Date()
+
+      // Normalize to noon to avoid timezone edge cases
+      let dobNoon = cal.date(bySettingHour: 12, minute: 0, second: 0, of: dob) ?? dob
+
+      let years = cal.dateComponents([.year], from: dobNoon, to: today).year ?? 0
+      return max(years, 0)
+  }
+    // MARK: - Backwards-compatible wrapper (temporary)
     func calculateAgeFrom(dobString: String) -> Double {
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-        dateFormatter.dateFormat = "YY/MM/dd" // keep for now
-
-        guard let backToDate = dateFormatter.date(from: dobString) else { return 0.0 }
-
-        let calculatedAge = calculateAgeFrom(dob: backToDate)
-        return calculatedAge < 2.0 ? 0.0 : calculatedAge
+        Double(calculateAgeYears(fromDOBString: dobString))
     }
-
-    func calculateAgeFrom(dob: Date) -> Double {
-        
-        let dateOfBirth = dob
-        // get today as a date object and compare
-        let today = Date()
-        let calendar = Calendar.current
-        let components = calendar.dateComponents([.year,.month, .day], from: dateOfBirth, to: today)
-        
-        let ageYears = components.year
-        let decimal =  Double(components.month!) / Double(12)
-        let compositeNumb = Double(ageYears!) + decimal
-        let  roundedNumb =    Double(compositeNumb).rounded(toPlaces: 1)
-        return roundedNumb
-    }
+  
 }
 
 
