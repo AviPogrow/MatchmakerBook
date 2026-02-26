@@ -167,7 +167,6 @@
 		3CDC470ACBC576D3973ED641 /* Pods-NasiShadchanHelper.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NasiShadchanHelper.debug.xcconfig"; path = "Target Support Files/Pods-NasiShadchanHelper/Pods-NasiShadchanHelper.debug.xcconfig"; sourceTree = "<group>"; };
 		3D1C42EF267405820004618A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3D689F0726729DFA00638097 /* SBL_Hbrw.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SBL_Hbrw.ttf; sourceTree = "<group>"; };
-		3D9D5B8D2673D7F70063D252 /* NasiShadchanHelper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NasiShadchanHelper.entitlements; sourceTree = "<group>"; };
 		3D9DA71B25A7827F0056F656 /* MyTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTabBarController.swift; sourceTree = "<group>"; };
 		3D9DA71D25ACCEB10056F656 /* ViewResumeVCViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewResumeVCViewController.swift; sourceTree = "<group>"; };
 		3D9DA71F25AE0DEA0056F656 /* AllNasiGirlsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllNasiGirlsViewController.swift; sourceTree = "<group>"; };
@@ -404,6 +403,7 @@
 				184F9857252C61F200187D72 /* AlignedPlaceholderTextField */,
 				185179872525FAA20099D65E /* progressIndicator */,
 				18A37F9E252F8A7E009C6BEB /* cells */,
+				5201E6E429AF7AEA00773F5B /* Analytics */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -443,30 +443,29 @@
 			children = (
 				CB9E7D622F4E192F00B43E38 /* DateISO.swift */,
 				CB90DEE82F4A171E002F7FEA /* ResumeParser .swift */,
+				CB90DEE42F4A0E3F002F7FEA /* ResumeScanVC.swift */,
+				CB90DEE02F438CBA002F7FEA /* OCRReviewViewController.swift */,
+				5290EBDB2923BFB10008C57D /* ShadchanGirl.swift */,
+				CB90DEE62F4A0F30002F7FEA /* ParsedResumeReviewViewController.swift */,
+				CB4E5B722F2BECD00042A61A /* GirlsFilterSearchVC.swift */,
+				CB3EED4E2F3E1C8D006B392B /* ProfileSearchFilterVC.swift */,
+				52DB326029997D0D00AC5F87 /* AddEditGirlViewController.swift */,
 				CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */,
 				3D9DA71B25A7827F0056F656 /* MyTabBarController.swift */,
 				5257776529A12432002C13D4 /* AdminLoginController.swift */,
 				52A3579F2A13C4F40064860F /* ShadchanBoyMainVC.swift */,
 				5228CB0F279C492A00EDF103 /* AllDatesViewController.swift */,
 				5228CB1D27A5D02E00EDF103 /* AddEditBoyViewController.swift */,
-				CB4E5B722F2BECD00042A61A /* GirlsFilterSearchVC.swift */,
-				5290EBDB2923BFB10008C57D /* ShadchanGirl.swift */,
-				CB3EED4E2F3E1C8D006B392B /* ProfileSearchFilterVC.swift */,
 				521924EC2A1909DE00A9DBA4 /* ShadchanGirlsCategoriesVC.swift */,
 				5299A1CB2A1BD62500F653F3 /* ShadchanGirlSubcategoryVC.swift */,
 				521D605529B7763A000E91DC /* BoyCategoriesVC.swift */,
 				529D21AC2A05F70100D1500D /* BoySubCategoriesVC.swift */,
-				52DB326029997D0D00AC5F87 /* AddEditGirlViewController.swift */,
-				CB90DEE02F438CBA002F7FEA /* OCRReviewViewController.swift */,
 				5290DBB7293E3FAE004F6A04 /* HomeViewController.swift */,
 				528F5E2429619AFC00DE5223 /* CategoryViewController.swift */,
 				52DB32562996CD2B00AC5F87 /* SubCategoryVC.swift */,
 				529D21AE2A06D41900D1500D /* BoyCollectionViewCell.swift */,
+				52DB32622999C48700AC5F87 /* NasiGirlModule */,
 				5299DCE829A7AFC400050586 /* ShadchanModule */,
-				5299DCF129A7BBD700050586 /* NasiGirlModule */,
-				1825F998252C3BA800448269 /* AuthViewControllers */,
-				CB90DEE42F4A0E3F002F7FEA /* ResumeScanVC.swift */,
-				CB90DEE62F4A0F30002F7FEA /* ParsedResumeReviewViewController.swift */,
 			);
 			path = TabBarControllers;
 			sourceTree = "<group>";
@@ -483,6 +482,8 @@
 		5201E6E529AF811600773F5B /* NonCodeFiles */ = {
 			isa = PBXGroup;
 			children = (
+				CE3AC08124536765006B9FEA /* Info.plist */,
+				3D1C42EF267405820004618A /* GoogleService-Info.plist */,
 				CE3AC07E24536765006B9FEA /* LaunchScreen.storyboard */,
 				CE3AC07924536729006B9FEA /* Main.storyboard */,
 				3D689F0726729DFA00638097 /* SBL_Hbrw.ttf */,
@@ -523,6 +524,7 @@
 		5228CB1F27A5D14800EDF103 /* GirlVCs */ = {
 			isa = PBXGroup;
 			children = (
+				52DB32632999C5C400AC5F87 /* NasiGirlDetailScene */,
 				CE3AC07724536729006B9FEA /* CategoriesViewController.swift */,
 				CE3AC0A5245383A0006B9FEA /* FullTimeYeshivaViewController.swift */,
 				CEC468DD245B37950071EC85 /* FullTimeCollegeWorkingViewController.swift */,
@@ -530,13 +532,6 @@
 				3D9DA71F25AE0DEA0056F656 /* AllNasiGirlsViewController.swift */,
 			);
 			path = GirlVCs;
-			sourceTree = "<group>";
-		};
-		5290EBD82922E3290008C57D /* ShadcanGirlVCS */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ShadcanGirlVCS;
 			sourceTree = "<group>";
 		};
 		5299DCE729A7AF8A00050586 /* ReddVCS */ = {
@@ -556,7 +551,6 @@
 				5299DCEC29A7B24E00050586 /* BizProfileVCS */,
 				5228CB1C27A5CFCE00EDF103 /* BoyVCS */,
 				5228CB1B27A5CF7A00EDF103 /* DateVCs */,
-				5290EBD82922E3290008C57D /* ShadcanGirlVCS */,
 			);
 			path = ShadchanModule;
 			sourceTree = "<group>";
@@ -607,18 +601,6 @@
 			path = BizProfileVCS;
 			sourceTree = "<group>";
 		};
-		5299DCF129A7BBD700050586 /* NasiGirlModule */ = {
-			isa = PBXGroup;
-			children = (
-				3DC1849E258C13AD00B529F0 /* NasiGirl.swift */,
-				52DB32582997A53E00AC5F87 /* GirlGroup.swift */,
-				5228CB2627B4163300EDF103 /* ShadchanGirlNote.swift */,
-				CEC468DC245B1C0E0071EC85 /* NasiGirlsModule */,
-				52DB32632999C5C400AC5F87 /* NasiGirlDetailScene */,
-			);
-			path = NasiGirlModule;
-			sourceTree = "<group>";
-		};
 		5299DCF229A7CC8700050586 /* SecondDateVCs */ = {
 			isa = PBXGroup;
 			children = (
@@ -628,17 +610,14 @@
 			path = SecondDateVCs;
 			sourceTree = "<group>";
 		};
-		52DB32622999C48700AC5F87 /* NewNasiGirlModule */ = {
+		52DB32622999C48700AC5F87 /* NasiGirlModule */ = {
 			isa = PBXGroup;
 			children = (
-				52DB325A2997BFE700AC5F87 /* GirlCell.swift */,
-				5238D5CF293131AF00ECB2AF /* SearchResultCell.swift */,
-				528F5E222960780C00DE5223 /* CategoryCell.swift */,
-				5290DBB9293E86AF004F6A04 /* CategoryHeader.swift */,
-				520578DD299E6F8C00B732A0 /* GirlCollectionViewCell.swift */,
-				520578D6299D62FF00B732A0 /* AppRowCell.swift */,
+				CB9E7D652F4F76C700B43E38 /* Models */,
+				CB9E7D642F4F767600B43E38 /* NasiGirlsViews */,
+				5228CB1F27A5D14800EDF103 /* GirlVCs */,
 			);
-			path = NewNasiGirlModule;
+			path = NasiGirlModule;
 			sourceTree = "<group>";
 		};
 		52DB32632999C5C400AC5F87 /* NasiGirlDetailScene */ = {
@@ -669,12 +648,33 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		CB9E7D642F4F767600B43E38 /* NasiGirlsViews */ = {
+			isa = PBXGroup;
+			children = (
+				5238D5CF293131AF00ECB2AF /* SearchResultCell.swift */,
+				528F5E222960780C00DE5223 /* CategoryCell.swift */,
+				520578DD299E6F8C00B732A0 /* GirlCollectionViewCell.swift */,
+				5290DBB9293E86AF004F6A04 /* CategoryHeader.swift */,
+				520578D6299D62FF00B732A0 /* AppRowCell.swift */,
+				52DB325A2997BFE700AC5F87 /* GirlCell.swift */,
+			);
+			path = NasiGirlsViews;
+			sourceTree = "<group>";
+		};
+		CB9E7D652F4F76C700B43E38 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				3DC1849E258C13AD00B529F0 /* NasiGirl.swift */,
+				52DB32582997A53E00AC5F87 /* GirlGroup.swift */,
+				5228CB2627B4163300EDF103 /* ShadchanGirlNote.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		CE3AC06724536729006B9FEA = {
 			isa = PBXGroup;
 			children = (
 				CE3AC07224536729006B9FEA /* NasiShadchanHelper */,
-				184F2F4E252ADB8900252C97 /* CommonClasses */,
-				185179862525FA190099D65E /* CustomViews */,
 				CE3AC08924536765006B9FEA /* NasiShadchanHelperTests */,
 				CE3AC09424536765006B9FEA /* NasiShadchanHelperUITests */,
 				CE3AC07124536729006B9FEA /* Products */,
@@ -697,12 +697,11 @@
 			isa = PBXGroup;
 			children = (
 				52444B012A26D0F900F54E32 /* AppDelegate.swift */,
-				5201E6E429AF7AEA00773F5B /* Analytics */,
-				18AB903A252DBA8100D9FCAB /* TabBarControllers */,
-				CE3AC08124536765006B9FEA /* Info.plist */,
-				3D1C42EF267405820004618A /* GoogleService-Info.plist */,
-				3D9D5B8D2673D7F70063D252 /* NasiShadchanHelper.entitlements */,
 				5238D5CD2931307C00ECB2AF /* NasiSearchController.swift */,
+				1825F998252C3BA800448269 /* AuthViewControllers */,
+				185179862525FA190099D65E /* CustomViews */,
+				184F2F4E252ADB8900252C97 /* CommonClasses */,
+				18AB903A252DBA8100D9FCAB /* TabBarControllers */,
 				5201E6E529AF811600773F5B /* NonCodeFiles */,
 			);
 			path = NasiShadchanHelper;
@@ -724,15 +723,6 @@
 				CE3AC09724536765006B9FEA /* Info.plist */,
 			);
 			path = NasiShadchanHelperUITests;
-			sourceTree = "<group>";
-		};
-		CEC468DC245B1C0E0071EC85 /* NasiGirlsModule */ = {
-			isa = PBXGroup;
-			children = (
-				52DB32622999C48700AC5F87 /* NewNasiGirlModule */,
-				5228CB1F27A5D14800EDF103 /* GirlVCs */,
-			);
-			path = NasiGirlsModule;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1231,19 +1221,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = NasiShadchanHelper/NasiShadchanHelper.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 58.8.1;
+				CURRENT_PROJECT_VERSION = 58.8.2;
 				DEVELOPMENT_TEAM = P77A2352BM;
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = NasiShadchanHelper/Info.plist;
+				INFOPLIST_FILE = NasiShadchanHelper/NonCodeFiles/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 58.8.1;
+				MARKETING_VERSION = 58.8.2;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.AviPogrow.NasiShadchanHelper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1260,19 +1250,19 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = NasiShadchanHelper/NasiShadchanHelper.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 58.8.1;
+				CURRENT_PROJECT_VERSION = 58.8.2;
 				DEVELOPMENT_TEAM = P77A2352BM;
 				ENABLE_BITCODE = NO;
-				INFOPLIST_FILE = NasiShadchanHelper/Info.plist;
+				INFOPLIST_FILE = NasiShadchanHelper/NonCodeFiles/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 58.8.1;
+				MARKETING_VERSION = 58.8.2;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.AviPogrow.NasiShadchanHelper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
