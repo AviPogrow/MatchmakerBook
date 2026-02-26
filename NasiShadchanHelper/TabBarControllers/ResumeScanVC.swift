@@ -112,7 +112,8 @@ final class ResumeScanVC: UIViewController, VNDocumentCameraViewControllerDelega
     }
     
     private func presentReviewSheet(parsed: [String: String], rawText: String) {
-        let reviewVC = ParsedResumeReviewViewController(parsed: parsed, rawText: rawText) { [weak self] selectedDict in
+        
+        let reviewVC = ParsedResumeReviewVC(parsed: parsed, rawText: rawText) { [weak self] selectedDict in
             guard let self else { return }
             self.delegate?.didScanAndParseResume(dict: selectedDict)
 

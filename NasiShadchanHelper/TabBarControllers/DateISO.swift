@@ -94,4 +94,18 @@ enum ISODateOnly {
 
         return nil
     }
+    /// Display format that matches Eureka's default DateRow style (e.g. "Feb 26, 2026")
+    static let eurekaDisplayFormatter: DateFormatter = {
+        let df = DateFormatter()
+        df.locale = Locale(identifier: "en_US_POSIX")
+        df.timeZone = TimeZone.current
+        df.dateStyle = .medium
+        df.timeStyle = .none
+        return df
+    }()
+    static func displayStringForDOB(_ rawDOB: String) -> String {
+        guard let iso = normalizeToISO(rawDOB),
+              let date = dateForDateRow(fromISO: iso) else { return "" }
+        return eurekaDisplayFormatter.string(from: date)
+    }
 }
