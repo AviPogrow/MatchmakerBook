@@ -12,3 +12,4 @@ Carthage/Build/
 fastlane/report.xml
 fastlane/test_output/
 Config/Secrets.xcconfig
+.DS_Store
