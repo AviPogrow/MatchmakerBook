@@ -48,6 +48,7 @@ enum ISODateOnly {
         let candidateYears = [1900 + yy, 2000 + yy]
         let cal = Calendar.current
 
+        //calc age
         func ageFor(year: Int) -> Int? {
             var comps = DateComponents()
             comps.year = year
