@@ -102,9 +102,7 @@
 		CB219D4E2D8C82EB00D439B6 /* DatingRelationship.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */; };
 		CB3EED4F2F3E1C8D006B392B /* ProfileSearchFilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3EED4E2F3E1C8D006B392B /* ProfileSearchFilterVC.swift */; };
 		CB4E5B732F2BECD00042A61A /* GirlsFilterSearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4E5B722F2BECD00042A61A /* GirlsFilterSearchVC.swift */; };
-		CB90DEE12F438CBA002F7FEA /* OCRReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB90DEE02F438CBA002F7FEA /* OCRReviewViewController.swift */; };
 		CB90DEE52F4A0E3F002F7FEA /* ResumeScanVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB90DEE42F4A0E3F002F7FEA /* ResumeScanVC.swift */; };
-		CB90DEE72F4A0F30002F7FEA /* ParsedResumeReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB90DEE62F4A0F30002F7FEA /* ParsedResumeReviewViewController.swift */; };
 		CB90DEE92F4A1725002F7FEA /* ResumeParser .swift in Sources */ = {isa = PBXBuildFile; fileRef = CB90DEE82F4A171E002F7FEA /* ResumeParser .swift */; };
 		CB9E7D632F4E193A00B43E38 /* DateISO.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9E7D622F4E192F00B43E38 /* DateISO.swift */; };
 		CB9E7D672F50ADE000B43E38 /* ParsedResumeReviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9E7D662F50ADE000B43E38 /* ParsedResumeReviewVC.swift */; };
@@ -245,9 +243,7 @@
 		CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatingRelationship.swift; sourceTree = "<group>"; };
 		CB3EED4E2F3E1C8D006B392B /* ProfileSearchFilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSearchFilterVC.swift; sourceTree = "<group>"; };
 		CB4E5B722F2BECD00042A61A /* GirlsFilterSearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GirlsFilterSearchVC.swift; sourceTree = "<group>"; };
-		CB90DEE02F438CBA002F7FEA /* OCRReviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRReviewViewController.swift; sourceTree = "<group>"; };
 		CB90DEE42F4A0E3F002F7FEA /* ResumeScanVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResumeScanVC.swift; sourceTree = "<group>"; };
-		CB90DEE62F4A0F30002F7FEA /* ParsedResumeReviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsedResumeReviewViewController.swift; sourceTree = "<group>"; };
 		CB90DEE82F4A171E002F7FEA /* ResumeParser .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ResumeParser .swift"; sourceTree = "<group>"; };
 		CB9E7D622F4E192F00B43E38 /* DateISO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateISO.swift; sourceTree = "<group>"; };
 		CB9E7D662F50ADE000B43E38 /* ParsedResumeReviewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsedResumeReviewVC.swift; sourceTree = "<group>"; };
@@ -446,9 +442,7 @@
 				CB9E7D622F4E192F00B43E38 /* DateISO.swift */,
 				CB90DEE82F4A171E002F7FEA /* ResumeParser .swift */,
 				CB90DEE42F4A0E3F002F7FEA /* ResumeScanVC.swift */,
-				CB90DEE62F4A0F30002F7FEA /* ParsedResumeReviewViewController.swift */,
 				CB9E7D662F50ADE000B43E38 /* ParsedResumeReviewVC.swift */,
-				CB90DEE02F438CBA002F7FEA /* OCRReviewViewController.swift */,
 				5290EBDB2923BFB10008C57D /* ShadchanGirl.swift */,
 				CB4E5B722F2BECD00042A61A /* GirlsFilterSearchVC.swift */,
 				CB3EED4E2F3E1C8D006B392B /* ProfileSearchFilterVC.swift */,
@@ -993,7 +987,6 @@
 				3D9DA72225AE1A600056F656 /* AllGirlsTableViewCell.swift in Sources */,
 				CB3EED4F2F3E1C8D006B392B /* ProfileSearchFilterVC.swift in Sources */,
 				1825F99E252C3FE400448269 /* LoginVC.swift in Sources */,
-				CB90DEE72F4A0F30002F7FEA /* ParsedResumeReviewViewController.swift in Sources */,
 				5228CB2727B4163300EDF103 /* ShadchanGirlNote.swift in Sources */,
 				520578CF299BB55700B732A0 /* SendMessageButton.swift in Sources */,
 				52DB325F2998904100AC5F87 /* Variables.swift in Sources */,
@@ -1008,7 +1001,6 @@
 				1851798A2525FAF20099D65E /* ProgressIndicator.swift in Sources */,
 				5228CB2327B1876300EDF103 /* DescriptionCollectionViewCell.swift in Sources */,
 				52E486C62B23831B00CA43CE /* SelectableViewController.swift in Sources */,
-				CB90DEE12F438CBA002F7FEA /* OCRReviewViewController.swift in Sources */,
 				CE3AC0AC2454650F006B9FEA /* SingleTableViewCell.swift in Sources */,
 				529D21AF2A06D41900D1500D /* BoyCollectionViewCell.swift in Sources */,
 				CE525A702461B55300CBEC41 /* UIImage+Resize.swift in Sources */,
