@@ -1,13 +1,14 @@
 //
-//  ParsedResumeReviewViewController.swift
+//  ParsedResumeReviewVC.swift
 //  NasiShadchanHelper
 //
-//  Created by Avi Pogrow on 2/21/26.
+//  Created by Avi Pogrow on 2/26/26.
 //  Copyright © 2026 user. All rights reserved.
 //
+
 import UIKit
 
-final class ParsedResumeReviewViewController: UITableViewController {
+final class ParsedResumeReviewVC: UITableViewController {
 
     struct Field {
         let key: String
@@ -21,19 +22,30 @@ final class ParsedResumeReviewViewController: UITableViewController {
     private let onApply: ([String: String]) -> Void
     private var showRawText = false
 
+    // Keep the original parsed DOB so "Apply" can pass ISO even if UI shows "Feb 26, 2026"
+    private let rawParsedDOB: String
+
     init(parsed: [String: String],
          rawText: String,
          onApply: @escaping ([String: String]) -> Void) {
 
         func v(_ k: String) -> String { (parsed[k] ?? "").trimmingCharacters(in: .whitespacesAndNewlines) }
+        func displayDOB(_ raw: String) -> String { ISODateOnly.displayStringForDOB(raw) }
+
+        let dobRaw = v("dob")
+        self.rawParsedDOB = dobRaw
+        let dobDisplay = displayDOB(dobRaw)
 
         self.fields = [
-            Field(key: "firstName", title: "First Name", value: v("firstName"), isSelected: !v("firstName").isEmpty),
-            Field(key: "lastName",  title: "Last Name",  value: v("lastName"),  isSelected: !v("lastName").isEmpty),
-            Field(key: "telephone", title: "Telephone",  value: v("telephone"), isSelected: !v("telephone").isEmpty),
-            Field(key: "city",      title: "City",       value: v("city"),      isSelected: !v("city").isEmpty),
-            Field(key: "height",    title: "Height",     value: v("height"),    isSelected: !v("height").isEmpty),
-            Field(key: "dob",       title: "Date of Birth", value: v("dob"),    isSelected: !v("dob").isEmpty)
+            Field(key: "firstName", title: "First Name",    value: v("firstName"),  isSelected: !v("firstName").isEmpty),
+            Field(key: "lastName",  title: "Last Name",     value: v("lastName"),   isSelected: !v("lastName").isEmpty),
+            Field(key: "telephone", title: "Telephone",     value: v("telephone"),  isSelected: !v("telephone").isEmpty),
+            Field(key: "city",      title: "City",          value: v("city"),       isSelected: !v("city").isEmpty),
+            Field(key: "height",    title: "Height",        value: v("height"),     isSelected: !v("height").isEmpty),
+
+            // ✅ Display in Eureka-style format (e.g. "Jul 11, 2001")
+            // ✅ Still apply ISO back to the form/model
+            Field(key: "dob",       title: "Date of Birth", value: dobDisplay,      isSelected: !dobDisplay.isEmpty)
         ]
 
         self.rawText = rawText
@@ -43,8 +55,7 @@ final class ParsedResumeReviewViewController: UITableViewController {
     }
 
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-    
-    
+
     var onCancel: (() -> Void)?
     var onRetake: (() -> Void)?
 
@@ -67,6 +78,7 @@ final class ParsedResumeReviewViewController: UITableViewController {
 
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
+
     @objc private func retakeTapped() {
         onRetake?()
         dismiss(animated: true)
@@ -74,16 +86,25 @@ final class ParsedResumeReviewViewController: UITableViewController {
 
     @objc private func cancelTapped() {
         onCancel?()
-        //dismiss(animated: true)
+        // dismiss(animated: true)
     }
 
     @objc private func applyTapped() {
         var dict: [String: String] = [:]
+
         for f in fields where f.isSelected && !f.value.isEmpty {
-            dict[f.key] = f.value
+            if f.key == "dob" {
+                // ✅ Always apply DOB as ISO (yyyy-MM-dd) regardless of display text
+                if let iso = ISODateOnly.normalizeToISO(rawParsedDOB) {
+                    dict["dob"] = iso
+                }
+            } else {
+                dict[f.key] = f.value
+            }
         }
+
         onApply(dict)
-        //dismiss(animated: true)
+        // dismiss(animated: true)
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int { showRawText ? 2 : 1 }
@@ -151,3 +172,7 @@ final class ParsedResumeReviewViewController: UITableViewController {
         }
     }
 }
+  
+    
+
+
