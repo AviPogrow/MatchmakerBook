@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -106,6 +106,9 @@
 		CB90DEE92F4A1725002F7FEA /* ResumeParser .swift in Sources */ = {isa = PBXBuildFile; fileRef = CB90DEE82F4A171E002F7FEA /* ResumeParser .swift */; };
 		CB9E7D632F4E193A00B43E38 /* DateISO.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9E7D622F4E192F00B43E38 /* DateISO.swift */; };
 		CB9E7D672F50ADE000B43E38 /* ParsedResumeReviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9E7D662F50ADE000B43E38 /* ParsedResumeReviewVC.swift */; };
+		CB9E7D762F528FAD00B43E38 /* ResumeShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CB9E7D6C2F528FAD00B43E38 /* ResumeShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		CB9E7D802F52968F00B43E38 /* ResumeImportRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9E7D7F2F52968F00B43E38 /* ResumeImportRouter.swift */; };
+		CB9E7D822F52970700B43E38 /* DebugImportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9E7D812F52970700B43E38 /* DebugImportViewController.swift */; };
 		CE3AC07824536729006B9FEA /* CategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3AC07724536729006B9FEA /* CategoriesViewController.swift */; };
 		CE3AC07B24536729006B9FEA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE3AC07924536729006B9FEA /* Main.storyboard */; };
 		CE3AC07D24536765006B9FEA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE3AC07C24536765006B9FEA /* Assets.xcassets */; };
@@ -129,6 +132,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		CB9E7D742F528FAD00B43E38 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CE3AC06824536729006B9FEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CB9E7D6B2F528FAD00B43E38;
+			remoteInfo = ResumeShareExtension;
+		};
 		CE3AC08724536765006B9FEA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = CE3AC06824536729006B9FEA /* Project object */;
@@ -144,6 +154,20 @@
 			remoteInfo = NasiShadchanHelper;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		CB9E7D7B2F528FAD00B43E38 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				CB9E7D762F528FAD00B43E38 /* ResumeShareExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1825F99D252C3FE400448269 /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
@@ -247,6 +271,10 @@
 		CB90DEE82F4A171E002F7FEA /* ResumeParser .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ResumeParser .swift"; sourceTree = "<group>"; };
 		CB9E7D622F4E192F00B43E38 /* DateISO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateISO.swift; sourceTree = "<group>"; };
 		CB9E7D662F50ADE000B43E38 /* ParsedResumeReviewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParsedResumeReviewVC.swift; sourceTree = "<group>"; };
+		CB9E7D6C2F528FAD00B43E38 /* ResumeShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ResumeShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB9E7D7D2F52913400B43E38 /* NasiShadchanHelper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NasiShadchanHelper.entitlements; sourceTree = "<group>"; };
+		CB9E7D7F2F52968F00B43E38 /* ResumeImportRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResumeImportRouter.swift; sourceTree = "<group>"; };
+		CB9E7D812F52970700B43E38 /* DebugImportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugImportViewController.swift; sourceTree = "<group>"; };
 		CE3AC07024536729006B9FEA /* NasiShadchanHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NasiShadchanHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE3AC07724536729006B9FEA /* CategoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewController.swift; sourceTree = "<group>"; };
 		CE3AC07A24536729006B9FEA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -275,7 +303,28 @@
 		FFD6A6BE2B2FDF4400459D61 /* SelectGirlVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectGirlVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		CB9E7D772F528FAD00B43E38 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = CB9E7D6B2F528FAD00B43E38 /* ResumeShareExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		CB9E7D6D2F528FAD00B43E38 /* ResumeShareExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (CB9E7D772F528FAD00B43E38 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ResumeShareExtension; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
+		CB9E7D692F528FAD00B43E38 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CE3AC06D24536729006B9FEA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -674,6 +723,7 @@
 				CE3AC07224536729006B9FEA /* NasiShadchanHelper */,
 				CE3AC08924536765006B9FEA /* NasiShadchanHelperTests */,
 				CE3AC09424536765006B9FEA /* NasiShadchanHelperUITests */,
+				CB9E7D6D2F528FAD00B43E38 /* ResumeShareExtension */,
 				CE3AC07124536729006B9FEA /* Products */,
 				79D0799967B4D24C67E66333 /* Pods */,
 				C82B7A2AC1A0D68E92DB4BB2 /* Frameworks */,
@@ -686,6 +736,7 @@
 				CE3AC07024536729006B9FEA /* NasiShadchanHelper.app */,
 				CE3AC08624536765006B9FEA /* NasiShadchanHelperTests.xctest */,
 				CE3AC09124536765006B9FEA /* NasiShadchanHelperUITests.xctest */,
+				CB9E7D6C2F528FAD00B43E38 /* ResumeShareExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -693,7 +744,10 @@
 		CE3AC07224536729006B9FEA /* NasiShadchanHelper */ = {
 			isa = PBXGroup;
 			children = (
+				CB9E7D7D2F52913400B43E38 /* NasiShadchanHelper.entitlements */,
 				52444B012A26D0F900F54E32 /* AppDelegate.swift */,
+				CB9E7D7F2F52968F00B43E38 /* ResumeImportRouter.swift */,
+				CB9E7D812F52970700B43E38 /* DebugImportViewController.swift */,
 				5238D5CD2931307C00ECB2AF /* NasiSearchController.swift */,
 				1825F998252C3BA800448269 /* AuthViewControllers */,
 				185179862525FA190099D65E /* CustomViews */,
@@ -725,6 +779,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		CB9E7D6B2F528FAD00B43E38 /* ResumeShareExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CB9E7D782F528FAD00B43E38 /* Build configuration list for PBXNativeTarget "ResumeShareExtension" */;
+			buildPhases = (
+				CB9E7D682F528FAD00B43E38 /* Sources */,
+				CB9E7D692F528FAD00B43E38 /* Frameworks */,
+				CB9E7D6A2F528FAD00B43E38 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				CB9E7D6D2F528FAD00B43E38 /* ResumeShareExtension */,
+			);
+			name = ResumeShareExtension;
+			packageProductDependencies = (
+			);
+			productName = ResumeShareExtension;
+			productReference = CB9E7D6C2F528FAD00B43E38 /* ResumeShareExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		CE3AC06F24536729006B9FEA /* NasiShadchanHelper */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = CE3AC09A24536765006B9FEA /* Build configuration list for PBXNativeTarget "NasiShadchanHelper" */;
@@ -735,10 +811,12 @@
 				CE3AC06E24536729006B9FEA /* Resources */,
 				D98456B8F7890B5DF2331561 /* [CP] Embed Pods Frameworks */,
 				54C7601202E2B0812240A24A /* [CP] Copy Pods Resources */,
+				CB9E7D7B2F528FAD00B43E38 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				CB9E7D752F528FAD00B43E38 /* PBXTargetDependency */,
 			);
 			name = NasiShadchanHelper;
 			productName = NasiShadchanHelper;
@@ -787,10 +865,13 @@
 		CE3AC06824536729006B9FEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1110;
+				LastSwiftUpdateCheck = 1630;
 				LastUpgradeCheck = 1310;
 				ORGANIZATIONNAME = user;
 				TargetAttributes = {
+					CB9E7D6B2F528FAD00B43E38 = {
+						CreatedOnToolsVersion = 16.3;
+					};
 					CE3AC06F24536729006B9FEA = {
 						CreatedOnToolsVersion = 11.1;
 						LastSwiftMigration = 1630;
@@ -821,11 +902,19 @@
 				CE3AC06F24536729006B9FEA /* NasiShadchanHelper */,
 				CE3AC08524536765006B9FEA /* NasiShadchanHelperTests */,
 				CE3AC09024536765006B9FEA /* NasiShadchanHelperUITests */,
+				CB9E7D6B2F528FAD00B43E38 /* ResumeShareExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		CB9E7D6A2F528FAD00B43E38 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CE3AC06E24536729006B9FEA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -928,6 +1017,13 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		CB9E7D682F528FAD00B43E38 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		CE3AC06C24536729006B9FEA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1005,6 +1101,7 @@
 				529D21AF2A06D41900D1500D /* BoyCollectionViewCell.swift in Sources */,
 				CE525A702461B55300CBEC41 /* UIImage+Resize.swift in Sources */,
 				CB9E7D672F50ADE000B43E38 /* ParsedResumeReviewVC.swift in Sources */,
+				CB9E7D822F52970700B43E38 /* DebugImportViewController.swift in Sources */,
 				CE3AC0A6245383A0006B9FEA /* FullTimeYeshivaViewController.swift in Sources */,
 				184F2F50252ADCDA00252C97 /* Constant.swift in Sources */,
 				5228CB1A27A5834100EDF103 /* DateNumberPIckerViewController.swift in Sources */,
@@ -1028,6 +1125,7 @@
 				5228CB1827A5066300EDF103 /* ProgramPickerViewController.swift in Sources */,
 				52DB325D29988DA800AC5F87 /* UserInfo.swift in Sources */,
 				52577764299FE024002C13D4 /* ShadchanVCViewController.swift in Sources */,
+				CB9E7D802F52968F00B43E38 /* ResumeImportRouter.swift in Sources */,
 				5299DCF029A7B90500050586 /* AppFirstDate.swift in Sources */,
 				CB9E7D632F4E193A00B43E38 /* DateISO.swift in Sources */,
 				3DC18497258AF5C200B529F0 /* GirlResearchCell.swift in Sources */,
@@ -1059,6 +1157,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		CB9E7D752F528FAD00B43E38 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CB9E7D6B2F528FAD00B43E38 /* ResumeShareExtension */;
+			targetProxy = CB9E7D742F528FAD00B43E38 /* PBXContainerItemProxy */;
+		};
 		CE3AC08824536765006B9FEA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = CE3AC06F24536729006B9FEA /* NasiShadchanHelper */;
@@ -1091,6 +1194,73 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		CB9E7D792F528FAD00B43E38 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = ResumeShareExtension/ResumeShareExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = P77A2352BM;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ResumeShareExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ResumeShareExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 user. All rights reserved.";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.AviPogrow.NasiShadchanHelper.ResumeShareExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CB9E7D7A2F528FAD00B43E38 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = ResumeShareExtension/ResumeShareExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = P77A2352BM;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ResumeShareExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ResumeShareExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 user. All rights reserved.";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.AviPogrow.NasiShadchanHelper.ResumeShareExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		CE3AC09824536765006B9FEA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1217,10 +1387,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_ENTITLEMENTS = NasiShadchanHelper/NasiShadchanHelper.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 58.8.2;
+				CURRENT_PROJECT_VERSION = 58.8.3;
 				DEVELOPMENT_TEAM = P77A2352BM;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = NasiShadchanHelper/NonCodeFiles/Info.plist;
@@ -1229,7 +1399,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 58.8.2;
+				MARKETING_VERSION = 58.8.3;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.AviPogrow.NasiShadchanHelper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1246,10 +1416,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_ENTITLEMENTS = NasiShadchanHelper/NasiShadchanHelper.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 58.8.2;
+				CURRENT_PROJECT_VERSION = 58.8.3;
 				DEVELOPMENT_TEAM = P77A2352BM;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = NasiShadchanHelper/NonCodeFiles/Info.plist;
@@ -1258,7 +1428,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 58.8.2;
+				MARKETING_VERSION = 58.8.3;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.AviPogrow.NasiShadchanHelper;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1359,6 +1529,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		CB9E7D782F528FAD00B43E38 /* Build configuration list for PBXNativeTarget "ResumeShareExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CB9E7D792F528FAD00B43E38 /* Debug */,
+				CB9E7D7A2F528FAD00B43E38 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		CE3AC06B24536729006B9FEA /* Build configuration list for PBXProject "NasiShadchanHelper" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

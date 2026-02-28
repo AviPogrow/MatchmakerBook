@@ -2,15 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>LSExecutableArchitectures</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeName</key>
-			<string></string>
-			<key>LSHandlerRank</key>
-			<string>Default</string>
-		</dict>
-	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -27,6 +18,19 @@
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>matchmaker</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>matchmaker</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>FirebaseAppDelegateProxyEnabled</key>
@@ -37,6 +41,15 @@
 	<array>
 		<string>whatsapp</string>
 	</array>
+	<key>LSExecutableArchitectures</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string></string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+		</dict>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -46,6 +59,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Add Photos to Contacts</string>
+	<key>NSContactsUsageDescription</key>
+	<string>We need access to your contacts to allow importing</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Add Photos to Contacts</string>
 	<key>UIAppFonts</key>
@@ -79,7 +94,5 @@
 	</array>
 	<key>User Interface Style</key>
 	<string>Light</string>
-	<key>NSContactsUsageDescription</key>
-	<string>We need access to your contacts to allow importing</string>
 </dict>
 </plist>

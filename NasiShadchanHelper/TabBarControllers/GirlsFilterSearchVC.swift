@@ -1886,8 +1886,9 @@ final class ProfileResultCell: UITableViewCell {
         }
 
         // ---- Photo ----
-        photoView.image = DefaultImageCycler.image(forRow: row)
-            ?? UIImage(systemName: "person.crop.square")
+        //photoView.image = DefaultImageCycler.image(forRow: row)
+         //   ?? UIImage(systemName: "person.crop.square")
+        photoView.image = UIImage(systemName: "person.crop.square")
 
         photoView.layer.borderWidth = 2
         photoView.layer.borderColor = TagCategory.age.accentColor.cgColor

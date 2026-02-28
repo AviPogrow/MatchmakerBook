@@ -5,88 +5,145 @@
 //  Created by user on 4/24/20.
 //  Copyright © 2020 user. All rights reserved.
 //
-
 import UIKit
 import Firebase
 import FirebaseAnalytics
 import IQKeyboardManagerSwift
 
 @UIApplicationMain
- class AppDelegate: UIResponder, UIApplicationDelegate {
-    
-   // var window: UIWindow?
-   var handle: AuthStateDidChangeListenerHandle?
-   
-    // solve dark mode by keeping it in light mode always
+class AppDelegate: UIResponder, UIApplicationDelegate {
+
+    // MARK: - Properties
+
+    var handle: AuthStateDidChangeListenerHandle?
+
+    // Keep light mode
     var window: UIWindow? {
-      didSet {
-        window?.overrideUserInterfaceStyle = .light
-     }
+        didSet { window?.overrideUserInterfaceStyle = .light }
     }
-     
-    // get access to  the shared app delegate elsewhere in app
-    class func instance() -> AppDelegate { return UIApplication.shared.delegate as! AppDelegate
+
+    // Deep-link pending flag (so Auth/root reset doesn't wipe out routing)
+    private var pendingImportResume = false
+
+    // Access shared delegate
+    class func instance() -> AppDelegate {
+        return UIApplication.shared.delegate as! AppDelegate
     }
-        
-    override init () {
+
+    // MARK: - Init
+
+    override init() {
+        super.init()
         FirebaseApp.configure()
         FirebaseConfiguration.shared.setLoggerLevel(.min)
         Database.database().isPersistenceEnabled = true
-        
     }
-    
-     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-         
-          
-        // need to 
-        // -- IQKeyboardManager---
-        IQKeyboardManager.shared.enable = true
-      let   handle = Auth.auth().addStateDidChangeListener { _, user in
-          if user == nil {
-          self.makingRootFlow(Constant.AppRootFlow.kAuthVc)
+
+    // MARK: - App Lifecycle
+
+    func application(_ application: UIApplication,
+                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+
+        // ✅ Deep link on cold start (if launched via URL)
+        if let url = launchOptions?[.url] as? URL {
+            print("✅ Cold start URL in launchOptions:", url.absoluteString)
+            handleDeepLink(url)
         } else {
-           self.makingRootFlow(Constant.AppRootFlow.kEnterApp)
-            
-          }
+            print("ℹ️ No launchOptions URL")
         }
+
+        // IQKeyboardManager
+        IQKeyboardManager.shared.enable = true
+
+        // ✅ Fix: store listener handle on the property (don’t shadow with local `let handle = ...`)
+        self.handle = Auth.auth().addStateDidChangeListener { [weak self] _, user in
+            guard let self else { return }
+
+            if user == nil {
+                self.makingRootFlow(Constant.AppRootFlow.kAuthVc)
+            } else {
+                self.makingRootFlow(Constant.AppRootFlow.kEnterApp)
+            }
+        }
+
         return true
     }
-    
-    // MARK:- MEthods
+
+    func application(_ app: UIApplication,
+                     open url: URL,
+                     options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+
+        print("✅ AppDelegate openURL called:", url.absoluteString)
+        handleDeepLink(url)
+        return true
+    }
+
+    // MARK: - Deep Link Handling
+
+    private func handleDeepLink(_ url: URL) {
+        print("✅ handleDeepLink:", url.absoluteString)
+
+        guard url.scheme == "matchmaker" else { return }
+
+        if url.host == "import-resume" {
+            print("✅ Deep link matched import-resume (pendingImportResume = true)")
+            pendingImportResume = true
+            tryProcessPendingImport()
+        }
+    }
+
+    private func tryProcessPendingImport() {
+        guard pendingImportResume else { return }
+        guard window?.rootViewController != nil else {
+            print("ℹ️ Root not set yet; will process import after makingRootFlow()")
+            return
+        }
+
+        pendingImportResume = false
+        print("✅ Processing pending import now → calling ResumeImportRouter")
+        ResumeImportRouter.shared.handleIncomingShare()
+    }
+
+    // MARK: - Making RootView Controller
+
+    func makingRootFlow(_ strRoot: String) {
+
+        window?.rootViewController?.removeFromParent()
+
+        if strRoot == Constant.AppRootFlow.kEnterApp {
+
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let tabBar = storyboard.instantiateViewController(withIdentifier: "MyTabBarController")
+            window?.rootViewController = tabBar
+
+        } else if strRoot == Constant.AppRootFlow.kAuthVc {
+
+            let authStoryboard = UIStoryboard(name: "UserAuthentication", bundle: nil)
+            let vcNav: AuthNavViewController = authStoryboard.instantiateViewController()
+            window?.rootViewController = vcNav
+        }
+
+        // ✅ Now that root exists (and auth flow may have just reset it), try routing
+        tryProcessPendingImport()
+    }
+
+    // MARK: - Optional UI Appearance
+
     private func setUpNavigationAppearance() {
         UINavigationBar.appearance().isTranslucent = false
         UINavigationBar.appearance().barTintColor = .yellow
         UINavigationBar.appearance().backgroundColor = .green
-        UIBarButtonItem.appearance() .tintColor = UIColor.red
-        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 18), NSAttributedString.Key.foregroundColor: UIColor.white]
+        UIBarButtonItem.appearance().tintColor = UIColor.red
+        UINavigationBar.appearance().titleTextAttributes = [
+            .font: UIFont.systemFont(ofSize: 18),
+            .foregroundColor: UIColor.white
+        ]
         UIBarButtonItem.appearance().setTitleTextAttributes(
-            [NSAttributedString.Key.font:UIFont.systemFont(ofSize: 18), NSAttributedString.Key.foregroundColor: UIColor.white],
-            for: .normal)
-    }
-    
-    // MARK: - Making RootView Controller
-    func makingRootFlow(_ strRoot: String) {
-        
-        self.window?.rootViewController?.removeFromParent()
-        
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        
-        if strRoot == Constant.AppRootFlow.kEnterApp {
-            let tabBar = storyboard.instantiateViewController(withIdentifier: "MyTabBarController")
-            
-            window?.rootViewController = tabBar
-            
-        } else if strRoot == Constant.AppRootFlow.kAuthVc {
-            
-            let authStoryboard = UIStoryboard(name: "UserAuthentication", bundle: nil)
-            
-            let vcNav : AuthNavViewController = authStoryboard.instantiateViewController()
-            
-            window?.rootViewController = vcNav
-        }
+            [.font: UIFont.systemFont(ofSize: 18), .foregroundColor: UIColor.white],
+            for: .normal
+        )
     }
 }
-
 
 extension UIColor {
     static func rgb(red: CGFloat, green: CGFloat, blue: CGFloat) -> UIColor {
