@@ -169,30 +169,36 @@ class HomeViewController: UIViewController, UICollectionViewDataSource,UICollect
         }
         self.collectionView?.reloadData()
     }
-    
     func fetchAndCreateNasiGirlsArray() {
-       self.view.showLoadingIndicator()
+        view.showLoadingIndicator()
         allNasiGirlsList.removeAll()
-        let allNasiGirlsRef = Database.database().reference().child("NasiGirlsList")
-         guard let myId = UserInfo.curentUser?.id else {return}
-         allNasiGirlsRef.observe(.childAdded, with: { (snapshot) in
-        let nasiGirl = NasiGirl(snapshot: snapshot)
-            
-        self.allNasiGirlsList.append(nasiGirl)
-        self.allNasiGirlsList = self.allNasiGirlsList.sorted(by: { ($0.lastNameOfGirl) < ($1.lastNameOfGirl)
-            })
-            self.allNasiGirlsList = self.allNasiGirlsList.filter { (singleGirl) -> Bool in
-            return singleGirl.category != Constant.CategoryTypeName.CategoryEngaged1
+
+        let ref = Database.database().reference().child("NasiGirlsList")
+
+        ref.observeSingleEvent(of: .value) { snapshot in
+            var girls: [NasiGirl] = []
+            girls.reserveCapacity(Int(snapshot.childrenCount))
+
+            for child in snapshot.children {
+                guard let snap = child as? DataSnapshot else { continue }
+                let nasiGirl = NasiGirl(snapshot: snap)
+                girls.append(nasiGirl)
             }
-            self.allNasiGirlsList = self.allNasiGirlsList.sorted(by: { ($0.lastNameOfGirl ) < ($1.lastNameOfGirl ) })
-            DispatchQueue.main.async(execute: {
-             self.view.hideLoadingIndicator()
-             self.filteredNasiGirlsList = self.allNasiGirlsList
-             self.collectionView.reloadData()
-            })
-         })
+
+            // Filter once
+            girls = girls.filter { $0.category != Constant.CategoryTypeName.CategoryEngaged1 }
+
+            // Sort once
+            girls.sort { $0.lastNameOfGirl < $1.lastNameOfGirl }
+
+            DispatchQueue.main.async {
+                self.view.hideLoadingIndicator()
+                self.allNasiGirlsList = girls
+                self.filteredNasiGirlsList = girls
+                self.collectionView.reloadData()
+            }
+        }
     }
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let width = view.frame.width / 2 - 5
