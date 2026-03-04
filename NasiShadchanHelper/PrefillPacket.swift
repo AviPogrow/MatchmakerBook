@@ -8,8 +8,6 @@
 
 import Foundation
 
-import Foundation
-
 enum ProfileKind {
     case girl
     case boy
