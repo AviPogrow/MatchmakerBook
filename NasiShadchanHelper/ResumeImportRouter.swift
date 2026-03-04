@@ -21,13 +21,14 @@ final class ResumeImportRouter {
 
     // MARK: - Entry point
 
+    // MARK: - Entry point
+
     func handleIncomingShare() {
         guard let payload = readPayload() else {
             print("ResumeImportRouter: no payload found")
             return
         }
-        
-       
+
         DispatchQueue.main.async {
             guard let window = AppDelegate.instance().window,
                   let root = window.rootViewController else {
@@ -35,18 +36,31 @@ final class ResumeImportRouter {
                 return
             }
 
-            let targetVC = DebugImportViewController(payload: payload)
-
-            // Prefer pushing onto an existing nav stack
-            if let nav = self.bestNav(from: root) {
-                nav.popToRootViewController(animated: false)
-                nav.pushViewController(targetVC, animated: true)
+            // 1) We expect the main app root to be a tab bar once logged in
+            guard let tabBar = root as? UITabBarController else {
+                print("ResumeImportRouter: root is not UITabBarController")
                 return
             }
 
-            // Fallback: present modally from the currently visible controller
-            let presenter = self.topMost(from: root)
-            presenter.present(targetVC, animated: true)
+            // 2) Pick the Girls tab
+            // TODO: adjust index to match your storyboard order
+            let girlsTabIndex = 1
+            tabBar.selectedIndex = girlsTabIndex
+
+            // 3) Get the nav controller for that tab
+            guard let nav = tabBar.selectedViewController as? UINavigationController else {
+                print("ResumeImportRouter: selected VC is not a UINavigationController")
+                return
+            }
+
+            // 4) Push GirlsFilterSearchVC
+            nav.popToRootViewController(animated: false)
+
+            let girlsVC = GirlsFilterSearchVC()
+            nav.pushViewController(girlsVC, animated: true)
+
+            // (Next step later: pass payload into girlsVC or to a coordinator)
+            print("✅ Routed share payload:", payload)
         }
     }
 
