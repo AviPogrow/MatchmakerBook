@@ -234,6 +234,9 @@ enum TagCategory: Int, CaseIterable {
         }
     }
 }
+import PDFKit
+import Vision
+import UniformTypeIdentifiers
 
 //MARK: GirlsFilterSearchVC
 class GirlsFilterSearchVC: UIViewController {
@@ -511,11 +514,11 @@ class GirlsFilterSearchVC: UIViewController {
         super.viewDidAppear(animated)
 
         guard let payload = pendingImportPayload else { return }
-
         pendingImportPayload = nil
 
-        print("Resume import payload received:", payload)
+        handleIncomingPayload(payload)
     }
+    
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -2061,6 +2064,113 @@ private func highlightMatches(
     }
 
     return attr
+}
+
+extension GirlsFilterSearchVC {
+   
+
+    private func handleIncomingPayload(_ payload: ResumeImportRouter.IncomingPayload) {
+        resolveRawText(from: payload) { [weak self] rawText in
+            guard let self else { return }
+
+            let cleaned = rawText.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !cleaned.isEmpty else {
+                self.showSimpleAlert(title: "Import Failed", message: "Couldn’t extract text from that share item.")
+                return
+            }
+
+            let parsed = ResumeParser().parse(text: cleaned)
+            self.presentParsedResumeReview(parsed: parsed, rawText: cleaned)
+        }
+    }
+
+    private func presentParsedResumeReview(parsed: [String: String], rawText: String) {
+        let reviewVC = ParsedResumeReviewVC(parsed: parsed, rawText: rawText) { [weak self] selectedDict in
+            guard let self else { return }
+
+            // For now: just print what user chose.
+            // Next step we’ll push AddEditGirlViewController and apply these fields.
+            print("✅ Selected fields to apply:", selectedDict)
+
+            self.dismiss(animated: true)
+        }
+
+        reviewVC.onCancel = { [weak self] in
+            self?.dismiss(animated: true)
+        }
+
+        reviewVC.onRetake = nil // not needed for share-import path
+
+        let nav = UINavigationController(rootViewController: reviewVC)
+        nav.modalPresentationStyle = .pageSheet
+        if let sheet = nav.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.prefersGrabberVisible = true
+            sheet.preferredCornerRadius = 16
+        }
+        present(nav, animated: true)
+    }
+    private func resolveRawText(from payload: ResumeImportRouter.IncomingPayload,
+                                completion: @escaping (String) -> Void) {
+        switch payload {
+        case .text(let text):
+            DispatchQueue.main.async { completion(text) }
+
+        case .file(let url, let uti):
+            // Try PDF text → else image OCR → else plain file read
+            if uti == UTType.pdf.identifier || UTType(uti) == .pdf {
+                DispatchQueue.global(qos: .userInitiated).async {
+                    let text = self.extractTextFromPDF(url: url) ?? ""
+                    DispatchQueue.main.async { completion(text) }
+                }
+                return
+            }
+
+            if uti == UTType.image.identifier || UTType(uti) == .image {
+                DispatchQueue.global(qos: .userInitiated).async {
+                    let text = self.ocrImageFile(url: url) ?? ""
+                    DispatchQueue.main.async { completion(text) }
+                }
+                return
+            }
+
+            // Fallback: try reading as text
+            DispatchQueue.global(qos: .userInitiated).async {
+                let text = (try? String(contentsOf: url)) ?? ""
+                DispatchQueue.main.async { completion(text) }
+            }
+        }
+    }
+    private func extractTextFromPDF(url: URL) -> String? {
+        guard let doc = PDFDocument(url: url) else { return nil }
+        // Often works surprisingly well for digital PDFs
+        return doc.string
+    }
+
+    private func ocrImageFile(url: URL) -> String? {
+        guard let image = UIImage(contentsOfFile: url.path),
+              let cgImage = image.cgImage else { return nil }
+
+        let request = VNRecognizeTextRequest()
+        request.recognitionLevel = .accurate
+        request.recognitionLanguages = ["en-US"]
+
+        let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+        do {
+            try handler.perform([request])
+            let observations = request.results as? [VNRecognizedTextObservation] ?? []
+            let lines = observations.compactMap { $0.topCandidates(1).first?.string }
+            return lines.joined(separator: "\n")
+        } catch {
+            return nil
+        }
+    }
+    
+    private func showSimpleAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
 }
 
 
