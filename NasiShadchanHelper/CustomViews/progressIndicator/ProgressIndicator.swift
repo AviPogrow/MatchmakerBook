@@ -6,7 +6,7 @@ import Lottie
 class ProgressIndicator: UIView {
     
     @IBOutlet var imgBackground: UIImageView!
-    @IBOutlet weak var vwAnimated: AnimationView!
+    @IBOutlet weak var vwAnimated: LottieAnimationView!
     
     class func initWith(frame:CGRect) -> ProgressIndicator {
         let indicator  = Bundle.main.loadNibNamed("ProgressIndicator", owner:self, options:nil)?.first as! ProgressIndicator
@@ -22,16 +22,16 @@ class ProgressIndicator: UIView {
         self.frame = superView.bounds
         self.tag = 19518
         addTo(superView: superView)
-        animateRotation()
+        //animateRotation()
     }
     
     func hide() {
       //  vwAnimated.loopAnimation = false
-        vwAnimated!.stop()
-        vwAnimated.layer.removeAllAnimations()
+        //vwAnimated!.stop()
+        //vwAnimated.layer.removeAllAnimations()
         self.removeFromSuperview()
     }
-    
+    /*
     func animateRotation() {
         vwAnimated!.play()
         vwAnimated.layer.cornerRadius = 10
@@ -40,7 +40,7 @@ class ProgressIndicator: UIView {
         vwAnimated.loopMode = LottieLoopMode.loop
         vwAnimated.play()
     }
-    
+    */
     func addTo(superView:UIView) {
         superView.addSubview(self)
         

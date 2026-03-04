@@ -39,9 +39,9 @@ class LoginParentVC: UIViewController {
     
     //Google Sign In Methods
     func signInWithGoogle() {
-        GIDSignIn.sharedInstance().presentingViewController = self
-        GIDSignIn.sharedInstance().delegate = self
-        GIDSignIn.sharedInstance().signIn()
+       // GIDSignIn.sharedInstance().presentingViewController = self
+       // GIDSignIn.sharedInstance().delegate = self
+       // GIDSignIn.sharedInstance().signIn()
     }
     
     //MARK: IBActions
@@ -52,7 +52,7 @@ class LoginParentVC: UIViewController {
          */
     }
 }
-
+/*
 extension LoginParentVC : GIDSignInDelegate {
     
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error?) {
@@ -88,3 +88,4 @@ extension LoginParentVC : GIDSignInDelegate {
         }
     }
 }
+*/

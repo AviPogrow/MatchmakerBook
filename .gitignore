@@ -1,0 +1,15 @@
+.DS_Store
+*.xcuserstate
+*.xcscmblueprint
+*.xccheckout
+*.xcworkspace/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+.build/
+DerivedData/
+Pods/
+Carthage/Build/
+fastlane/report.xml
+fastlane/test_output/
+Config/Secrets.xcconfig
+.DS_Store
