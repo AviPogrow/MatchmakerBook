@@ -1,0 +1,11 @@
+{
+  "": {
+    "swift-dependencies": "/Users/yotlaireguillou/Downloads/NasiShadchanOrganizer/.build/x86_64-apple-macosx/debug/NasiShadchanOrganizer.build/master.swiftdeps"
+  },
+  "/Users/yotlaireguillou/Downloads/NasiShadchanOrganizer/Sources/main.swift": {
+    "dependencies": "/Users/yotlaireguillou/Downloads/NasiShadchanOrganizer/.build/x86_64-apple-macosx/debug/NasiShadchanOrganizer.build/main.d",
+    "object": "/Users/yotlaireguillou/Downloads/NasiShadchanOrganizer/.build/x86_64-apple-macosx/debug/NasiShadchanOrganizer.build/main.swift.o",
+    "swiftmodule": "/Users/yotlaireguillou/Downloads/NasiShadchanOrganizer/.build/x86_64-apple-macosx/debug/NasiShadchanOrganizer.build/main~partial.swiftmodule",
+    "swift-dependencies": "/Users/yotlaireguillou/Downloads/NasiShadchanOrganizer/.build/x86_64-apple-macosx/debug/NasiShadchanOrganizer.build/main.swiftdeps"
+  }
+}
