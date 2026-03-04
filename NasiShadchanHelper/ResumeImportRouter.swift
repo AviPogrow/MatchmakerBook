@@ -57,6 +57,10 @@ final class ResumeImportRouter {
             nav.popToRootViewController(animated: false)
 
             let girlsVC = GirlsFilterSearchVC()
+
+            // TEMP: attach payload for next step
+            girlsVC.pendingImportPayload = payload
+            
             nav.pushViewController(girlsVC, animated: true)
 
             // (Next step later: pass payload into girlsVC or to a coordinator)

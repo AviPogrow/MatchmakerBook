@@ -237,6 +237,7 @@ enum TagCategory: Int, CaseIterable {
 
 //MARK: GirlsFilterSearchVC
 class GirlsFilterSearchVC: UIViewController {
+    var pendingImportPayload: ResumeImportRouter.IncomingPayload?
     
     private var chipsHeightConstraint: NSLayoutConstraint!
     private var chipsCollapsed = false
