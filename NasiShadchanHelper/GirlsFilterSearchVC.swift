@@ -507,6 +507,15 @@ class GirlsFilterSearchVC: UIViewController {
             loadMocks()     // sets girlsByKey + allResults -> applyFilters()
         }
     }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        guard let payload = pendingImportPayload else { return }
+
+        pendingImportPayload = nil
+
+        print("Resume import payload received:", payload)
+    }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
