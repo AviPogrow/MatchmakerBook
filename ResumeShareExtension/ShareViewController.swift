@@ -9,7 +9,7 @@ import UIKit
 import Social
 import UniformTypeIdentifiers
 
-final class ShareViewController: SLComposeServiceViewController {
+final class ShareViewController: UIViewController {
 
     private let appGroupID = "group.com.AviPogrow.NasiShadchanHelper"
     private let payloadKey = "latestSharedResumePayload"
@@ -280,8 +280,5 @@ final class ShareViewController: SLComposeServiceViewController {
         finish()
     }
 
-    // Hide the compose UI
-    override func isContentValid() -> Bool { false }
-    override func didSelectPost() {}
-    override func configurationItems() -> [Any]! { [] }
+    
 }

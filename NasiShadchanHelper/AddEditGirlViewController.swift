@@ -150,7 +150,7 @@ class AddEditGirlViewController: FormViewController,CNContactPickerDelegate, Res
         }
         else {
             navigationItem.title = "Add Profile Details"
-            showAddGirlOptions()
+            //showAddGirlOptions()
             initNewNasiGirl()
             
             let barButtonSave = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(saveGirlToFirebase))
@@ -704,6 +704,8 @@ private func makeAgeRow() -> IntRow {
         }
         
     }
+    
+    
     @objc func showAddGirlOptions() {
         let alert = UIAlertController(title: "Add Girl", message: "Choose how you'd like to add a girl", preferredStyle: .actionSheet)
         //alert.addAction(UIAlertAction(title: "Add Manually", style: .default, handler: { (_) in
