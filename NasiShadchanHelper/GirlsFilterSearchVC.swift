@@ -2088,18 +2088,16 @@ extension GirlsFilterSearchVC {
         let reviewVC = ParsedResumeReviewVC(parsed: parsed, rawText: rawText) { [weak self] selectedDict in
             guard let self else { return }
 
-            // For now: just print what user chose.
-            // Next step we’ll push AddEditGirlViewController and apply these fields.
-            print("✅ Selected fields to apply:", selectedDict)
-
-            self.dismiss(animated: true)
+            self.dismiss(animated: true) {
+                self.pushAddEditGirlPrefilled(with: selectedDict)
+            }
         }
 
         reviewVC.onCancel = { [weak self] in
             self?.dismiss(animated: true)
         }
 
-        reviewVC.onRetake = nil // not needed for share-import path
+        reviewVC.onRetake = nil
 
         let nav = UINavigationController(rootViewController: reviewVC)
         nav.modalPresentationStyle = .pageSheet
@@ -2110,6 +2108,54 @@ extension GirlsFilterSearchVC {
         }
         present(nav, animated: true)
     }
+    private func pushAddEditGirlPrefilled(with selectedDict: [String: String]) {
+        let now = Date()
+        let updateTimeStamp = Int(now.timeIntervalSince1970)
+        let dateCreatedISO = ISODateOnly.iso(from: now)
+
+        // Create a brand-new private girl (like your "Add" flow)
+        let newGirl = ShadchanGirl(
+            girlCell: "",
+            girlLastName: "",
+            girlFirstName: "",
+            city: "",
+            dobIntervalString: "",
+            dateCreated: dateCreatedISO,
+            dateLastUpdate: updateTimeStamp,
+            girlHeight: "",
+            sendResumeEmail: "",
+            sendResumeText: "",
+            lifePlans: [],
+            status: "available",
+            datingHistory: "",
+            shadchanNotesNew: "",
+            notesImageURL: "",
+            resumeImageURL: "",
+            photoImageURL: ""
+        )
+
+        // Instantiate Add/Edit VC
+        let vc = AddEditGirlViewController()
+        vc.isEditingGirl = false
+        vc.selectedShadchanGirl = newGirl
+
+        // Push onto your current tab's nav stack
+        if let nav = self.navigationController {
+            nav.pushViewController(vc, animated: true)
+
+            // Ensure Eureka form exists before applying values
+            vc.loadViewIfNeeded()
+            vc.didScanAndParseResume(dict: selectedDict)
+        } else {
+            // Fallback: present modally
+            let nav = UINavigationController(rootViewController: vc)
+            present(nav, animated: true) {
+                vc.loadViewIfNeeded()
+                vc.didScanAndParseResume(dict: selectedDict)
+            }
+        }
+    }
+    
     private func resolveRawText(from payload: ResumeImportRouter.IncomingPayload,
                                 completion: @escaping (String) -> Void) {
         switch payload {
