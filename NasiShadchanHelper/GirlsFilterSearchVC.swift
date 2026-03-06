@@ -674,29 +674,7 @@ class GirlsFilterSearchVC: UIViewController {
     }
     
     @objc private func addGirlTapped() {
-        let vc = AddEditGirlViewController()
-        vc.isEditingGirl = false
-        vc.selectedShadchanGirl = ShadchanGirl(
-            girlCell: "",
-            girlLastName: "",
-            girlFirstName: "",
-            city: "",
-            dobIntervalString: "",
-            dateCreated: "",
-            dateLastUpdate: Int(Date().timeIntervalSince1970),
-            girlHeight: "",
-            sendResumeEmail: "",
-            sendResumeText: "",
-            lifePlans: [],
-            status: "available",
-            datingHistory: "",
-            shadchanNotesNew: "",
-            notesImageURL: "",
-            resumeImageURL: "",
-            photoImageURL: "",
-            key: ""
-        )
-
+        let vc = makeNewAddEditGirlViewController()
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -2067,7 +2045,31 @@ private func highlightMatches(
 }
 
 extension GirlsFilterSearchVC {
-   
+    private func makeNewAddEditGirlViewController() -> AddEditGirlViewController {
+        let vc = AddEditGirlViewController()
+        vc.isEditingGirl = false
+        vc.selectedShadchanGirl = ShadchanGirl(
+            girlCell: "",
+            girlLastName: "",
+            girlFirstName: "",
+            city: "",
+            dobIntervalString: "",
+            dateCreated: "",
+            dateLastUpdate: Int(Date().timeIntervalSince1970),
+            girlHeight: "",
+            sendResumeEmail: "",
+            sendResumeText: "",
+            lifePlans: [],
+            status: "available",
+            datingHistory: "",
+            shadchanNotesNew: "",
+            notesImageURL: "",
+            resumeImageURL: "",
+            photoImageURL: "",
+            key: ""
+        )
+        return vc
+    }
 
     private func handleIncomingPayload(_ payload: ResumeImportRouter.IncomingPayload) {
         resolveRawText(from: payload) { [weak self] rawText in
@@ -2080,33 +2082,42 @@ extension GirlsFilterSearchVC {
             }
 
             let parsed = ResumeParser().parse(text: cleaned)
-            self.presentParsedResumeReview(parsed: parsed, rawText: cleaned)
+
+            let addEditVC = self.makeNewAddEditGirlViewController()
+            addEditVC.loadViewIfNeeded()
+
+            self.navigationController?.pushViewController(addEditVC, animated: false)
+
+            self.presentParsedResumeReview(parsed: parsed, rawText: cleaned, on: addEditVC)
         }
     }
-
-    private func presentParsedResumeReview(parsed: [String: String], rawText: String) {
-        let reviewVC = ParsedResumeReviewVC(parsed: parsed, rawText: rawText) { [weak self] selectedDict in
-            guard let self else { return }
-
-            self.dismiss(animated: true) {
-                self.pushAddEditGirlPrefilled(with: selectedDict)
+    private func presentParsedResumeReview(
+        parsed: [String: String],
+        rawText: String,
+        on addEditVC: AddEditGirlViewController
+    ) {
+        let reviewVC = ParsedResumeReviewVC(parsed: parsed, rawText: rawText) { [weak addEditVC] selectedDict in
+            addEditVC?.dismiss(animated: true) {
+                addEditVC?.didScanAndParseResume(dict: selectedDict)
             }
         }
 
-        reviewVC.onCancel = { [weak self] in
-            self?.dismiss(animated: true)
+        reviewVC.onCancel = { [weak addEditVC] in
+            addEditVC?.dismiss(animated: true)
         }
 
         reviewVC.onRetake = nil
 
         let nav = UINavigationController(rootViewController: reviewVC)
         nav.modalPresentationStyle = .pageSheet
+
         if let sheet = nav.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
             sheet.prefersGrabberVisible = true
             sheet.preferredCornerRadius = 16
         }
-        present(nav, animated: true)
+
+        addEditVC.present(nav, animated: true)
     }
     private func pushAddEditGirlPrefilled(with selectedDict: [String: String]) {
         let now = Date()

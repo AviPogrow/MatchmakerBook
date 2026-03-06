@@ -20,9 +20,6 @@ final class ResumeImportRouter {
     }
 
     // MARK: - Entry point
-
-    // MARK: - Entry point
-
     func handleIncomingShare() {
         guard let payload = readPayload() else {
             print("ResumeImportRouter: no payload found")

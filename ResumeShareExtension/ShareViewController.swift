@@ -6,270 +6,319 @@
 //  Copyright © 2026 user. All rights reserved.
 //
 import UIKit
-import Social
 import UniformTypeIdentifiers
 
 final class ShareViewController: UIViewController {
 
-    // MARK: - App Group / Payload
-
     private let appGroupID = "group.com.AviPogrow.NasiShadchanHelper"
     private let payloadKey = "latestSharedResumePayload"
 
-    private var capturedPayload: [String: Any]?
-
     // MARK: - UI
 
-    private let headerLabel: UILabel = {
+    private let scrollView = UIScrollView()
+    private let contentStack = UIStackView()
+
+    private let titleLabel: UILabel = {
         let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.text = "Share to Connect"
+        l.text = "Share to Nasi"
         l.font = .systemFont(ofSize: 34, weight: .bold)
         l.textAlignment = .center
+        l.numberOfLines = 1
         return l
     }()
 
-    private let docsTitleLabel: UILabel = {
+    private let subtitleLabel: UILabel = {
         let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.text = "📎 Documents"
-        l.font = .systemFont(ofSize: 22, weight: .bold)
-        return l
-    }()
-
-    private let fileCardView: UIView = {
-        let v = UIView()
-        v.translatesAutoresizingMaskIntoConstraints = false
-        v.backgroundColor = UIColor.secondarySystemBackground
-        v.layer.cornerRadius = 18
-        v.layer.shadowOpacity = 0.08
-        v.layer.shadowRadius = 12
-        v.layer.shadowOffset = CGSize(width: 0, height: 6)
-        return v
-    }()
-
-    private let fileIconView: UIImageView = {
-        let iv = UIImageView()
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.contentMode = .scaleAspectFit
-        iv.tintColor = .secondaryLabel
-        iv.image = UIImage(systemName: "doc")
-        iv.backgroundColor = UIColor.tertiarySystemBackground
-        iv.layer.cornerRadius = 14
-        iv.clipsToBounds = true
-        return iv
-    }()
-
-    private let fileNameLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.text = "No file shared"
-        l.font = .systemFont(ofSize: 18, weight: .semibold)
-        l.numberOfLines = 2
-        return l
-    }()
-
-    private let fileTypeLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.text = "Share a PDF, image, or text resume"
-        l.font = .systemFont(ofSize: 15, weight: .regular)
-        l.textColor = .secondaryLabel
-        l.numberOfLines = 2
-        return l
-    }()
-
-    private let bioTitleLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.text = "✏️ Bio"
-        l.font = .systemFont(ofSize: 22, weight: .bold)
-        return l
-    }()
-
-    private let bioTextView: UITextView = {
-        let tv = UITextView()
-        tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.backgroundColor = UIColor.secondarySystemBackground
-        tv.layer.cornerRadius = 18
-        tv.textContainerInset = UIEdgeInsets(top: 14, left: 12, bottom: 14, right: 12)
-        tv.font = .systemFont(ofSize: 17)
-        tv.textColor = .label
-        tv.returnKeyType = .done
-        tv.autocorrectionType = .yes
-        tv.isEditable = false
-        tv.isScrollEnabled = false
-        tv.isSelectable = false
-        tv.isUserInteractionEnabled = false
-        
-        return tv
-    }()
-
-    private let statusLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        l.text = "Preparing import…"
-        l.font = .systemFont(ofSize: 15, weight: .regular)
+        l.text = "Import a resume into your Girls list"
+        l.font = .systemFont(ofSize: 16, weight: .regular)
         l.textAlignment = .center
         l.textColor = .secondaryLabel
         l.numberOfLines = 0
         return l
     }()
 
-    private let cancelButton: UIButton = {
-        var config = UIButton.Configuration.filled()
-        config.title = "Cancel"
-        config.cornerStyle = .capsule
-        config.baseBackgroundColor = .secondarySystemBackground
-        config.baseForegroundColor = .label
-
-        let b = UIButton(configuration: config)
-        b.translatesAutoresizingMaskIntoConstraints = false
-        return b
+    private let resumeSectionTitle: UILabel = {
+        let l = UILabel()
+        l.text = "Documents"
+        l.font = .systemFont(ofSize: 20, weight: .semibold)
+        l.numberOfLines = 1
+        return l
     }()
 
-    private let importButton: UIButton = {
-        var config = UIButton.Configuration.filled()
-        config.title = "Import to Nasi"
-        config.cornerStyle = .capsule
-        config.baseBackgroundColor = .systemBlue
-        config.baseForegroundColor = .white
+    private let fileCard = UIView()
+    private let fileIconView = UIImageView()
+    private let fileNameLabel = UILabel()
+    private let fileTypeLabel = UILabel()
 
-        let b = UIButton(configuration: config)
-        b.translatesAutoresizingMaskIntoConstraints = false
-        b.isEnabled = false
-        b.alpha = 0.5
-        return b
+    private let notesSectionTitle: UILabel = {
+        let l = UILabel()
+        l.text = "Bio / Notes"
+        l.font = .systemFont(ofSize: 20, weight: .semibold)
+        l.numberOfLines = 1
+        return l
     }()
+
+    private let notesTextView: UITextView = {
+        let tv = UITextView()
+        tv.font = .systemFont(ofSize: 16)
+        tv.backgroundColor = .secondarySystemBackground
+        tv.layer.cornerRadius = 14
+        tv.textContainerInset = UIEdgeInsets(top: 14, left: 12, bottom: 14, right: 12)
+        tv.isScrollEnabled = false
+        tv.text = ""
+        return tv
+    }()
+
+    private let statusLabel: UILabel = {
+        let l = UILabel()
+        l.text = "Preparing import…"
+        l.font = .systemFont(ofSize: 14)
+        l.textColor = .secondaryLabel
+        l.numberOfLines = 0
+        l.textAlignment = .center
+        return l
+    }()
+
+    private let bottomBar = UIView()
+    private let cancelButton = UIButton(type: .system)
+    private let importButton = UIButton(type: .system)
+
+    // MARK: - State
+
+    private var capturedPayload: [String: Any]?
 
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Hide the standard compose UI
-      
-
         view.backgroundColor = .systemBackground
 
-        layoutUI()
+        buildUI()
+        wireActions()
 
-        cancelButton.addTarget(self, action: #selector(didTapCancel), for: .touchUpInside)
-        importButton.addTarget(self, action: #selector(didTapImport), for: .touchUpInside)
-
-        // Capture immediately, but do NOT open host app automatically
         importFirstSupportedAttachment()
     }
 
-    
+    // MARK: - UI Build
 
-    // MARK: - Layout
+    private func buildUI() {
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        contentStack.translatesAutoresizingMaskIntoConstraints = false
+        contentStack.axis = .vertical
+        contentStack.spacing = 18
 
-    private func layoutUI() {
-        let content = UIView()
-        content.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(content)
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentStack)
 
-        content.addSubview(headerLabel)
-        content.addSubview(docsTitleLabel)
-        content.addSubview(fileCardView)
-        content.addSubview(bioTitleLabel)
-        content.addSubview(bioTextView)
-        content.addSubview(statusLabel)
-        content.addSubview(cancelButton)
-        content.addSubview(importButton)
+        bottomBar.translatesAutoresizingMaskIntoConstraints = false
+        bottomBar.backgroundColor = .systemBackground
+        view.addSubview(bottomBar)
 
-        fileCardView.addSubview(fileIconView)
-        fileCardView.addSubview(fileNameLabel)
-        fileCardView.addSubview(fileTypeLabel)
+        contentStack.addArrangedSubview(makeSpacer(10))
+        contentStack.addArrangedSubview(titleLabel)
+        contentStack.addArrangedSubview(subtitleLabel)
+        contentStack.addArrangedSubview(makeSpacer(6))
+        contentStack.addArrangedSubview(resumeSectionTitle)
+        contentStack.addArrangedSubview(buildFileCard())
+        contentStack.addArrangedSubview(notesSectionTitle)
+        contentStack.addArrangedSubview(notesTextView)
+        contentStack.addArrangedSubview(makeSpacer(8))
+        contentStack.addArrangedSubview(statusLabel)
+        contentStack.addArrangedSubview(makeSpacer(24))
+
+        buildBottomButtons()
 
         NSLayoutConstraint.activate([
-            content.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
-            content.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 18),
-            content.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -18),
-            content.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -14),
+            bottomBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            bottomBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            bottomBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            bottomBar.heightAnchor.constraint(equalToConstant: 84),
 
-            headerLabel.topAnchor.constraint(equalTo: content.topAnchor, constant: 10),
-            headerLabel.leadingAnchor.constraint(equalTo: content.leadingAnchor),
-            headerLabel.trailingAnchor.constraint(equalTo: content.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: bottomBar.topAnchor),
 
-            docsTitleLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 18),
-            docsTitleLabel.leadingAnchor.constraint(equalTo: content.leadingAnchor),
-            docsTitleLabel.trailingAnchor.constraint(equalTo: content.trailingAnchor),
+            contentStack.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor, constant: 18),
+            contentStack.leadingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.leadingAnchor, constant: 20),
+            contentStack.trailingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.trailingAnchor, constant: -20),
+            contentStack.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor, constant: -18),
+        ])
 
-            fileCardView.topAnchor.constraint(equalTo: docsTitleLabel.bottomAnchor, constant: 12),
-            fileCardView.leadingAnchor.constraint(equalTo: content.leadingAnchor),
-            fileCardView.trailingAnchor.constraint(equalTo: content.trailingAnchor),
-            fileCardView.heightAnchor.constraint(equalToConstant: 92),
+        notesTextView.translatesAutoresizingMaskIntoConstraints = false
+        notesTextView.heightAnchor.constraint(equalToConstant: 200).isActive = true
 
-            fileIconView.leadingAnchor.constraint(equalTo: fileCardView.leadingAnchor, constant: 14),
-            fileIconView.centerYAnchor.constraint(equalTo: fileCardView.centerYAnchor),
-            fileIconView.widthAnchor.constraint(equalToConstant: 56),
-            fileIconView.heightAnchor.constraint(equalToConstant: 56),
+        setFileCardEmpty()
+        setImportEnabled(false)
+    }
 
-            fileNameLabel.topAnchor.constraint(equalTo: fileCardView.topAnchor, constant: 18),
-            fileNameLabel.leadingAnchor.constraint(equalTo: fileIconView.trailingAnchor, constant: 12),
-            fileNameLabel.trailingAnchor.constraint(equalTo: fileCardView.trailingAnchor, constant: -14),
+    private func buildFileCard() -> UIView {
+        fileCard.translatesAutoresizingMaskIntoConstraints = false
+        fileCard.backgroundColor = .secondarySystemBackground
+        fileCard.layer.cornerRadius = 16
 
-            fileTypeLabel.topAnchor.constraint(equalTo: fileNameLabel.bottomAnchor, constant: 4),
-            fileTypeLabel.leadingAnchor.constraint(equalTo: fileNameLabel.leadingAnchor),
-            fileTypeLabel.trailingAnchor.constraint(equalTo: fileNameLabel.trailingAnchor),
+        let h = UIStackView()
+        h.translatesAutoresizingMaskIntoConstraints = false
+        h.axis = .horizontal
+        h.spacing = 14
+        h.alignment = .center
 
-            bioTitleLabel.topAnchor.constraint(equalTo: fileCardView.bottomAnchor, constant: 22),
-            bioTitleLabel.leadingAnchor.constraint(equalTo: content.leadingAnchor),
-            bioTitleLabel.trailingAnchor.constraint(equalTo: content.trailingAnchor),
+        fileIconView.translatesAutoresizingMaskIntoConstraints = false
+        fileIconView.contentMode = .scaleAspectFit
+        fileIconView.tintColor = .systemPink
 
-            bioTextView.topAnchor.constraint(equalTo: bioTitleLabel.bottomAnchor, constant: 10),
-            bioTextView.leadingAnchor.constraint(equalTo: content.leadingAnchor),
-            bioTextView.trailingAnchor.constraint(equalTo: content.trailingAnchor),
-            bioTextView.heightAnchor.constraint(equalToConstant: 180),
+        NSLayoutConstraint.activate([
+            fileIconView.widthAnchor.constraint(equalToConstant: 44),
+            fileIconView.heightAnchor.constraint(equalToConstant: 44),
+        ])
 
-            statusLabel.topAnchor.constraint(equalTo: bioTextView.bottomAnchor, constant: 14),
-            statusLabel.leadingAnchor.constraint(equalTo: content.leadingAnchor, constant: 6),
-            statusLabel.trailingAnchor.constraint(equalTo: content.trailingAnchor, constant: -6),
+        fileNameLabel.font = .systemFont(ofSize: 18, weight: .semibold)
+        fileNameLabel.numberOfLines = 2
 
-            cancelButton.bottomAnchor.constraint(equalTo: content.bottomAnchor),
-            cancelButton.leadingAnchor.constraint(equalTo: content.leadingAnchor),
-            cancelButton.heightAnchor.constraint(equalToConstant: 54),
+        fileTypeLabel.font = .systemFont(ofSize: 14, weight: .regular)
+        fileTypeLabel.textColor = .secondaryLabel
+        fileTypeLabel.numberOfLines = 1
 
-            importButton.bottomAnchor.constraint(equalTo: content.bottomAnchor),
-            importButton.trailingAnchor.constraint(equalTo: content.trailingAnchor),
-            importButton.heightAnchor.constraint(equalToConstant: 54),
+        let v = UIStackView(arrangedSubviews: [fileNameLabel, fileTypeLabel])
+        v.axis = .vertical
+        v.spacing = 4
 
-            cancelButton.trailingAnchor.constraint(equalTo: content.centerXAnchor, constant: -8),
-            importButton.leadingAnchor.constraint(equalTo: content.centerXAnchor, constant: 8)
+        h.addArrangedSubview(fileIconView)
+        h.addArrangedSubview(v)
+
+        fileCard.addSubview(h)
+
+        NSLayoutConstraint.activate([
+            h.topAnchor.constraint(equalTo: fileCard.topAnchor, constant: 14),
+            h.leadingAnchor.constraint(equalTo: fileCard.leadingAnchor, constant: 14),
+            h.trailingAnchor.constraint(equalTo: fileCard.trailingAnchor, constant: -14),
+            h.bottomAnchor.constraint(equalTo: fileCard.bottomAnchor, constant: -14),
+        ])
+
+        return fileCard
+    }
+
+    private func buildBottomButtons() {
+        cancelButton.setTitle("Cancel", for: .normal)
+        cancelButton.titleLabel?.font = .systemFont(ofSize: 18, weight: .semibold)
+        cancelButton.layer.cornerRadius = 22
+        cancelButton.layer.borderWidth = 2
+        cancelButton.layer.borderColor = UIColor.label.cgColor
+        cancelButton.contentEdgeInsets = UIEdgeInsets(top: 12, left: 18, bottom: 12, right: 18)
+
+        importButton.setTitle("Import to Nasi", for: .normal)
+        importButton.titleLabel?.font = .systemFont(ofSize: 18, weight: .semibold)
+        importButton.layer.cornerRadius = 22
+        importButton.contentEdgeInsets = UIEdgeInsets(top: 12, left: 18, bottom: 12, right: 18)
+        importButton.backgroundColor = .systemBlue
+        importButton.setTitleColor(.white, for: .normal)
+
+        let buttons = UIStackView(arrangedSubviews: [cancelButton, importButton])
+        buttons.translatesAutoresizingMaskIntoConstraints = false
+        buttons.axis = .horizontal
+        buttons.spacing = 14
+        buttons.distribution = .fillEqually
+
+        bottomBar.addSubview(buttons)
+
+        NSLayoutConstraint.activate([
+            buttons.leadingAnchor.constraint(equalTo: bottomBar.leadingAnchor, constant: 20),
+            buttons.trailingAnchor.constraint(equalTo: bottomBar.trailingAnchor, constant: -20),
+            buttons.centerYAnchor.constraint(equalTo: bottomBar.centerYAnchor),
+            buttons.heightAnchor.constraint(equalToConstant: 52),
         ])
     }
 
-    private func setImportEnabled(_ enabled: Bool) {
-        importButton.isEnabled = enabled
-        importButton.alpha = enabled ? 1.0 : 0.5
+    private func wireActions() {
+        cancelButton.addTarget(self, action: #selector(didTapCancel), for: .touchUpInside)
+        importButton.addTarget(self, action: #selector(didTapImport), for: .touchUpInside)
+    }
+
+    private func makeSpacer(_ h: CGFloat) -> UIView {
+        let v = UIView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.heightAnchor.constraint(equalToConstant: h).isActive = true
+        return v
+    }
+
+    // MARK: - UI State
+
+    private func setFileCardEmpty() {
+        DispatchQueue.main.async {
+            self.fileIconView.image = UIImage(systemName: "doc.fill")
+            self.fileNameLabel.text = "No file selected"
+            self.fileTypeLabel.text = "Share a PDF, image, or text"
+        }
     }
 
     private func setFileCard(fileName: String, typeLabel: String, icon: String) {
-        fileNameLabel.text = fileName
-        fileTypeLabel.text = typeLabel
-        fileIconView.image = UIImage(systemName: icon)
-        fileIconView.tintColor = .secondaryLabel
+        DispatchQueue.main.async {
+            self.fileIconView.image = UIImage(systemName: icon)
+            self.fileNameLabel.text = fileName
+            self.fileTypeLabel.text = typeLabel
+        }
     }
 
-    // MARK: - Import pipeline (capture only)
+    private func setImportEnabled(_ enabled: Bool) {
+        DispatchQueue.main.async {
+            self.importButton.isEnabled = enabled
+            self.importButton.alpha = enabled ? 1.0 : 0.4
+        }
+    }
+
+    private func setReady(_ message: String) {
+        DispatchQueue.main.async {
+            self.statusLabel.text = message
+            self.setImportEnabled(true)
+        }
+    }
+
+    private func setError(_ message: String) {
+        DispatchQueue.main.async {
+            self.statusLabel.text = "Couldn’t prepare import.\n\n\(message)"
+            self.importButton.setTitle("Close", for: .normal)
+            self.importButton.isEnabled = true
+            self.importButton.alpha = 1.0
+            self.importButton.removeTarget(nil, action: nil, for: .allEvents)
+            self.importButton.addTarget(self, action: #selector(self.didTapClose), for: .touchUpInside)
+        }
+    }
+
+    // MARK: - Actions
+
+    @objc private func didTapCancel() {
+        finish()
+    }
+
+    @objc private func didTapImport() {
+        if let text = notesTextView.text?.trimmingCharacters(in: .whitespacesAndNewlines),
+           !text.isEmpty {
+            appendNotesToCapturedPayload(text)
+        }
+        openHostApp()
+    }
+
+    @objc private func didTapClose() {
+        finish()
+    }
+
+    // MARK: - Import pipeline
 
     private func importFirstSupportedAttachment() {
         guard let items = extensionContext?.inputItems as? [NSExtensionItem] else {
-            statusLabel.text = "No items received."
+            setError("No items received.")
             return
         }
 
         for item in items {
             let providers = item.attachments ?? []
             if let provider = providers.first(where: canHandle(_:)) {
-                loadAndPrepare(provider: provider)
+                loadAndStore(provider: provider)
                 return
             }
         }
 
-        statusLabel.text = "Unsupported share type."
+        setError("Unsupported share type.")
     }
 
     private func canHandle(_ provider: NSItemProvider) -> Bool {
@@ -279,8 +328,7 @@ final class ShareViewController: UIViewController {
         provider.hasItemConformingToTypeIdentifier(UTType.text.identifier)
     }
 
-    private func loadAndPrepare(provider: NSItemProvider) {
-        // Priority: PDF → Image → Text
+    private func loadAndStore(provider: NSItemProvider) {
         if provider.hasItemConformingToTypeIdentifier(UTType.pdf.identifier) {
             loadFile(provider: provider, type: .pdf)
         } else if provider.hasItemConformingToTypeIdentifier(UTType.image.identifier) {
@@ -291,7 +339,11 @@ final class ShareViewController: UIViewController {
     }
 
     private func loadText(provider: NSItemProvider) {
-        provider.loadItem(forTypeIdentifier: UTType.plainText.identifier, options: nil) { [weak self] item, _ in
+        let typeID = provider.hasItemConformingToTypeIdentifier(UTType.plainText.identifier)
+            ? UTType.plainText.identifier
+            : UTType.text.identifier
+
+        provider.loadItem(forTypeIdentifier: typeID, options: nil) { [weak self] item, error in
             guard let self else { return }
 
             let text: String?
@@ -304,22 +356,28 @@ final class ShareViewController: UIViewController {
             }
 
             guard let text, !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-                DispatchQueue.main.async { self.statusLabel.text = "Could not read text." }
+                self.setError("Could not read text.")
                 return
             }
 
             let payload: [String: Any] = ["kind": "text", "text": text]
+            self.capturedPayload = payload
+            self.savePayload(payload)
 
-            DispatchQueue.main.async {
-                self.setFileCard(fileName: "Text", typeLabel: "Plain text", icon: "text.alignleft")
-            }
+            let preview = String(text.prefix(80)).trimmingCharacters(in: .whitespacesAndNewlines)
+            let previewName = preview.isEmpty ? "Shared text" : preview
 
-            self.setReady(payload: payload, message: "Text captured. Tap Import to open Nasi.")
+            self.setFileCard(
+                fileName: previewName,
+                typeLabel: "Plain text",
+                icon: "doc.text.fill"
+            )
+            self.setReady("Text captured. Tap Import to Nasi.")
         }
     }
 
     private func loadImage(provider: NSItemProvider) {
-        provider.loadItem(forTypeIdentifier: UTType.image.identifier, options: nil) { [weak self] item, _ in
+        provider.loadItem(forTypeIdentifier: UTType.image.identifier, options: nil) { [weak self] item, error in
             guard let self else { return }
 
             if let url = item as? URL {
@@ -332,16 +390,16 @@ final class ShareViewController: UIViewController {
                 return
             }
 
-            DispatchQueue.main.async { self.statusLabel.text = "Could not read image." }
+            self.setError("Could not read image.")
         }
     }
 
     private func loadFile(provider: NSItemProvider, type: UTType) {
-        provider.loadItem(forTypeIdentifier: type.identifier, options: nil) { [weak self] item, _ in
+        provider.loadItem(forTypeIdentifier: type.identifier, options: nil) { [weak self] item, error in
             guard let self else { return }
 
             guard let url = item as? URL else {
-                DispatchQueue.main.async { self.statusLabel.text = "Could not read file." }
+                self.setError("Could not read file.")
                 return
             }
 
@@ -349,11 +407,9 @@ final class ShareViewController: UIViewController {
         }
     }
 
-    // MARK: - Reliable App Group file writing
-
     private func copyToAppGroup(sourceURL: URL, declaredType: UTType) {
         guard let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupID) else {
-            DispatchQueue.main.async { self.statusLabel.text = "App Group container not available." }
+            setError("App Group container not available.")
             return
         }
 
@@ -361,45 +417,55 @@ final class ShareViewController: UIViewController {
             ? (declaredType.preferredFilenameExtension ?? "dat")
             : sourceURL.pathExtension
 
-        let filename = sourceURL.lastPathComponent.isEmpty
-            ? "shared_resume_\(UUID().uuidString).\(ext)"
-            : sourceURL.lastPathComponent
-
+        let filename = "shared_resume_\(UUID().uuidString).\(ext)"
         let destURL = containerURL.appendingPathComponent(filename)
 
         do {
             let didStart = sourceURL.startAccessingSecurityScopedResource()
-            defer { if didStart { sourceURL.stopAccessingSecurityScopedResource() } }
-
-            // Read bytes and write into App Group
-            let data = try Data(contentsOf: sourceURL)
+            defer {
+                if didStart {
+                    sourceURL.stopAccessingSecurityScopedResource()
+                }
+            }
 
             if FileManager.default.fileExists(atPath: destURL.path) {
                 try FileManager.default.removeItem(at: destURL)
             }
-            try data.write(to: destURL, options: [.atomic])
+            try FileManager.default.copyItem(at: sourceURL, to: destURL)
 
-            let payload: [String: Any] = ["kind": "file", "path": destURL.path, "uti": declaredType.identifier]
+            let payload: [String: Any] = [
+                "kind": "file",
+                "path": destURL.path,
+                "uti": declaredType.identifier
+            ]
+            capturedPayload = payload
+            savePayload(payload)
 
-            DispatchQueue.main.async {
-                let icon = (declaredType == .pdf) ? "doc.richtext" : "photo"
-                let typeLabel = (declaredType == .pdf) ? "PDF Resume" : "Image"
-                self.setFileCard(fileName: filename, typeLabel: typeLabel, icon: icon)
+            let displayName = sourceURL.lastPathComponent.isEmpty ? filename : sourceURL.lastPathComponent
+            let typeLabel: String
+            let icon: String
+
+            if declaredType.conforms(to: .pdf) {
+                typeLabel = "PDF document"
+                icon = "doc.richtext.fill"
+            } else if declaredType.conforms(to: .image) {
+                typeLabel = "Image"
+                icon = "photo.fill"
+            } else {
+                typeLabel = declaredType.localizedDescription ?? declaredType.identifier
+                icon = "doc.fill"
             }
 
-            setReady(payload: payload, message: "File captured. Tap Import to open Nasi.")
-
+            setFileCard(fileName: displayName, typeLabel: typeLabel, icon: icon)
+            setReady("File captured. Tap Import to Nasi.")
         } catch {
-            DispatchQueue.main.async {
-                self.statusLabel.text = "Failed to copy into App Group."
-            }
-            print("❌ copyToAppGroup error:", error)
+            setError("Failed to copy file into App Group.")
         }
     }
 
     private func saveUIImageToAppGroup(_ image: UIImage) {
         guard let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupID) else {
-            DispatchQueue.main.async { self.statusLabel.text = "App Group container not available." }
+            setError("App Group container not available.")
             return
         }
 
@@ -407,73 +473,79 @@ final class ShareViewController: UIViewController {
         let destURL = containerURL.appendingPathComponent(filename)
 
         guard let data = image.pngData() else {
-            DispatchQueue.main.async { self.statusLabel.text = "Failed to encode image." }
+            setError("Failed to encode image.")
             return
         }
 
         do {
             try data.write(to: destURL, options: [.atomic])
 
-            let payload: [String: Any] = ["kind": "file", "path": destURL.path, "uti": UTType.png.identifier]
+            let payload: [String: Any] = [
+                "kind": "file",
+                "path": destURL.path,
+                "uti": UTType.png.identifier
+            ]
+            capturedPayload = payload
+            savePayload(payload)
 
-            DispatchQueue.main.async {
-                self.setFileCard(fileName: filename, typeLabel: "Image", icon: "photo")
-            }
-
-            setReady(payload: payload, message: "Image captured. Tap Import to open Nasi.")
-
+            setFileCard(fileName: filename, typeLabel: "Image", icon: "photo.fill")
+            setReady("Image captured. Tap Import to Nasi.")
         } catch {
-            DispatchQueue.main.async { self.statusLabel.text = "Failed to save image into App Group." }
+            setError("Failed to save image into App Group.")
         }
     }
 
-    // MARK: - Capture state
-
-    private func setReady(payload: [String: Any], message: String) {
-        DispatchQueue.main.async {
-            self.capturedPayload = payload
-            self.statusLabel.text = message
-            self.setImportEnabled(true)
-        }
+    private func appendNotesToCapturedPayload(_ notes: String) {
+        var payload = capturedPayload ?? [:]
+        payload["notes"] = notes
+        capturedPayload = payload
+        savePayload(payload)
     }
 
-    private func persistCapturedPayloadToAppGroup() {
-        guard let payload = capturedPayload else { return }
-
-        // Optional: add bio into payload if provided
-        let bio = bioTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
-        if !bio.isEmpty {
-            var p = payload
-            p["bio"] = bio
-            capturedPayload = p
-        }
-
+    private func savePayload(_ dict: [String: Any]) {
         let defaults = UserDefaults(suiteName: appGroupID)
-        defaults?.set(capturedPayload, forKey: payloadKey)
+        defaults?.set(dict, forKey: payloadKey)
         defaults?.synchronize()
-        print("✅ EXT persisted payload:", capturedPayload ?? [:])
+        print("✅ EXT saved payload:", dict)
     }
 
-    // MARK: - Buttons
+    // MARK: - Open app
 
-    @objc private func didTapCancel() {
-        extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
-    }
-
-    @objc private func didTapImport() {
-        persistCapturedPayloadToAppGroup()
-
+    private func openHostApp() {
         guard let url = URL(string: "matchmaker://import-resume") else {
-            statusLabel.text = "Bad deep link URL."
+            setError("Bad deep link URL.")
             return
         }
 
         extensionContext?.open(url) { [weak self] success in
             print("✅ EXT openHostApp success:", success)
 
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                self?.extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
+            if success {
+                self?.finish()
+            } else {
+                let didOpen = self?.openViaResponderChain(url) ?? false
+                print("✅ EXT responderChain open attempted:", didOpen)
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    self?.finish()
+                }
             }
         }
+    }
+
+    private func openViaResponderChain(_ url: URL) -> Bool {
+        var responder: UIResponder? = self
+        while let r = responder {
+            if let app = r as? UIApplication {
+                app.open(url, options: [:], completionHandler: nil)
+                return true
+            }
+            responder = r.next
+        }
+        return false
+    }
+
+    private func finish() {
+        extensionContext?.completeRequest(returningItems: nil, completionHandler: nil)
     }
 }

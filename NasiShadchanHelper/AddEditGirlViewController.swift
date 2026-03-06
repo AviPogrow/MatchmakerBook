@@ -915,6 +915,7 @@ private func makeAgeRow() -> IntRow {
     }
     
     @objc func saveGirlToFirebase() {
+
         if isEditingGirl {
             selectedShadchanGirl.dateLastUpdate = Int(Date().timeIntervalSince1970)
         }
@@ -923,16 +924,20 @@ private func makeAgeRow() -> IntRow {
             guard let self else { return }
 
             switch result {
+
             case .success:
-                self.navigationController?.popToRootViewController(animated: true)
+
+                if self.presentingViewController != nil {
+                    self.dismiss(animated: true)
+                } else {
+                    self.navigationController?.popToRootViewController(animated: true)
+                }
 
             case .failure(let error):
-                // TODO: show alert / toast / HUD
                 print("Save failed:", error)
             }
         }
     }
-
     func saveSelectedShadchanGirlToFB(completion: @escaping (Result<Void, Error>) -> Void) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
 
