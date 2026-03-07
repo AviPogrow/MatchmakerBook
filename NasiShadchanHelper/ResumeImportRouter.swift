@@ -20,7 +20,7 @@ final class ResumeImportRouter {
     }
 
     // MARK: - Entry point
-    func handleIncomingShare() {
+    func handleIncomingShare(retryCount: Int = 0) {
         guard let payload = readPayload() else {
             print("ResumeImportRouter: no payload found")
             return
@@ -33,35 +33,45 @@ final class ResumeImportRouter {
                 return
             }
 
-            // 1) We expect the main app root to be a tab bar once logged in
             guard let tabBar = root as? UITabBarController else {
                 print("ResumeImportRouter: root is not UITabBarController")
                 return
             }
 
-            // 2) Pick the Girls tab
-            // TODO: adjust index to match your storyboard order
             let girlsTabIndex = 1
             tabBar.selectedIndex = girlsTabIndex
 
-            // 3) Get the nav controller for that tab
             guard let nav = tabBar.selectedViewController as? UINavigationController else {
-                print("ResumeImportRouter: selected VC is not a UINavigationController")
+                guard retryCount < 5 else {
+                    print("ResumeImportRouter: selected VC is not UINavigationController after retries")
+                    return
+                }
+
+                print("ResumeImportRouter: nav not ready yet, retrying...")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    self.handleIncomingShare(retryCount: retryCount + 1)
+                }
                 return
             }
 
-            // 4) Push GirlsFilterSearchVC
             nav.popToRootViewController(animated: false)
 
-            let girlsVC = GirlsFilterSearchVC()
+            guard let girlsVC = nav.viewControllers.first as? GirlsFilterSearchVC else {
+                guard retryCount < 5 else {
+                    print("ResumeImportRouter: root VC is not GirlsFilterSearchVC after retries")
+                    return
+                }
 
-            // TEMP: attach payload for next step
+                print("ResumeImportRouter: GirlsFilterSearchVC not ready yet, retrying...")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    self.handleIncomingShare(retryCount: retryCount + 1)
+                }
+                return
+            }
+
             girlsVC.pendingImportPayload = payload
-            
-            nav.pushViewController(girlsVC, animated: true)
 
-            // (Next step later: pass payload into girlsVC or to a coordinator)
-            print("✅ Routed share payload:", payload)
+            print("✅ Routed share payload to existing GirlsFilterSearchVC:", payload)
         }
     }
 
