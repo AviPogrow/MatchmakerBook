@@ -916,9 +916,9 @@ private func makeAgeRow() -> IntRow {
     
     @objc func saveGirlToFirebase() {
 
-        if isEditingGirl {
-            selectedShadchanGirl.dateLastUpdate = Int(Date().timeIntervalSince1970)
-        }
+        
+        selectedShadchanGirl.dateLastUpdate = Int(Date().timeIntervalSince1970)
+        
 
         saveSelectedShadchanGirlToFB { [weak self] result in
             guard let self else { return }

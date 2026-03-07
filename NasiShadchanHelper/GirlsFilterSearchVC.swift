@@ -743,6 +743,10 @@ class GirlsFilterSearchVC: UIViewController {
 
          // Stable, case-insensitive sorting
          girls.sort {
+             if $0.dateLastUpdate != $1.dateLastUpdate {
+                 return $0.dateLastUpdate > $1.dateLastUpdate
+             }
+
              let aFirst = $0.girlFirstName.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
              let bFirst = $1.girlFirstName.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
              if aFirst != bFirst { return aFirst < bFirst }
