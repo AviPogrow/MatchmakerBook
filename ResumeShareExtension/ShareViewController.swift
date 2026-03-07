@@ -8,10 +8,11 @@
 import UIKit
 import UniformTypeIdentifiers
 
-final class ShareViewController: UIViewController {
+final class ShareViewController: UIViewController, UITextViewDelegate {
 
     private let appGroupID = "group.com.AviPogrow.NasiShadchanHelper"
     private let payloadKey = "latestSharedResumePayload"
+    private let notesPlaceholder = "Add notes to include with this resume…"
 
     // MARK: - UI
 
@@ -46,7 +47,7 @@ final class ShareViewController: UIViewController {
     }()
 
     private let fileCard = UIView()
-    private let fileIconView = UIImageView()
+    private let filePreviewImageView = UIImageView()
     private let fileNameLabel = UILabel()
     private let fileTypeLabel = UILabel()
 
@@ -63,9 +64,10 @@ final class ShareViewController: UIViewController {
         tv.font = .systemFont(ofSize: 16)
         tv.backgroundColor = .secondarySystemBackground
         tv.layer.cornerRadius = 14
+        tv.layer.borderWidth = 1
+        tv.layer.borderColor = UIColor.systemGray4.cgColor
         tv.textContainerInset = UIEdgeInsets(top: 14, left: 12, bottom: 14, right: 12)
-        tv.isScrollEnabled = false
-        tv.text = ""
+        tv.isScrollEnabled = true
         return tv
     }()
 
@@ -83,6 +85,18 @@ final class ShareViewController: UIViewController {
     private let cancelButton = UIButton(type: .system)
     private let importButton = UIButton(type: .system)
 
+    private let existingProfileButton: UIButton = {
+        let b = UIButton(type: .system)
+        b.setTitle("Use Existing Profile (Coming Soon)", for: .normal)
+        b.titleLabel?.font = .systemFont(ofSize: 18, weight: .semibold)
+        b.layer.cornerRadius = 22
+        b.layer.borderWidth = 2
+        b.layer.borderColor = UIColor.systemGray3.cgColor
+        b.contentEdgeInsets = UIEdgeInsets(top: 12, left: 18, bottom: 12, right: 18)
+        b.alpha = 0.6
+        return b
+    }()
+
     // MARK: - State
 
     private var capturedPayload: [String: Any]?
@@ -93,16 +107,41 @@ final class ShareViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
 
+        notesTextView.delegate = self
+        
+        
+
         buildUI()
         wireActions()
-
+        configureNotesPlaceholder()
         importFirstSupportedAttachment()
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+        
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+
+        let flex = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let done = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissKeyboard))
+
+        toolbar.items = [flex, done]
+
+        notesTextView.inputAccessoryView = toolbar
+        
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
     }
 
     // MARK: - UI Build
 
     private func buildUI() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.keyboardDismissMode = .interactive
+
         contentStack.translatesAutoresizingMaskIntoConstraints = false
         contentStack.axis = .vertical
         contentStack.spacing = 18
@@ -131,9 +170,10 @@ final class ShareViewController: UIViewController {
         NSLayoutConstraint.activate([
             bottomBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             bottomBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            bottomBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            bottomBar.heightAnchor.constraint(equalToConstant: 84),
 
+            bottomBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+
+            bottomBar.heightAnchor.constraint(equalToConstant: 220),
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -146,7 +186,7 @@ final class ShareViewController: UIViewController {
         ])
 
         notesTextView.translatesAutoresizingMaskIntoConstraints = false
-        notesTextView.heightAnchor.constraint(equalToConstant: 200).isActive = true
+        notesTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 120).isActive = true
 
         setFileCardEmpty()
         setImportEnabled(false)
@@ -163,13 +203,16 @@ final class ShareViewController: UIViewController {
         h.spacing = 14
         h.alignment = .center
 
-        fileIconView.translatesAutoresizingMaskIntoConstraints = false
-        fileIconView.contentMode = .scaleAspectFit
-        fileIconView.tintColor = .systemPink
+        filePreviewImageView.translatesAutoresizingMaskIntoConstraints = false
+        filePreviewImageView.contentMode = .scaleAspectFit
+        filePreviewImageView.clipsToBounds = true
+        filePreviewImageView.layer.cornerRadius = 10
+        filePreviewImageView.backgroundColor = .tertiarySystemBackground
+        filePreviewImageView.tintColor = .systemPink
 
         NSLayoutConstraint.activate([
-            fileIconView.widthAnchor.constraint(equalToConstant: 44),
-            fileIconView.heightAnchor.constraint(equalToConstant: 44),
+            filePreviewImageView.widthAnchor.constraint(equalToConstant: 56),
+            filePreviewImageView.heightAnchor.constraint(equalToConstant: 56),
         ])
 
         fileNameLabel.font = .systemFont(ofSize: 18, weight: .semibold)
@@ -183,7 +226,7 @@ final class ShareViewController: UIViewController {
         v.axis = .vertical
         v.spacing = 4
 
-        h.addArrangedSubview(fileIconView)
+        h.addArrangedSubview(filePreviewImageView)
         h.addArrangedSubview(v)
 
         fileCard.addSubview(h)
@@ -213,10 +256,14 @@ final class ShareViewController: UIViewController {
         importButton.backgroundColor = .systemBlue
         importButton.setTitleColor(.white, for: .normal)
 
-        let buttons = UIStackView(arrangedSubviews: [cancelButton, importButton])
+        let buttons = UIStackView(arrangedSubviews: [
+            cancelButton,
+            existingProfileButton,
+            importButton
+        ])
         buttons.translatesAutoresizingMaskIntoConstraints = false
-        buttons.axis = .horizontal
-        buttons.spacing = 14
+        buttons.axis = .vertical
+        buttons.spacing = 12
         buttons.distribution = .fillEqually
 
         bottomBar.addSubview(buttons)
@@ -224,13 +271,14 @@ final class ShareViewController: UIViewController {
         NSLayoutConstraint.activate([
             buttons.leadingAnchor.constraint(equalTo: bottomBar.leadingAnchor, constant: 20),
             buttons.trailingAnchor.constraint(equalTo: bottomBar.trailingAnchor, constant: -20),
-            buttons.centerYAnchor.constraint(equalTo: bottomBar.centerYAnchor),
-            buttons.heightAnchor.constraint(equalToConstant: 52),
+            buttons.topAnchor.constraint(equalTo: bottomBar.topAnchor, constant: 12),
+            buttons.bottomAnchor.constraint(equalTo: bottomBar.bottomAnchor, constant: -12),
         ])
     }
 
     private func wireActions() {
         cancelButton.addTarget(self, action: #selector(didTapCancel), for: .touchUpInside)
+        existingProfileButton.addTarget(self, action: #selector(existingProfileTapped), for: .touchUpInside)
         importButton.addTarget(self, action: #selector(didTapImport), for: .touchUpInside)
     }
 
@@ -241,11 +289,39 @@ final class ShareViewController: UIViewController {
         return v
     }
 
+    private func configureNotesPlaceholder() {
+        notesTextView.text = notesPlaceholder
+        notesTextView.textColor = .secondaryLabel
+    }
+
+    // MARK: - UITextViewDelegate
+
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == notesPlaceholder {
+            textView.text = ""
+            textView.textColor = .label
+        }
+    }
+
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            textView.text = notesPlaceholder
+            textView.textColor = .secondaryLabel
+        }
+    }
+
+    func textViewDidChange(_ textView: UITextView) {
+        UIView.performWithoutAnimation {
+            self.view.layoutIfNeeded()
+        }
+    }
+
     // MARK: - UI State
 
     private func setFileCardEmpty() {
         DispatchQueue.main.async {
-            self.fileIconView.image = UIImage(systemName: "doc.fill")
+            self.filePreviewImageView.image = UIImage(systemName: "doc.fill")
+            self.filePreviewImageView.contentMode = .scaleAspectFit
             self.fileNameLabel.text = "No file selected"
             self.fileTypeLabel.text = "Share a PDF, image, or text"
         }
@@ -253,7 +329,17 @@ final class ShareViewController: UIViewController {
 
     private func setFileCard(fileName: String, typeLabel: String, icon: String) {
         DispatchQueue.main.async {
-            self.fileIconView.image = UIImage(systemName: icon)
+            self.filePreviewImageView.image = UIImage(systemName: icon)
+            self.filePreviewImageView.contentMode = .scaleAspectFit
+            self.fileNameLabel.text = fileName
+            self.fileTypeLabel.text = typeLabel
+        }
+    }
+
+    private func setFileCardPreview(image: UIImage, fileName: String, typeLabel: String) {
+        DispatchQueue.main.async {
+            self.filePreviewImageView.image = image
+            self.filePreviewImageView.contentMode = .scaleAspectFill
             self.fileNameLabel.text = fileName
             self.fileTypeLabel.text = typeLabel
         }
@@ -290,9 +376,19 @@ final class ShareViewController: UIViewController {
         finish()
     }
 
+    @objc private func existingProfileTapped() {
+        let alert = UIAlertController(
+            title: "Coming Soon",
+            message: "Using a shared resume with an existing profile will be available in a future update.",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
+
     @objc private func didTapImport() {
-        if let text = notesTextView.text?.trimmingCharacters(in: .whitespacesAndNewlines),
-           !text.isEmpty {
+        let text = notesTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !text.isEmpty && text != notesPlaceholder {
             appendNotesToCapturedPayload(text)
         }
         openHostApp()
@@ -442,21 +538,17 @@ final class ShareViewController: UIViewController {
             savePayload(payload)
 
             let displayName = sourceURL.lastPathComponent.isEmpty ? filename : sourceURL.lastPathComponent
-            let typeLabel: String
-            let icon: String
 
-            if declaredType.conforms(to: .pdf) {
-                typeLabel = "PDF document"
-                icon = "doc.richtext.fill"
-            } else if declaredType.conforms(to: .image) {
-                typeLabel = "Image"
-                icon = "photo.fill"
+            if declaredType.conforms(to: .image),
+               let image = UIImage(contentsOfFile: destURL.path) {
+                setFileCardPreview(image: image, fileName: displayName, typeLabel: "Image")
+            } else if declaredType.conforms(to: .pdf) {
+                setFileCard(fileName: displayName, typeLabel: "PDF document", icon: "doc.richtext.fill")
             } else {
-                typeLabel = declaredType.localizedDescription ?? declaredType.identifier
-                icon = "doc.fill"
+                let typeLabel = declaredType.localizedDescription ?? declaredType.identifier
+                setFileCard(fileName: displayName, typeLabel: typeLabel, icon: "doc.fill")
             }
 
-            setFileCard(fileName: displayName, typeLabel: typeLabel, icon: icon)
             setReady("File captured. Tap Import to Nasi.")
         } catch {
             setError("Failed to copy file into App Group.")
@@ -488,7 +580,7 @@ final class ShareViewController: UIViewController {
             capturedPayload = payload
             savePayload(payload)
 
-            setFileCard(fileName: filename, typeLabel: "Image", icon: "photo.fill")
+            setFileCardPreview(image: image, fileName: filename, typeLabel: "Image")
             setReady("Image captured. Tap Import to Nasi.")
         } catch {
             setError("Failed to save image into App Group.")
@@ -505,7 +597,6 @@ final class ShareViewController: UIViewController {
     private func savePayload(_ dict: [String: Any]) {
         let defaults = UserDefaults(suiteName: appGroupID)
         defaults?.set(dict, forKey: payloadKey)
-        defaults?.synchronize()
         print("✅ EXT saved payload:", dict)
     }
 
