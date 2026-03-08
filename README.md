@@ -9,6 +9,20 @@ The app supports:
 
 Built with Swift, UIKit, Firebase, and iOS platform integrations such as Share Extensions, App Groups, deep linking, OCR, and Contacts.
 
+## High-Level Workflow
+
+Paper Resume / Digital Resume / Contacts  
+↓  
+OCR or Data Extraction  
+↓  
+Resume Parsing  
+↓  
+Parsed Field Review  
+↓  
+Prefilled Profile Form  
+↓  
+Save to Firebase
+
 ## Resume Intake System
 
 Matchmakers often receive candidate information in different formats.  
