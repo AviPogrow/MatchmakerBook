@@ -13,3 +13,11 @@ Built with Swift, UIKit, Firebase, and iOS platform integrations such as Share E
 
 Matchmakers often receive candidate information in different formats.  
 This app includes a system that converts resumes and contact information into structured profile data automatically.
+
+### Supported Import Methods
+
+
+
+
+
+
