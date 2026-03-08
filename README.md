@@ -112,7 +112,17 @@ The app uses several architectural components to manage navigation, data parsing
 This project explores how modern iOS platform features can be combined to automate real-world workflows for professional matchmakers.
 
 The focus of the app is reducing manual data entry by allowing candidate information to be imported from multiple sources such as paper resumes, messaging apps, and the iOS Contacts system.
-  
+
+  ## Screenshots
+
+### Girls Profile List
+*(Add screenshot later)*
+
+### Resume Parsing Review
+*(Add screenshot later)*
+
+### Add / Edit Profile Form
+*(Add screenshot later)*
 
 
 
