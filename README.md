@@ -37,5 +37,7 @@ Save to Firebase
 
 #### 2. Digital Resume Import (Share Extension)
 
+Users can import resumes directly from other apps such as WhatsApp, Mail, Photos, or Files using an iOS Share Extension.
+
 
 
