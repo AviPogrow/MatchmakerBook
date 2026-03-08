@@ -21,6 +21,20 @@ This app includes a system that converts resumes and contact information into st
 Users can scan a physical resume using the device camera.  
 The system performs OCR and extracts structured fields which are used to prefill the profile creation form.
 
+**Workflow**
+
+Camera Scan  
+↓  
+Vision OCR  
+↓  
+Text Parsing  
+↓  
+Parsed Field Review  
+↓  
+Prefilled Profile Form  
+↓  
+Save to Firebase
+
 
 
 
