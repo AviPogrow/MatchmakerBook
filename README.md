@@ -16,7 +16,10 @@ This app includes a system that converts resumes and contact information into st
 
 ### Supported Import Methods
 
+#### 1. Paper Resume Scanning
 
+Users can scan a physical resume using the device camera.  
+The system performs OCR and extracts structured fields which are used to prefill the profile creation form.
 
 
 
