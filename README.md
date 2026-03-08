@@ -74,5 +74,7 @@ Prefill Profile Form
 ↓  
 Save to Firebase
 
+## Architecture Highlights
+
 
 
