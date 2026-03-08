@@ -8,3 +8,8 @@ The app supports:
 - importing candidate details from the Contacts app
 
 Built with Swift, UIKit, Firebase, and iOS platform integrations such as Share Extensions, App Groups, deep linking, OCR, and Contacts.
+
+## Resume Intake System
+
+Matchmakers often receive candidate information in different formats.  
+This app includes a system that converts resumes and contact information into structured profile data automatically.
