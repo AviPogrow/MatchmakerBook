@@ -64,5 +64,15 @@ Save to Firebase
 Users can import candidate information directly from the iOS Contacts app.  
 The system extracts relevant contact fields and maps them into the profile creation form.
 
+**Workflow**
+
+Contacts Picker  
+↓  
+Extract Contact Fields  
+↓  
+Prefill Profile Form  
+↓  
+Save to Firebase
+
 
 
