@@ -76,5 +76,29 @@ Save to Firebase
 
 ## Architecture Highlights
 
+The app uses several architectural components to manage navigation, data parsing, and profile creation workflows.
+- Router-based navigation handles deep link routing from the Share Extension into the correct screen flow.
+- The ResumeImportRouter coordinates the flow from deep link → profile list → profile creation. -  Resume parsing is separated from the UI layer so extracted data can be reviewed before populating the profile form.
+ - Profile data is stored and synchronized using Firebase Realtime Database.
+   
+  ## Technology Stack
+
+- Swift
+- UIKit
+- Firebase Realtime Database
+- Share Extensions
+- App Groups
+- Deep Linking
+- Vision OCR
+- Contacts Framework
+- Eureka Forms
+
+  ## Project Goal
+
+This project explores how modern iOS platform features can be combined to automate real-world workflows for professional matchmakers.
+
+The focus of the app is reducing manual data entry by allowing candidate information to be imported from multiple sources such as paper resumes, messaging apps, and the iOS Contacts system.
+  
+
 
 
