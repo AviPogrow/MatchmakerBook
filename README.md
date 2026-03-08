@@ -39,5 +39,25 @@ Save to Firebase
 
 Users can import resumes directly from other apps such as WhatsApp, Mail, Photos, or Files using an iOS Share Extension.
 
+**Workflow**
+
+External App  
+↓  
+Share Extension  
+↓  
+App Group Payload  
+↓  
+Deep Link into Main App  
+↓  
+Text Extraction  
+↓  
+Resume Parsing  
+↓  
+Parsed Review Screen  
+↓  
+Prefilled Profile Form  
+↓  
+Save to Firebase
+
 
 
