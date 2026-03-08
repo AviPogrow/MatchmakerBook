@@ -67,7 +67,9 @@ final class ShareViewController: UIViewController, UITextViewDelegate {
         tv.layer.borderWidth = 1
         tv.layer.borderColor = UIColor.systemGray4.cgColor
         tv.textContainerInset = UIEdgeInsets(top: 14, left: 12, bottom: 14, right: 12)
-        tv.isScrollEnabled = true
+        tv.isScrollEnabled = false 
+        tv.isEditable = false
+        tv.isSelectable = false
         return tv
     }()
 
@@ -96,9 +98,17 @@ final class ShareViewController: UIViewController, UITextViewDelegate {
         b.alpha = 0.6
         return b
     }()
+    private let sourceAppLabel: UILabel = {
+        let l = UILabel()
+        l.text = "Shared via iOS"
+        l.font = .systemFont(ofSize: 14, weight: .medium)
+        l.textColor = .secondaryLabel
+        l.numberOfLines = 1
+        return l
+    }()
 
     // MARK: - State
-
+    private var detectedSourceAppName: String?
     private var capturedPayload: [String: Any]?
 
     // MARK: - Lifecycle
@@ -110,7 +120,7 @@ final class ShareViewController: UIViewController, UITextViewDelegate {
         notesTextView.delegate = self
         
         
-
+        detectSourceApp()
         buildUI()
         wireActions()
         configureNotesPlaceholder()
@@ -130,6 +140,41 @@ final class ShareViewController: UIViewController, UITextViewDelegate {
 
         notesTextView.inputAccessoryView = toolbar
         
+    }
+    private func detectSourceApp() {
+        guard let items = extensionContext?.inputItems as? [NSExtensionItem] else { return }
+
+        for item in items {
+            if let userInfo = item.userInfo,
+               let sourceAppID = userInfo["UIApplicationExtensionHostBundleIdentifier"] as? String {
+                detectedSourceAppName = friendlyAppName(for: sourceAppID)
+                return
+            }
+        }
+    }
+    private func friendlyAppName(for bundleIdentifier: String) -> String {
+        switch bundleIdentifier {
+        case "net.whatsapp.WhatsApp":
+            return "WhatsApp"
+        case "com.apple.MobileSMS":
+            return "Messages"
+        case "com.apple.mobilemail":
+            return "Mail"
+        case "com.apple.DocumentsApp":
+            return "Files"
+        case "com.apple.mobilenotes":
+            return "Notes"
+        default:
+            return bundleIdentifier
+        }
+    }
+    
+    private func updateSourceAppLabel() {
+        if let appName = detectedSourceAppName, !appName.isEmpty {
+            sourceAppLabel.text = "Shared from \(appName)"
+        } else {
+            sourceAppLabel.text = "Shared via iOS"
+        }
     }
     
     @objc private func dismissKeyboard() {
@@ -159,6 +204,7 @@ final class ShareViewController: UIViewController, UITextViewDelegate {
         contentStack.addArrangedSubview(makeSpacer(6))
         contentStack.addArrangedSubview(resumeSectionTitle)
         contentStack.addArrangedSubview(buildFileCard())
+        contentStack.addArrangedSubview(sourceAppLabel)
         contentStack.addArrangedSubview(notesSectionTitle)
         contentStack.addArrangedSubview(notesTextView)
         contentStack.addArrangedSubview(makeSpacer(8))
@@ -189,6 +235,7 @@ final class ShareViewController: UIViewController, UITextViewDelegate {
         notesTextView.heightAnchor.constraint(greaterThanOrEqualToConstant: 120).isActive = true
 
         setFileCardEmpty()
+        updateSourceAppLabel()
         setImportEnabled(false)
     }
 
