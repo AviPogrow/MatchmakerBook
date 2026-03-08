@@ -35,6 +35,7 @@ Prefilled Profile Form
 ↓  
 Save to Firebase
 
+#### 2. Digital Resume Import (Share Extension)
 
 
 
