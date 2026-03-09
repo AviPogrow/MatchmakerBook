@@ -104,6 +104,10 @@
 		CB4E5B732F2BECD00042A61A /* GirlsFilterSearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4E5B722F2BECD00042A61A /* GirlsFilterSearchVC.swift */; };
 		CB60A7A02F5F01F900B209A3 /* AppLifecycleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB60A79F2F5F01F800B209A3 /* AppLifecycleCoordinator.swift */; };
 		CB60A7A12F5F01F900B209A3 /* AppLifecycleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB60A79F2F5F01F800B209A3 /* AppLifecycleCoordinator.swift */; };
+		CB60A7A32F5F057100B209A3 /* DraftManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB60A7A22F5F057100B209A3 /* DraftManager.swift */; };
+		CB60A7A42F5F057100B209A3 /* DraftManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB60A7A22F5F057100B209A3 /* DraftManager.swift */; };
+		CB60A7A62F5F06CA00B209A3 /* GirlDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB60A7A52F5F06BB00B209A3 /* GirlDraft.swift */; };
+		CB60A7A72F5F06CA00B209A3 /* GirlDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB60A7A52F5F06BB00B209A3 /* GirlDraft.swift */; };
 		CB90DEE52F4A0E3F002F7FEA /* ResumeScanVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB90DEE42F4A0E3F002F7FEA /* ResumeScanVC.swift */; };
 		CB90DEE92F4A1725002F7FEA /* ResumeParser .swift in Sources */ = {isa = PBXBuildFile; fileRef = CB90DEE82F4A171E002F7FEA /* ResumeParser .swift */; };
 		CB9E7D632F4E193A00B43E38 /* DateISO.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9E7D622F4E192F00B43E38 /* DateISO.swift */; };
@@ -271,6 +275,8 @@
 		CB3EED4E2F3E1C8D006B392B /* ProfileSearchFilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSearchFilterVC.swift; sourceTree = "<group>"; };
 		CB4E5B722F2BECD00042A61A /* GirlsFilterSearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GirlsFilterSearchVC.swift; sourceTree = "<group>"; };
 		CB60A79F2F5F01F800B209A3 /* AppLifecycleCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLifecycleCoordinator.swift; sourceTree = "<group>"; };
+		CB60A7A22F5F057100B209A3 /* DraftManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftManager.swift; sourceTree = "<group>"; };
+		CB60A7A52F5F06BB00B209A3 /* GirlDraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GirlDraft.swift; sourceTree = "<group>"; };
 		CB90DEE42F4A0E3F002F7FEA /* ResumeScanVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResumeScanVC.swift; sourceTree = "<group>"; };
 		CB90DEE82F4A171E002F7FEA /* ResumeParser .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ResumeParser .swift"; sourceTree = "<group>"; };
 		CB9E7D622F4E192F00B43E38 /* DateISO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateISO.swift; sourceTree = "<group>"; };
@@ -745,6 +751,8 @@
 			isa = PBXGroup;
 			children = (
 				CB60A79F2F5F01F800B209A3 /* AppLifecycleCoordinator.swift */,
+				CB60A7A22F5F057100B209A3 /* DraftManager.swift */,
+				CB60A7A52F5F06BB00B209A3 /* GirlDraft.swift */,
 				CB9E7D7D2F52913400B43E38 /* NasiShadchanHelper.entitlements */,
 				52444B012A26D0F900F54E32 /* AppDelegate.swift */,
 				52DB326029997D0D00AC5F87 /* AddEditGirlViewController.swift */,
@@ -1029,6 +1037,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB60A7A02F5F01F900B209A3 /* AppLifecycleCoordinator.swift in Sources */,
+				CB60A7A72F5F06CA00B209A3 /* GirlDraft.swift in Sources */,
+				CB60A7A32F5F057100B209A3 /* DraftManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1041,6 +1051,7 @@
 				FFD6A6BF2B2FDF4400459D61 /* SelectGirlVC.swift in Sources */,
 				CB90DEE52F4A0E3F002F7FEA /* ResumeScanVC.swift in Sources */,
 				5228CB1E27A5D02E00EDF103 /* AddEditBoyViewController.swift in Sources */,
+				CB60A7A42F5F057100B209A3 /* DraftManager.swift in Sources */,
 				184B498A2563EED4008B61F9 /* GradientView.swift in Sources */,
 				5299DCF429A7CCBF00050586 /* AllSecondDatesVC.swift in Sources */,
 				52E486C42B23829300CA43CE /* PresenterRowSampleCell.swift in Sources */,
@@ -1101,6 +1112,7 @@
 				520578D7299D630000B732A0 /* AppRowCell.swift in Sources */,
 				5228CB12279C6EF400EDF103 /* AddEditDatesViewController.swift in Sources */,
 				CEC468E0245C60120071EC85 /* YeshivaAndCollegeWorkingViewController.swift in Sources */,
+				CB60A7A62F5F06CA00B209A3 /* GirlDraft.swift in Sources */,
 				1825F9A0252C400600448269 /* SignUpVC.swift in Sources */,
 				52A04EF329A3D98500C490B0 /* MatchIdeaDetailsViewController.swift in Sources */,
 				1851798A2525FAF20099D65E /* ProgressIndicator.swift in Sources */,

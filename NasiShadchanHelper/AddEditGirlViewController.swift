@@ -15,7 +15,7 @@ import ViewRow
 import Contacts
 import ContactsUI
 
-class AddEditGirlViewController: FormViewController,CNContactPickerDelegate, ResumeScanVCDelegate {
+class AddEditGirlViewController: FormViewController, CNContactPickerDelegate, ResumeScanVCDelegate, GirlDraftProvider {
     
     enum ProfileFormTag: String {
         case age
@@ -184,6 +184,7 @@ class AddEditGirlViewController: FormViewController,CNContactPickerDelegate, Res
         Section("Girls Cell")
         
         <<< PhoneRow(){
+            
             $0.title = "Cell"
             $0.tag = "cell"
             $0.placeholder = "Add numbers here"
@@ -299,8 +300,9 @@ class AddEditGirlViewController: FormViewController,CNContactPickerDelegate, Res
             }
         }
         <<< PhoneRow() {
-            
+            $0.tag = "sendResumeText"
             $0.placeholder = "Cell"
+            
             $0.value = selectedShadchanGirl?.sendResumeText  //5
             
             $0.onChange { [unowned self] row in //6
@@ -311,6 +313,7 @@ class AddEditGirlViewController: FormViewController,CNContactPickerDelegate, Res
         +++ Section("Shadchan Notes")
         
         <<< TextAreaRow() {
+            $0.tag = "shadchanNotesNew"
             $0.value = selectedShadchanGirl.shadchanNotesNew
             
             $0.textAreaHeight = .dynamic(initialTextViewHeight: 110)
@@ -447,8 +450,21 @@ class AddEditGirlViewController: FormViewController,CNContactPickerDelegate, Res
             }
     }
     
-    override func viewDidAppear(_ animated: Bool) { //presentDocumentScanner()
-        //handleScanResumeWithDocScanner()
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        DraftManager.shared.activeDraftProvider = self
+
+        if let draft = DraftManager.shared.loadDraft() {
+            applyDraft(draft)
+        }
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        if DraftManager.shared.activeDraftProvider === self {
+            DraftManager.shared.activeDraftProvider = nil
+        }
     }
     
     
@@ -914,6 +930,94 @@ private func makeAgeRow() -> IntRow {
         )
     }
     
+    func applyDraft(_ draft: GirlDraft) {
+        selectedShadchanGirl.girlFirstName = draft.girlFirstName
+        selectedShadchanGirl.girlLastName = draft.girlLastName
+        selectedShadchanGirl.girlCell = draft.girlCell
+        selectedShadchanGirl.city = draft.city
+        selectedShadchanGirl.dobIntervalString = draft.dobIntervalString
+        selectedShadchanGirl.girlHeight = draft.girlHeight
+        selectedShadchanGirl.lifePlans = draft.lifePlans
+        selectedShadchanGirl.sendResumeEmail = draft.sendResumeEmail
+        selectedShadchanGirl.sendResumeText = draft.sendResumeText
+        selectedShadchanGirl.shadchanNotesNew = draft.shadchanNotesNew
+        isEditingGirl = draft.isEditingGirl
+
+        if let key = draft.girlKey {
+            selectedShadchanGirl.key = key
+        }
+
+        if let row = form.rowBy(tag: "firstName") as? TextRow {
+            row.value = draft.girlFirstName
+            row.updateCell()
+        }
+
+        if let row = form.rowBy(tag: "lastName") as? TextRow {
+            row.value = draft.girlLastName
+            row.updateCell()
+        }
+
+        if let row = form.rowBy(tag: "cell") as? PhoneRow {
+            row.value = draft.girlCell
+            row.updateCell()
+        }
+
+        if let row = form.rowBy(tag: "city") as? TextRow {
+            row.value = draft.city
+            row.updateCell()
+        }
+
+        if let row = form.rowBy(tag: "height") as? ActionSheetRow<String> {
+            row.value = draft.girlHeight
+            row.updateCell()
+        }
+
+        if let row = form.rowBy(tag: "email") as? TextRow {
+            row.value = draft.sendResumeEmail
+            row.updateCell()
+        }
+
+        if let row = form.rowBy(tag: "sendResumeText") as? PhoneRow {
+            row.value = draft.sendResumeText
+            row.updateCell()
+        }
+
+        if let row = form.rowBy(tag: "shadchanNotesNew") as? TextAreaRow {
+            row.value = draft.shadchanNotesNew
+            row.updateCell()
+        }
+
+        if let iso = ISODateOnly.normalizeToISO(draft.dobIntervalString),
+           let date = ISODateOnly.dateForDateRow(fromISO: iso) {
+            applyDOB(date)
+        }
+
+        if let section = form.sectionBy(tag: "lifePlansSection") as? SelectableSection<ImageCheckRow<String>> {
+            for baseRow in section.allRows {
+                guard let row = baseRow as? ImageCheckRow<String>,
+                      let value = row.selectableValue else { continue }
+
+                row.value = draft.lifePlans.contains(value) ? value : nil
+                row.updateCell()
+            }
+        }
+    }
+    func makeDraft() -> GirlDraft {
+        GirlDraft(
+            girlFirstName: selectedShadchanGirl.girlFirstName,
+            girlLastName: selectedShadchanGirl.girlLastName,
+            girlCell: selectedShadchanGirl.girlCell,
+            city: selectedShadchanGirl.city,
+            dobIntervalString: selectedShadchanGirl.dobIntervalString,
+            girlHeight: selectedShadchanGirl.girlHeight,
+            lifePlans: selectedShadchanGirl.lifePlans,
+            sendResumeEmail: selectedShadchanGirl.sendResumeEmail,
+            sendResumeText: selectedShadchanGirl.sendResumeText,
+            shadchanNotesNew: selectedShadchanGirl.shadchanNotesNew,
+            isEditingGirl: isEditingGirl,
+            girlKey: selectedShadchanGirl.key
+        )
+    }
     @objc func saveGirlToFirebase() {
 
         
@@ -926,6 +1030,8 @@ private func makeAgeRow() -> IntRow {
             switch result {
 
             case .success:
+                
+                DraftManager.shared.clearDraft()
 
                 if self.presentingViewController != nil {
                     self.dismiss(animated: true)
