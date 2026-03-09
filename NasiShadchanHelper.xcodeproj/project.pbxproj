@@ -102,6 +102,8 @@
 		CB219D4E2D8C82EB00D439B6 /* DatingRelationship.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */; };
 		CB3EED4F2F3E1C8D006B392B /* ProfileSearchFilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3EED4E2F3E1C8D006B392B /* ProfileSearchFilterVC.swift */; };
 		CB4E5B732F2BECD00042A61A /* GirlsFilterSearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4E5B722F2BECD00042A61A /* GirlsFilterSearchVC.swift */; };
+		CB60A7A02F5F01F900B209A3 /* AppLifecycleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB60A79F2F5F01F800B209A3 /* AppLifecycleCoordinator.swift */; };
+		CB60A7A12F5F01F900B209A3 /* AppLifecycleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB60A79F2F5F01F800B209A3 /* AppLifecycleCoordinator.swift */; };
 		CB90DEE52F4A0E3F002F7FEA /* ResumeScanVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB90DEE42F4A0E3F002F7FEA /* ResumeScanVC.swift */; };
 		CB90DEE92F4A1725002F7FEA /* ResumeParser .swift in Sources */ = {isa = PBXBuildFile; fileRef = CB90DEE82F4A171E002F7FEA /* ResumeParser .swift */; };
 		CB9E7D632F4E193A00B43E38 /* DateISO.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9E7D622F4E192F00B43E38 /* DateISO.swift */; };
@@ -268,6 +270,7 @@
 		CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatingRelationship.swift; sourceTree = "<group>"; };
 		CB3EED4E2F3E1C8D006B392B /* ProfileSearchFilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSearchFilterVC.swift; sourceTree = "<group>"; };
 		CB4E5B722F2BECD00042A61A /* GirlsFilterSearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GirlsFilterSearchVC.swift; sourceTree = "<group>"; };
+		CB60A79F2F5F01F800B209A3 /* AppLifecycleCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLifecycleCoordinator.swift; sourceTree = "<group>"; };
 		CB90DEE42F4A0E3F002F7FEA /* ResumeScanVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResumeScanVC.swift; sourceTree = "<group>"; };
 		CB90DEE82F4A171E002F7FEA /* ResumeParser .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ResumeParser .swift"; sourceTree = "<group>"; };
 		CB9E7D622F4E192F00B43E38 /* DateISO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateISO.swift; sourceTree = "<group>"; };
@@ -741,6 +744,7 @@
 		CE3AC07224536729006B9FEA /* NasiShadchanHelper */ = {
 			isa = PBXGroup;
 			children = (
+				CB60A79F2F5F01F800B209A3 /* AppLifecycleCoordinator.swift */,
 				CB9E7D7D2F52913400B43E38 /* NasiShadchanHelper.entitlements */,
 				52444B012A26D0F900F54E32 /* AppDelegate.swift */,
 				52DB326029997D0D00AC5F87 /* AddEditGirlViewController.swift */,
@@ -1024,6 +1028,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB60A7A02F5F01F900B209A3 /* AppLifecycleCoordinator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1066,6 +1071,7 @@
 				5228CB14279C6FCB00EDF103 /* DatesTableCell.swift in Sources */,
 				CE3AC07824536729006B9FEA /* CategoriesViewController.swift in Sources */,
 				521D605629B7763A000E91DC /* BoyCategoriesVC.swift in Sources */,
+				CB60A7A12F5F01F900B209A3 /* AppLifecycleCoordinator.swift in Sources */,
 				CE428D54248142B500C34EAB /* ShadchanListDetailViewController.swift in Sources */,
 				3D9DA71C25A7827F0056F656 /* MyTabBarController.swift in Sources */,
 				1865CB3F2542AC5900B1272A /* GirlsDetailTableCell.swift in Sources */,

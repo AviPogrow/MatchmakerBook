@@ -68,6 +68,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         return true
     }
+    
+    func applicationWillResignActive(_ application: UIApplication) {
+        AppLifecycleCoordinator.shared.applicationWillResignActive()
+    }
+
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        AppLifecycleCoordinator.shared.applicationDidEnterBackground()
+    }
+
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        AppLifecycleCoordinator.shared.applicationWillEnterForeground()
+    }
+
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        AppLifecycleCoordinator.shared.applicationDidBecomeActive()
+    }
+    
+    
 
     func application(_ app: UIApplication,
                      open url: URL,
