@@ -15,7 +15,7 @@ import ViewRow
 import Contacts
 import ContactsUI
 
-class AddEditGirlViewController: FormViewController, CNContactPickerDelegate, ResumeScanVCDelegate, GirlDraftProvider {
+class AddEditGirlViewController: FormViewController, CNContactPickerDelegate, ResumeScanVCDelegate, GirlDraftProvider, NavigationStateProvider {
     
     enum ProfileFormTag: String {
         case age
@@ -454,16 +454,21 @@ class AddEditGirlViewController: FormViewController, CNContactPickerDelegate, Re
         super.viewDidAppear(animated)
 
         DraftManager.shared.activeDraftProvider = self
+        NavigationStateManager.shared.activeProvider = self
 
-        if let draft = DraftManager.shared.loadDraft() {
-            applyDraft(draft)
-        }
+        //if let draft = DraftManager.shared.loadDraft() {
+        //    applyDraft(draft)
+       // }
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 
         if DraftManager.shared.activeDraftProvider === self {
             DraftManager.shared.activeDraftProvider = nil
+        }
+
+        if NavigationStateManager.shared.activeProvider === self {
+            NavigationStateManager.shared.activeProvider = nil
         }
     }
     
@@ -1016,6 +1021,13 @@ private func makeAgeRow() -> IntRow {
             shadchanNotesNew: selectedShadchanGirl.shadchanNotesNew,
             isEditingGirl: isEditingGirl,
             girlKey: selectedShadchanGirl.key
+        )
+    }
+    func makeNavigationState() -> NavigationState {
+        NavigationState(
+            screenID: "addEditGirl",
+            isEditingGirl: isEditingGirl,
+            girlKey: selectedShadchanGirl.key.isEmpty ? nil : selectedShadchanGirl.key
         )
     }
     @objc func saveGirlToFirebase() {

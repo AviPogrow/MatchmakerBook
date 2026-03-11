@@ -83,6 +83,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         AppLifecycleCoordinator.shared.applicationDidBecomeActive()
+
+        guard let tabBarController = window?.rootViewController as? UITabBarController,
+              let nav = tabBarController.selectedViewController as? UINavigationController else {
+            return
+        }
+
+        AppLifecycleCoordinator.shared.restoreNavigationIfNeeded(using: nav)
     }
     
     
