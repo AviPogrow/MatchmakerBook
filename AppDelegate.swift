@@ -96,7 +96,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         tabBarController.selectedIndex = state.tabIndex
-        AppLifecycleCoordinator.shared.restoreNavigationIfNeeded(using: nav)
+
+        // Defer restoration one run loop so UIKit finishes switching tabs
+        // before we push onto the correct navigation controller.
+        DispatchQueue.main.async {
+            if let nav = tabBarController.viewControllers?[state.tabIndex] as? UINavigationController {
+                AppLifecycleCoordinator.shared.restoreNavigationIfNeeded(using: nav)
+            }
+        }
+        
     }
     
     
