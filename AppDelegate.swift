@@ -84,27 +84,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(_ application: UIApplication) {
         AppLifecycleCoordinator.shared.applicationDidBecomeActive()
 
-        //“Restore onto the same tab the user was on when the state was saved.”
-        guard let tabBarController = window?.rootViewController as? UITabBarController,
-              let state = NavigationStateManager.shared.load() else {
-            return
+        // The app uses a UITabBarController as the root.
+        // Restoration should start from the tab bar controller so the coordinator
+        // can switch to the correct tab before restoring the pushed screen.
+        if let tabBarController = window?.rootViewController as? UITabBarController {
+            AppLifecycleCoordinator.shared.restoreNavigationIfNeeded(from: tabBarController)
         }
-
-        guard state.tabIndex < (tabBarController.viewControllers?.count ?? 0),
-              let nav = tabBarController.viewControllers?[state.tabIndex] as? UINavigationController else {
-            return
-        }
-
-        tabBarController.selectedIndex = state.tabIndex
-
-        // Defer restoration one run loop so UIKit finishes switching tabs
-        // before we push onto the correct navigation controller.
-        DispatchQueue.main.async {
-            if let nav = tabBarController.viewControllers?[state.tabIndex] as? UINavigationController {
-                AppLifecycleCoordinator.shared.restoreNavigationIfNeeded(using: nav)
-            }
-        }
-        
     }
     
     

@@ -1024,12 +1024,17 @@ private func makeAgeRow() -> IntRow {
         )
     }
     func makeNavigationState() -> NavigationState {
+        // Capture the currently selected tab so restoration pushes
+        // AddEditGirlViewController onto the correct navigation controller.
         let tabIndex = tabBarController?.selectedIndex ?? 0
 
         return NavigationState(
             screenID: "addEditGirl",
             isEditingGirl: isEditingGirl,
+
+            // Avoid storing an empty string as if it were a real key.
             girlKey: selectedShadchanGirl.key.isEmpty ? nil : selectedShadchanGirl.key,
+
             tabIndex: tabIndex
         )
     }

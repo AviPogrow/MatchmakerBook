@@ -1,15 +1,8 @@
-//
-//  Coordinators.swift
-//  NasiShadchanHelper
-//
-//  Created by Avi Pogrow on 3/9/26.
-//  Copyright © 2026 user. All rights reserved.
-//
 import UIKit
 
 final class AppLifecycleCoordinator {
     static let shared = AppLifecycleCoordinator()
-    
+
     // Prevent navigation restoration from running multiple times during the same app session.
     // applicationDidBecomeActive can fire every time the app returns to foreground,
     // so without this guard the restore logic could push duplicate screens.
@@ -18,6 +11,8 @@ final class AppLifecycleCoordinator {
     private init() {}
 
     func applicationWillResignActive() {
+        // App is about to move from active to inactive.
+        // Good place to pause temporary UI-driven work if needed.
     }
 
     func applicationDidEnterBackground() {
@@ -26,23 +21,42 @@ final class AppLifecycleCoordinator {
     }
 
     func applicationWillEnterForeground() {
+        // App is moving from background to foreground.
     }
 
     func applicationDidBecomeActive() {
+        // Keep thin for now.
     }
-    func restoreNavigationIfNeeded(using navigationController: UINavigationController) {
 
-        // Only restore once per app launch to avoid duplicate pushes
-        // when the app repeatedly enters the foreground.
+    func restoreNavigationIfNeeded(from tabBarController: UITabBarController) {
         guard !didRestoreNavigation else { return }
-        didRestoreNavigation = true
-
         guard let state = NavigationStateManager.shared.load() else { return }
         guard state.screenID == "addEditGirl" else { return }
+        guard let viewControllers = tabBarController.viewControllers,
+              state.tabIndex >= 0,
+              state.tabIndex < viewControllers.count else { return }
 
+        didRestoreNavigation = true
+
+        tabBarController.selectedIndex = state.tabIndex
+
+        // Defer restoration one run loop so UIKit finishes switching tabs
+        // before we push onto the correct navigation controller.
+        DispatchQueue.main.async {
+            guard let nav = tabBarController.viewControllers?[state.tabIndex] as? UINavigationController else {
+                return
+            }
+
+            self.restoreNavigationIfNeeded(using: nav, state: state)
+        }
+    }
+
+    private func restoreNavigationIfNeeded(using navigationController: UINavigationController,
+                                           state: NavigationState) {
         let alreadyShowingAddEdit = navigationController.viewControllers.contains {
             $0 is AddEditGirlViewController
         }
+
         guard !alreadyShowingAddEdit else { return }
 
         let vc = AddEditGirlViewController()
