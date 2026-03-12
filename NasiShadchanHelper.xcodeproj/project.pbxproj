@@ -751,11 +751,11 @@
 		CE3AC07224536729006B9FEA /* NasiShadchanHelper */ = {
 			isa = PBXGroup;
 			children = (
+				52444B012A26D0F900F54E32 /* AppDelegate.swift */,
+				CB60A79F2F5F01F800B209A3 /* AppLifecycleCoordinator.swift */,
 				CB60A7D92F61BD3F00B209A3 /* NavigationState.swift */,
 				CB60A7DC2F61BDC000B209A3 /* NavigationStateManager.swift */,
 				52DB326029997D0D00AC5F87 /* AddEditGirlViewController.swift */,
-				52444B012A26D0F900F54E32 /* AppDelegate.swift */,
-				CB60A79F2F5F01F800B209A3 /* AppLifecycleCoordinator.swift */,
 				CB60A7A22F5F057100B209A3 /* DraftManager.swift */,
 				CB60A7A52F5F06BB00B209A3 /* GirlDraft.swift */,
 				CB9E7D7D2F52913400B43E38 /* NasiShadchanHelper.entitlements */,

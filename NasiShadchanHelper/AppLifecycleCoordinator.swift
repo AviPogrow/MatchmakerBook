@@ -9,6 +9,11 @@ import UIKit
 
 final class AppLifecycleCoordinator {
     static let shared = AppLifecycleCoordinator()
+    
+    // Prevent navigation restoration from running multiple times during the same app session.
+    // applicationDidBecomeActive can fire every time the app returns to foreground,
+    // so without this guard the restore logic could push duplicate screens.
+    private var didRestoreNavigation = false
 
     private init() {}
 
@@ -25,15 +30,19 @@ final class AppLifecycleCoordinator {
 
     func applicationDidBecomeActive() {
     }
-
     func restoreNavigationIfNeeded(using navigationController: UINavigationController) {
+
+        // Only restore once per app launch to avoid duplicate pushes
+        // when the app repeatedly enters the foreground.
+        guard !didRestoreNavigation else { return }
+        didRestoreNavigation = true
+
         guard let state = NavigationStateManager.shared.load() else { return }
         guard state.screenID == "addEditGirl" else { return }
 
         let alreadyShowingAddEdit = navigationController.viewControllers.contains {
             $0 is AddEditGirlViewController
         }
-
         guard !alreadyShowingAddEdit else { return }
 
         let vc = AddEditGirlViewController()

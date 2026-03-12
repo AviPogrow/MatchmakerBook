@@ -1024,10 +1024,13 @@ private func makeAgeRow() -> IntRow {
         )
     }
     func makeNavigationState() -> NavigationState {
-        NavigationState(
+        let tabIndex = tabBarController?.selectedIndex ?? 0
+
+        return NavigationState(
             screenID: "addEditGirl",
             isEditingGirl: isEditingGirl,
-            girlKey: selectedShadchanGirl.key.isEmpty ? nil : selectedShadchanGirl.key
+            girlKey: selectedShadchanGirl.key.isEmpty ? nil : selectedShadchanGirl.key,
+            tabIndex: tabIndex
         )
     }
     @objc func saveGirlToFirebase() {

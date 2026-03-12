@@ -12,4 +12,5 @@ struct NavigationState: Codable {
     var screenID: String
     var isEditingGirl: Bool
     var girlKey: String?
+    var tabIndex: Int
 }
