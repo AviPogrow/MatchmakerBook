@@ -1044,6 +1044,7 @@ private func makeAgeRow() -> IntRow {
             case .success:
                 
                 DraftManager.shared.clearDraft()
+                NavigationStateManager.shared.clear()
 
                 if self.presentingViewController != nil {
                     self.dismiss(animated: true)
