@@ -84,6 +84,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(_ application: UIApplication) {
         AppLifecycleCoordinator.shared.applicationDidBecomeActive()
 
+        //“Restore onto the same tab the user was on when the state was saved.”
         guard let tabBarController = window?.rootViewController as? UITabBarController,
               let state = NavigationStateManager.shared.load() else {
             return
