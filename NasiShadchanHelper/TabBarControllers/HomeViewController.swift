@@ -227,9 +227,9 @@ class HomeViewController: UIViewController, UICollectionViewDataSource,UICollect
        func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
          let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! SearchResultCell
         
-         //let cell = UICollectionViewCell.self
+         
           cell.girl = filteredNasiGirlsList[indexPath.item]
-           print(cell.girl.debugDescription)
+           
            return cell
         }
     
