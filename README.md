@@ -1,115 +1,108 @@
 # MatchmakerBook
 
-An iOS app that helps professional matchmakers manage candidate profiles and import profile data from multiple real-world sources.
+An iOS application used by professional matchmakers to manage candidate profiles and automate profile creation from resumes.
 
-The app supports:
-- paper resume scanning with OCR
-- digital resume import through an iOS Share Extension
-- importing candidate details from the Contacts app
+The app supports importing candidate information from multiple sources including **paper resumes, digital documents, and the iOS Contacts system**.
 
-Built with Swift, UIKit, Firebase, and iOS platform integrations such as Share Extensions, App Groups, deep linking, OCR, and Contacts.
+Built using **Swift, UIKit, Firebase**, and several iOS platform integrations including **Share Extensions, Vision OCR, App Groups, and deep linking**.
 
-## High-Level Workflow
+---
 
-Paper Resume / Digital Resume / Contacts  
-↓  
-OCR or Data Extraction  
-↓  
-Resume Parsing  
-↓  
-Parsed Field Review  
-↓  
-Prefilled Profile Form  
-↓  
-Save to Firebase
+## System Architecture
 
-## Resume Intake System
+```text
+                          Matchmaker Platform
 
-Matchmakers often receive candidate information in different formats.  
-This app includes a system that converts resumes and contact information into structured profile data automatically.
+Resume Intake
+Paper Resume / Digital Resume / Contacts
+                 ↓
+           Data Extraction
+        (Vision OCR / Parsing)
+                 ↓
+        Structured Profile Data
+                 ↓
+            Firebase
+                 ↓
+        Search & Profile UI
 
-### Supported Import Methods
 
-#### 1. Paper Resume Scanning
+Client Profile Pipeline
+Web Portal → Google Sheets → Firebase → Read-Only Client Profiles
+```
 
-Users can scan a physical resume using the device camera.  
-The system performs OCR and extracts structured fields which are used to prefill the profile creation form.
+---
 
-**Workflow**
+## Core Workflows
 
-Camera Scan  
-↓  
+### Resume Import Workflow
+
+```text
+Camera Scan / Share Extension / Contacts
+                ↓
+        OCR or Data Extraction
+                ↓
+           Resume Parsing
+                ↓
+       Prefilled Profile Form
+                ↓
+           Save to Firebase
+```
+
+### Client Profile Pipeline
+
+```text
+Web Portal Entry
+        ↓
+Google Sheets Review
+        ↓
+Firebase Sync
+        ↓
+Read-Only Client Profiles
+        ↓
+Quick Actions (Text / Email / Call References)
+```
+
+---
+
+## Key Engineering Challenges
+
+- Extracting structured data from **unstructured resumes using Vision OCR**
+- Supporting **multiple data ingestion pipelines** with a consistent profile model
+- Integrating an **iOS Share Extension** using **App Groups and deep linking**
+- Designing workflows that allow **parsed data review before persistence**
+
+---
+
+## Technology Stack
+
+Swift  
+UIKit  
+Firebase Realtime Database  
 Vision OCR  
-↓  
-Text Parsing  
-↓  
-Parsed Field Review  
-↓  
-Prefilled Profile Form  
-↓  
-Save to Firebase
+Share Extensions  
+App Groups  
+Deep Linking  
+Contacts Framework  
+Eureka Forms  
 
-#### 2. Digital Resume Import (Share Extension)
+---
 
-Users can import resumes directly from other apps such as WhatsApp, Mail, Photos, or Files using an iOS Share Extension.
+## Architecture Documentation
 
-**Workflow**
+Detailed architecture explanations are available in the project **Wiki**.
 
-External App  
-↓  
-Share Extension  
-↓  
-App Group Payload  
-↓  
-Deep Link into Main App  
-↓  
-Text Extraction  
-↓  
-Resume Parsing  
-↓  
-Parsed Review Screen  
-↓  
-Prefilled Profile Form  
-↓  
-Save to Firebase
+---
 
-#### 3. Import from Contacts
+## Screenshots
 
-Users can import candidate information directly from the iOS Contacts app.  
-The system extracts relevant contact fields and maps them into the profile creation form.
+### Girls Profile List
+*(Add screenshot here)*
 
-**Workflow**
+### Resume Parsing Review
+*(Add screenshot here)*
 
-Contacts Picker  
-↓  
-Extract Contact Fields  
-↓  
-Prefill Profile Form  
-↓  
-Save to Firebase
-
-## Architecture Highlights
-
-The app uses several architectural components to manage navigation, data parsing, and profile creation workflows.
-- Router-based navigation handles deep link routing from the Share Extension into the correct screen flow.
-- The ResumeImportRouter coordinates the flow from deep link → profile list → profile creation. -  Resume parsing is separated from the UI layer so extracted data can be reviewed before populating the profile form.
- - Profile data is stored and synchronized using Firebase Realtime Database.
-   
-  ## Technology Stack
-
-- Swift
-- UIKit
-- Firebase Realtime Database
-- Share Extensions
-- App Groups
-- Deep Linking
-- Vision OCR
-- Contacts Framework
-- Eureka Forms
-
-  ## Project Goal
-
-This project explores how modern iOS platform features can be combined to automate real-world workflows for professional matchmakers.
+### Add / Edit Profile Form
+*(Add screenshot here)*ores how modern iOS platform features can be combined to automate real-world workflows for professional matchmakers.
 
 The focus of the app is reducing manual data entry by allowing candidate information to be imported from multiple sources such as paper resumes, messaging apps, and the iOS Contacts system.
 
