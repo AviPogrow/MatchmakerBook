@@ -2,11 +2,11 @@
 
 MatchmakerBook is an iOS application used by professional matchmakers to manage candidate profiles and automate profile creation from resumes.
 
-The system converts candidate information from multiple real-world sources into structured, searchable profiles.
+The platform converts candidate information from multiple real-world sources into structured, searchable profiles, reducing manual data entry for matchmakers.
 
-Supported input sources include **paper resumes, digital documents, and the iOS Contacts system**.
+Supported input sources include paper resumes, digital documents, and the iOS Contacts system.
 
-The app is built using **Swift, UIKit, Firebase**, and several iOS platform integrations including **Share Extensions, Vision OCR, App Groups, and deep linking**.
+The app is built with Swift, UIKit, and Firebase, and integrates several iOS platform features including Share Extensions, Vision OCR, App Groups, and deep linking.
 
 ---
 
