@@ -7,8 +7,7 @@ The app supports importing candidate information from multiple sources including
 Built using **Swift, UIKit, Firebase**, and several iOS platform integrations including **Share Extensions, Vision OCR, App Groups, and deep linking**.
 
 ---
-
-## System Architecture
+## Platform Overview
 
 ```text
                           Matchmaker Platform
