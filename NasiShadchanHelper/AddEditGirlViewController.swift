@@ -16,7 +16,10 @@ import Combine
 
 class AddEditGirlViewController: FormViewController, CNContactPickerDelegate, ResumeScanVCDelegate, GirlDraftProvider, NavigationStateProvider {
 
+    
     // MARK: - Debounced Autosave
+    
+  
 
     /// Emits a simple event whenever the form changes.
     /// We are not sending the whole draft through Combine.
@@ -32,6 +35,22 @@ class AddEditGirlViewController: FormViewController, CNContactPickerDelegate, Re
     /// True while we are programmatically restoring/applying data to the form.
     /// During restoration, we do NOT want to trigger debounced autosave.
     private var isRestoringFormState = false
+    
+    /// Runs a block while temporarily disabling row-triggered autosave.
+    /// Use this when the app is programmatically filling/restoring the form,
+    /// such as draft restore, contact import, or resume scan.
+    private func performProgrammaticFormUpdate(_ updates: () -> Void) {
+        
+        // Tell autosave logic to ignore row-change notifications
+        // while we are applying values to the form programmatically.
+        isRestoringFormState = true
+        
+        // Run all model + UI updates
+        updates()
+        
+        // Re-enable normal autosave behavior after the updates finish.
+        isRestoringFormState = false
+    }
 
     /// Tells the Combine autosave pipeline that the form changed.
     /// This does not save immediately.
@@ -97,85 +116,96 @@ class AddEditGirlViewController: FormViewController, CNContactPickerDelegate, Re
         case dateOfBirth
     }
 
-    // MARK: - DidScanAndParse (ISO version)
-    func didScanAndParseResume(dict: [String: String]) {
+    
+     // MARK: - DidScanAndParse (ISO version)
+     func didScanAndParseResume(dict: [String: String]) {
 
-        // 0) Clean inputs
-        func clean(_ key: String) -> String {
-            (dict[key] ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-        }
+         // 0) Clean inputs
+         func clean(_ key: String) -> String {
+             (dict[key] ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+         }
 
-        let firstName = clean("firstName")
-        let lastName  = clean("lastName")
-        let phone     = clean("telephone")
-        let city      = clean("city")
-        let height    = clean("height")
-        let rawDOB    = clean("dob")
+         let firstName = clean("firstName")
+         let lastName  = clean("lastName")
+         let phone     = clean("telephone")
+         let city      = clean("city")
+         let height    = clean("height")
+         let rawDOB    = clean("dob")
 
-        // -------------------------
-        // 1) UPDATE MODEL
-        // -------------------------
-        if !firstName.isEmpty { selectedShadchanGirl.girlFirstName = firstName }
-        if !lastName.isEmpty  { selectedShadchanGirl.girlLastName  = lastName }
-        if !phone.isEmpty     { selectedShadchanGirl.girlCell      = phone }
-        if !city.isEmpty      { selectedShadchanGirl.city          = city }
-        if !height.isEmpty    { selectedShadchanGirl.girlHeight    = height }
+         // Resume scanning is a programmatic form update, not manual typing.
+         // Temporarily disable row-triggered autosave while we apply parsed values.
+         performProgrammaticFormUpdate {
 
-        // -------------------------
-        // 2) UPDATE UI (Eureka rows)
-        // -------------------------
-        if let r = form.rowBy(tag: "firstName") as? TextRow, !firstName.isEmpty {
-            r.value = firstName
-            r.updateCell()
-        }
+             // -------------------------
+             // 1) UPDATE MODEL
+             // -------------------------
+             if !firstName.isEmpty { selectedShadchanGirl.girlFirstName = firstName }
+             if !lastName.isEmpty  { selectedShadchanGirl.girlLastName  = lastName }
+             if !phone.isEmpty     { selectedShadchanGirl.girlCell      = phone }
+             if !city.isEmpty      { selectedShadchanGirl.city          = city }
+             if !height.isEmpty    { selectedShadchanGirl.girlHeight    = height }
 
-        if let r = form.rowBy(tag: "lastName") as? TextRow, !lastName.isEmpty {
-            r.value = lastName
-            r.updateCell()
-        }
+             // -------------------------
+             // 2) UPDATE UI (Eureka rows)
+             // -------------------------
+             if let r = form.rowBy(tag: "firstName") as? TextRow, !firstName.isEmpty {
+                 r.value = firstName
+                 r.updateCell()
+             }
 
-        if let r = form.rowBy(tag: "cell") as? PhoneRow, !phone.isEmpty {
-            r.value = phone
-            r.updateCell()
-        }
+             if let r = form.rowBy(tag: "lastName") as? TextRow, !lastName.isEmpty {
+                 r.value = lastName
+                 r.updateCell()
+             }
 
-        if let r = form.rowBy(tag: "city") as? TextRow, !city.isEmpty {
-            r.value = city
-            r.updateCell()
-        }
+             if let r = form.rowBy(tag: "cell") as? PhoneRow, !phone.isEmpty {
+                 r.value = phone
+                 r.updateCell()
+             }
 
-        if let r = form.rowBy(tag: "height") as? ActionSheetRow<String>, !height.isEmpty {
-            r.value = height
-            r.updateCell()
-        }
+             if let r = form.rowBy(tag: "city") as? TextRow, !city.isEmpty {
+                 r.value = city
+                 r.updateCell()
+             }
 
-        // -------------------------
-        // 3) DOB -> ISO normalize -> applyDOB (handles DOB row + Age row)
-        // -------------------------
-        if !rawDOB.isEmpty,
-           let iso = ISODateOnly.normalizeToISO(rawDOB),
-           let dobDate = ISODateOnly.dateForDateRow(fromISO: iso) {
+             if let r = form.rowBy(tag: "height") as? ActionSheetRow<String>, !height.isEmpty {
+                 r.value = height
+                 r.updateCell()
+             }
 
-            // self-heal model immediately
-            selectedShadchanGirl.dobIntervalString = iso
+             // -------------------------
+             // 3) DOB -> ISO normalize -> applyDOB (handles DOB row + Age row)
+             // -------------------------
+             if !rawDOB.isEmpty,
+                let iso = ISODateOnly.normalizeToISO(rawDOB),
+                let dobDate = ISODateOnly.dateForDateRow(fromISO: iso) {
 
-            // applyDOB will:
-            // - store ISO in model (again, ok)
-            // - set DateRow value safely
-            // - update Age IntRow
-            applyDOB(dobDate)
+                 // Self-heal model immediately
+                 selectedShadchanGirl.dobIntervalString = iso
 
-            // Optional: update age tag row (if you use it)
-            let ageYears = calculateAgeYears(fromDOBISO: iso)
-            let ageTag = tagForGirlAge(ageYears)
-            if let tagRow = form.rowBy(tag: "ageTagRow") as? LabelRow {
-                tagRow.value = ageTag
-                tagRow.hidden = false
-                tagRow.updateCell()
-            }
-        }
-    }
+                 // applyDOB will:
+                 // - store ISO in model
+                 // - set DateRow value safely
+                 // - update Age IntRow
+                 applyDOB(dobDate)
 
+                 // Optional: update age tag row (if you use it)
+                 let ageYears = calculateAgeYears(fromDOBISO: iso)
+                 let ageTag = tagForGirlAge(ageYears)
+                 if let tagRow = form.rowBy(tag: "ageTagRow") as? LabelRow {
+                     tagRow.value = ageTag
+                     tagRow.hidden = false
+                     tagRow.updateCell()
+                 }
+             }
+         }
+
+         // Now that all parsed values are fully applied, emit one change event.
+         // This produces one debounced autosave instead of multiple row-triggered saves.
+         notifyDraftDidChange()
+     }
+     
+   
     func tagForGirlAge(_ age: Int) -> String {
         switch age {
         case 19...23:
@@ -767,45 +797,81 @@ class AddEditGirlViewController: FormViewController, CNContactPickerDelegate, Re
         dismiss(animated: true)
     }
 
+    
     func importContact(_ contact: CNContact) {
+        
         let firstName = "\(contact.givenName)"
         let lastName = "\(contact.familyName)"
         let phoneNumbers = contact.phoneNumbers.map({ $0.value as CNPhoneNumber })
-        let cellNumber = "\(phoneNumbers.first!.stringValue)"
+        let cellNumber = "\(phoneNumbers.first?.stringValue ?? "")"
         let emails = contact.emailAddresses.map({ $0.value as String })
-        let email = "\(emails.first!)"
-
-        let address = contact.postalAddresses.first?.value as? CNPostalAddress
+        let email = "\(emails.first ?? "")"
+        
+        let address = contact.postalAddresses.first?.value as CNPostalAddress?
         let city = "\(address?.city ?? "Not Found")"
-
+        
         let height = "\(contact.note ?? "No Note")"
-
+        
         print("imported contact: \(firstName), \(phoneNumbers), \(emails)")
         print("email: \(email), height note: \(height)")
-
-        let firstNameRow: TextRow? = form.rowBy(tag: "firstName") as? TextRow
-        if let firstNameRow = firstNameRow {
-            firstNameRow.value = firstName
-            firstNameRow.updateCell()
+        
+        // Contact import is a programmatic form update, not manual typing.
+        // Temporarily disable row-triggered autosave while we apply values.
+        performProgrammaticFormUpdate {
+            
+            // MARK: - Update the working model first
+            
+            selectedShadchanGirl.girlFirstName = firstName
+            selectedShadchanGirl.girlLastName = lastName
+            selectedShadchanGirl.girlCell = cellNumber
+            selectedShadchanGirl.city = city
+            
+            // Optional: only map these if you really want contact data to populate them
+            // selectedShadchanGirl.sendResumeEmail = email
+            // selectedShadchanGirl.girlHeight = height
+            
+            // MARK: - Update visible rows
+            
+            if let firstNameRow = form.rowBy(tag: "firstName") as? TextRow {
+                firstNameRow.value = firstName
+                firstNameRow.updateCell()
+            }
+            
+            if let secondNameRow = form.rowBy(tag: "lastName") as? TextRow {
+                secondNameRow.value = lastName
+                secondNameRow.updateCell()
+            }
+            
+            if let cellRow = form.rowBy(tag: "cell") as? PhoneRow {
+                cellRow.value = cellNumber
+                cellRow.updateCell()
+            }
+            
+            if let cityRow = form.rowBy(tag: "city") as? TextRow {
+                cityRow.value = city
+                cityRow.updateCell()
+            }
+            
+            // If you later decide to import email into the form:
+            /*
+            if let emailRow = form.rowBy(tag: "email") as? TextRow {
+                emailRow.value = email
+                emailRow.updateCell()
+            }
+            */
+            
+            // If you later decide to map contact.note into height:
+            /*
+            if let heightRow = form.rowBy(tag: "height") as? ActionSheetRow<String> {
+                heightRow.value = height
+                heightRow.updateCell()
+            }
+            */
         }
-
-        let secondNameRow: TextRow? = form.rowBy(tag: "lastName") as? TextRow
-        if let secondNameRow = secondNameRow {
-            secondNameRow.value = lastName
-            secondNameRow.updateCell()
-        }
-
-        let cellRow: PhoneRow? = form.rowBy(tag: "cell") as? PhoneRow
-        if let cellRow = cellRow {
-            cellRow.value = cellNumber
-            cellRow.updateCell()
-        }
-
-        let cityRow: TextRow? = form.rowBy(tag: "city") as? TextRow
-        if let cityRow = cityRow {
-            cityRow.value = city
-            cityRow.updateCell()
-        }
+        
+        // Now that the import is fully applied, emit one change event.
+        // This results in a single debounced autosave instead of many row-triggered saves.
+        notifyDraftDidChange()
     }
 
     @objc func showAddGirlOptions() {
@@ -985,78 +1051,87 @@ class AddEditGirlViewController: FormViewController, CNContactPickerDelegate, Re
     }
 
     func applyDraft(_ draft: GirlDraft) {
-        selectedShadchanGirl.girlFirstName = draft.girlFirstName
-        selectedShadchanGirl.girlLastName = draft.girlLastName
-        selectedShadchanGirl.girlCell = draft.girlCell
-        selectedShadchanGirl.city = draft.city
-        selectedShadchanGirl.dobIntervalString = draft.dobIntervalString
-        selectedShadchanGirl.girlHeight = draft.girlHeight
-        selectedShadchanGirl.lifePlans = draft.lifePlans
-        selectedShadchanGirl.sendResumeEmail = draft.sendResumeEmail
-        selectedShadchanGirl.sendResumeText = draft.sendResumeText
-        selectedShadchanGirl.shadchanNotesNew = draft.shadchanNotesNew
-        isEditingGirl = draft.isEditingGirl
+        
+        // Draft restoration is a programmatic form update, not a user edit.
+        // We temporarily disable row-triggered autosave while restoring.
+        performProgrammaticFormUpdate {
+            
+            // Update the working model first
+            selectedShadchanGirl.girlFirstName = draft.girlFirstName
+            selectedShadchanGirl.girlLastName = draft.girlLastName
+            selectedShadchanGirl.girlCell = draft.girlCell
+            selectedShadchanGirl.city = draft.city
+            selectedShadchanGirl.dobIntervalString = draft.dobIntervalString
+            selectedShadchanGirl.girlHeight = draft.girlHeight
+            selectedShadchanGirl.lifePlans = draft.lifePlans
+            selectedShadchanGirl.sendResumeEmail = draft.sendResumeEmail
+            selectedShadchanGirl.sendResumeText = draft.sendResumeText
+            selectedShadchanGirl.shadchanNotesNew = draft.shadchanNotesNew
+            isEditingGirl = draft.isEditingGirl
 
-        if let key = draft.girlKey {
-            selectedShadchanGirl.key = key
-        }
+            if let key = draft.girlKey {
+                selectedShadchanGirl.key = key
+            }
 
-        if let row = form.rowBy(tag: "firstName") as? TextRow {
-            row.value = draft.girlFirstName
-            row.updateCell()
-        }
-
-        if let row = form.rowBy(tag: "lastName") as? TextRow {
-            row.value = draft.girlLastName
-            row.updateCell()
-        }
-
-        if let row = form.rowBy(tag: "cell") as? PhoneRow {
-            row.value = draft.girlCell
-            row.updateCell()
-        }
-
-        if let row = form.rowBy(tag: "city") as? TextRow {
-            row.value = draft.city
-            row.updateCell()
-        }
-
-        if let row = form.rowBy(tag: "height") as? ActionSheetRow<String> {
-            row.value = draft.girlHeight
-            row.updateCell()
-        }
-
-        if let row = form.rowBy(tag: "email") as? TextRow {
-            row.value = draft.sendResumeEmail
-            row.updateCell()
-        }
-
-        if let row = form.rowBy(tag: "sendResumeText") as? PhoneRow {
-            row.value = draft.sendResumeText
-            row.updateCell()
-        }
-
-        if let row = form.rowBy(tag: "shadchanNotesNew") as? TextAreaRow {
-            row.value = draft.shadchanNotesNew
-            row.updateCell()
-        }
-
-        if let iso = ISODateOnly.normalizeToISO(draft.dobIntervalString),
-           let date = ISODateOnly.dateForDateRow(fromISO: iso) {
-            applyDOB(date)
-        }
-
-        if let section = form.sectionBy(tag: "lifePlansSection") as? SelectableSection<ImageCheckRow<String>> {
-            for baseRow in section.allRows {
-                guard let row = baseRow as? ImageCheckRow<String>,
-                      let value = row.selectableValue else { continue }
-
-                row.value = draft.lifePlans.contains(value) ? value : nil
+            // Update visible form rows to match the restored model
+            if let row = form.rowBy(tag: "firstName") as? TextRow {
+                row.value = draft.girlFirstName
                 row.updateCell()
+            }
+
+            if let row = form.rowBy(tag: "lastName") as? TextRow {
+                row.value = draft.girlLastName
+                row.updateCell()
+            }
+
+            if let row = form.rowBy(tag: "cell") as? PhoneRow {
+                row.value = draft.girlCell
+                row.updateCell()
+            }
+
+            if let row = form.rowBy(tag: "city") as? TextRow {
+                row.value = draft.city
+                row.updateCell()
+            }
+
+            if let row = form.rowBy(tag: "height") as? ActionSheetRow<String> {
+                row.value = draft.girlHeight
+                row.updateCell()
+            }
+
+            if let row = form.rowBy(tag: "email") as? TextRow {
+                row.value = draft.sendResumeEmail
+                row.updateCell()
+            }
+
+            if let row = form.rowBy(tag: "sendResumeText") as? PhoneRow {
+                row.value = draft.sendResumeText
+                row.updateCell()
+            }
+
+            if let row = form.rowBy(tag: "shadchanNotesNew") as? TextAreaRow {
+                row.value = draft.shadchanNotesNew
+                row.updateCell()
+            }
+
+            // Restore DOB and age in a synchronized way
+            if let iso = ISODateOnly.normalizeToISO(draft.dobIntervalString),
+               let date = ISODateOnly.dateForDateRow(fromISO: iso) {
+                applyDOB(date)
+            }
+
+            // Restore life plan selections
+            if let section = form.sectionBy(tag: "lifePlansSection") as? SelectableSection<ImageCheckRow<String>> {
+                for baseRow in section.allRows {
+                    guard let row = baseRow as? ImageCheckRow<String>,
+                          let value = row.selectableValue else { continue }
+
+                    row.value = draft.lifePlans.contains(value) ? value : nil
+                    row.updateCell()
+                }
             }
         }
     }
-
     func makeDraft() -> GirlDraft {
         GirlDraft(
             girlFirstName: selectedShadchanGirl.girlFirstName,
