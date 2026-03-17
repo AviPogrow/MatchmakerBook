@@ -500,6 +500,7 @@
 		18AB903A252DBA8100D9FCAB /* TabBarControllers */ = {
 			isa = PBXGroup;
 			children = (
+				5290DBB7293E3FAE004F6A04 /* HomeViewController.swift */,
 				CB9E7D622F4E192F00B43E38 /* DateISO.swift */,
 				CB3EED4E2F3E1C8D006B392B /* ProfileSearchFilterVC.swift */,
 				CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */,
@@ -513,7 +514,6 @@
 				5299A1CB2A1BD62500F653F3 /* ShadchanGirlSubcategoryVC.swift */,
 				521D605529B7763A000E91DC /* BoyCategoriesVC.swift */,
 				529D21AC2A05F70100D1500D /* BoySubCategoriesVC.swift */,
-				5290DBB7293E3FAE004F6A04 /* HomeViewController.swift */,
 				528F5E2429619AFC00DE5223 /* CategoryViewController.swift */,
 				52DB32562996CD2B00AC5F87 /* SubCategoryVC.swift */,
 				529D21AE2A06D41900D1500D /* BoyCollectionViewCell.swift */,
