@@ -65,11 +65,22 @@ class AddEditGirlViewController: FormViewController, CNContactPickerDelegate, Re
     }
 
     // MARK: - Autosave Setup
-
+    /// Autosave Architecture
+    ///
+    ///
     /// Configures the Combine pipeline responsible for debounced autosave.
     /// This listens for form change events and waits briefly before saving.
     /// If additional changes occur during the waiting period, the timer resets.
     /// This prevents saving on every keystroke.
+    ///
+    /// Row changes emit events through draftDidChangeSubject.
+    /// Events are debounced to avoid saving on every keystroke.
+    /// After the user pauses editing, we build a GirlDraft using makeDraft()
+    /// and persist it through DraftManager.
+    ///
+    /// Programmatic updates (draft restore, contact import, resume scan)
+    /// temporarily disable autosave using performProgrammaticFormUpdate().
+
     private func setupDebouncedAutosave() {
         draftDidChangeSubject
             // Wait 800ms after the most recent change before emitting an event.
