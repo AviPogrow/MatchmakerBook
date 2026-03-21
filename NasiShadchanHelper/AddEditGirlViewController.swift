@@ -17,6 +17,9 @@ class AddEditGirlViewController: FormViewController, CNContactPickerDelegate, Re
     
     // MARK: Age row and Dob row sync
     var isSyncingDOBAndAge = false
+    
+    var shouldPresentAddOptionsOnFirstAppearance = false
+    private var hasPresentedAddOptions = false
 
     // MARK: Data Model
     var selectedShadchanGirl: ShadchanGirl!
@@ -70,18 +73,18 @@ class AddEditGirlViewController: FormViewController, CNContactPickerDelegate, Re
         notifyDraftDidChange()
     }
 
-    private var hasPresentedAddOptions = false
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
         DraftManager.shared.activeDraftProvider = self
         NavigationStateManager.shared.activeProvider = self
 
-        //guard !isEditingGirl else { return }
-        //guard !hasPresentedAddOptions else { return }
+        guard shouldPresentAddOptionsOnFirstAppearance else { return }
+        guard !hasPresentedAddOptions else { return }
 
-       // hasPresentedAddOptions = true
-        //showAddGirlOptions()
+        hasPresentedAddOptions = true
+        showAddGirlOptions()
     }
 
     override func viewDidDisappear(_ animated: Bool) {

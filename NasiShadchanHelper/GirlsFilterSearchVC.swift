@@ -696,10 +696,10 @@ class GirlsFilterSearchVC: UIViewController {
     }
     
     @objc private func addGirlTapped() {
-        let vc = makeNewAddEditGirlViewController()
+        let vc = makeNewAddEditGirlViewController(showAddOptionsOnFirstAppearance: true)
         navigationController?.pushViewController(vc, animated: true)
     }
-    
+
     private func loadGirls() {
         fetchGirlsFromFirebase { [weak self] girls in
             guard let self else { return }
@@ -2071,9 +2071,13 @@ private func highlightMatches(
 }
 
 extension GirlsFilterSearchVC {
-    private func makeNewAddEditGirlViewController() -> AddEditGirlViewController {
+    
+ private func makeNewAddEditGirlViewController(
+        showAddOptionsOnFirstAppearance: Bool = false
+    ) -> AddEditGirlViewController {
         let vc = AddEditGirlViewController()
         vc.isEditingGirl = false
+        vc.shouldPresentAddOptionsOnFirstAppearance = showAddOptionsOnFirstAppearance
         vc.selectedShadchanGirl = ShadchanGirl(
             girlCell: "",
             girlLastName: "",
@@ -2096,7 +2100,7 @@ extension GirlsFilterSearchVC {
         )
         return vc
     }
-
+    
     private func handleIncomingPayload(_ payload: ResumeImportRouter.IncomingPayload) {
         resolveRawText(from: payload) { [weak self] rawText in
             guard let self else { return }
@@ -2109,10 +2113,11 @@ extension GirlsFilterSearchVC {
 
             let parsed = ResumeParser().parse(text: cleaned)
 
-            let addEditVC = self.makeNewAddEditGirlViewController()
-            addEditVC.loadViewIfNeeded()
+            let addEditVC = self.makeNewAddEditGirlViewController(showAddOptionsOnFirstAppearance: false)
 
-            self.navigationController?.pushViewController(addEditVC, animated: false)
+            self.navigationController?.pushViewController(addEditVC, animated: true)
+
+            addEditVC.loadViewIfNeeded()
 
             self.presentParsedResumeReview(parsed: parsed, rawText: cleaned, on: addEditVC)
         }
