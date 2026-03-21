@@ -985,6 +985,8 @@ extension AddEditGirlViewController {
         buildImageSections()
     }
     
+    
+    
     // MARK: Form Section Builders
     private func buildCoreProfileSections() {
         
@@ -998,17 +1000,16 @@ extension AddEditGirlViewController {
                 self.notifyDraftDidChange()
             }
         }
+        
 
         <<< TextRow() {
             $0.placeholder = "Last Name"
             $0.tag = "lastName"
-            $0.value = selectedShadchanGirl?.girlLastName ?? ""
-            $0.onChange { [unowned self] row in
-                self.selectedShadchanGirl?.girlLastName = row.value ?? ""
-                self.notifyDraftDidChange()
+            bindTextRow($0, initialValue: selectedShadchanGirl?.girlLastName ?? "") { [weak self] value in
+                self?.selectedShadchanGirl?.girlLastName = value
             }
         }
-
+        
         form +++ Section("Girls Cell")
         <<< PhoneRow() {
             $0.title = "Cell"
@@ -1022,14 +1023,11 @@ extension AddEditGirlViewController {
             }
         }
 
-        form +++ Section("Girls City")
         <<< TextRow() {
             $0.tag = "city"
             $0.placeholder = "City"
-            $0.value = selectedShadchanGirl?.city ?? ""
-            $0.onChange { [unowned self] row in
-                self.selectedShadchanGirl?.city = row.value ?? ""
-                self.notifyDraftDidChange()
+            bindTextRow($0, initialValue: selectedShadchanGirl?.city ?? "") { [weak self] value in
+                self?.selectedShadchanGirl?.city = value
             }
         }
 
@@ -1100,38 +1098,29 @@ extension AddEditGirlViewController {
     }
     
     private func buildResumeContactAndNotesSections() {
+        
         form +++ Section("Send Resume/Contact Info")
         <<< TextRow() {
             $0.tag = "email"
             $0.placeholder = "Email"
-            $0.value = selectedShadchanGirl?.sendResumeEmail
-
-            $0.onChange { [unowned self] row in
-                self.selectedShadchanGirl?.sendResumeEmail = row.value ?? ""
-                self.notifyDraftDidChange()
+            bindTextRow($0, initialValue: selectedShadchanGirl?.sendResumeEmail) { [weak self] value in
+                self?.selectedShadchanGirl?.sendResumeEmail = value
             }
         }
 
         <<< PhoneRow() {
             $0.tag = "sendResumeText"
             $0.placeholder = "Cell"
-            $0.value = selectedShadchanGirl?.sendResumeText
-
-            $0.onChange { [unowned self] row in
-                self.selectedShadchanGirl?.sendResumeText = row.value ?? ""
-                self.notifyDraftDidChange()
+            bindPhoneRow($0, initialValue: selectedShadchanGirl?.sendResumeText, fallback: "") { [weak self] value in
+                self?.selectedShadchanGirl?.sendResumeText = value
             }
         }
 
-        +++ Section("Shadchan Notes")
         <<< TextAreaRow() {
             $0.tag = "shadchanNotesNew"
-            $0.value = selectedShadchanGirl.shadchanNotesNew
-
             $0.textAreaHeight = .dynamic(initialTextViewHeight: 110)
-            $0.onChange { [unowned self] row in
-                self.selectedShadchanGirl?.shadchanNotesNew = row.value ?? ""
-                self.notifyDraftDidChange()
+            bindTextAreaRow($0, initialValue: selectedShadchanGirl.shadchanNotesNew) { [weak self] value in
+                self?.selectedShadchanGirl?.shadchanNotesNew = value
             }
         }
     }
@@ -1200,3 +1189,56 @@ extension AddEditGirlViewController {
         }
     }
 }
+extension AddEditGirlViewController {
+    
+    private func bindTextRow(
+        _ row: TextRow,
+        initialValue: String?,
+        assign: @escaping (String) -> Void
+    ) {
+        row.value = initialValue
+        row.onChange { [unowned self] changedRow in
+            assign(changedRow.value ?? "")
+            self.notifyDraftDidChange()
+        }
+    }
+    
+    private func bindPhoneRow(
+        _ row: PhoneRow,
+        initialValue: String?,
+        fallback: String = "",
+        assign: @escaping (String) -> Void
+    ) {
+        row.value = initialValue
+        row.onChange { [unowned self] changedRow in
+            assign(changedRow.value ?? fallback)
+            self.notifyDraftDidChange()
+        }
+    }
+    
+    private func bindActionSheetRow(
+        _ row: ActionSheetRow<String>,
+        initialValue: String?,
+        fallback: String = "",
+        assign: @escaping (String) -> Void
+    ) {
+        row.value = initialValue
+        row.onChange { [unowned self] changedRow in
+            assign(changedRow.value ?? fallback)
+            self.notifyDraftDidChange()
+        }
+    }
+    
+    private func bindTextAreaRow(
+        _ row: TextAreaRow,
+        initialValue: String?,
+        assign: @escaping (String) -> Void
+    ) {
+        row.value = initialValue
+        row.onChange { [unowned self] changedRow in
+            assign(changedRow.value ?? "")
+            self.notifyDraftDidChange()
+        }
+    }
+}
+
