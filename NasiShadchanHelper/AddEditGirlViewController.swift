@@ -74,6 +74,7 @@ class AddEditGirlViewController: FormViewController, CNContactPickerDelegate, Re
 
         DraftManager.shared.activeDraftProvider = self
         NavigationStateManager.shared.activeProvider = self
+        showAddGirlOptions()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -627,6 +628,93 @@ extension AddEditGirlViewController {
 
 extension AddEditGirlViewController {
     // MARK: External Data Application
+    private struct IncomingGirlData {
+        var firstName: String?
+        var lastName: String?
+        var cell: String?
+        var city: String?
+        var height: String?
+        var dobISO: String?
+        var email: String?
+        var sendResumeText: String?
+    }
+    private func applyIncomingDataToModel(_ data: IncomingGirlData) {
+        if let firstName = data.firstName, !firstName.isEmpty {
+            selectedShadchanGirl.girlFirstName = firstName
+        }
+
+        if let lastName = data.lastName, !lastName.isEmpty {
+            selectedShadchanGirl.girlLastName = lastName
+        }
+
+        if let cell = data.cell, !cell.isEmpty {
+            selectedShadchanGirl.girlCell = cell
+        }
+
+        if let city = data.city, !city.isEmpty {
+            selectedShadchanGirl.city = city
+        }
+
+        if let height = data.height, !height.isEmpty {
+            selectedShadchanGirl.girlHeight = height
+        }
+
+        if let email = data.email, !email.isEmpty {
+            selectedShadchanGirl.sendResumeEmail = email
+        }
+
+        if let sendResumeText = data.sendResumeText, !sendResumeText.isEmpty {
+            selectedShadchanGirl.sendResumeText = sendResumeText
+        }
+
+        if let dobISO = data.dobISO, !dobISO.isEmpty {
+            selectedShadchanGirl.dobIntervalString = dobISO
+        }
+    }
+    
+    private func populateFormRows(from data: IncomingGirlData) {
+        if let firstName = data.firstName, !firstName.isEmpty,
+           let row = form.rowBy(tag: "firstName") as? TextRow {
+            row.value = firstName
+            row.updateCell()
+        }
+
+        if let lastName = data.lastName, !lastName.isEmpty,
+           let row = form.rowBy(tag: "lastName") as? TextRow {
+            row.value = lastName
+            row.updateCell()
+        }
+
+        if let cell = data.cell, !cell.isEmpty,
+           let row = form.rowBy(tag: "cell") as? PhoneRow {
+            row.value = cell
+            row.updateCell()
+        }
+
+        if let city = data.city, !city.isEmpty,
+           let row = form.rowBy(tag: "city") as? TextRow {
+            row.value = city
+            row.updateCell()
+        }
+
+        if let height = data.height, !height.isEmpty,
+           let row = form.rowBy(tag: "height") as? ActionSheetRow<String> {
+            row.value = height
+            row.updateCell()
+        }
+
+        if let email = data.email, !email.isEmpty,
+           let row = form.rowBy(tag: "email") as? TextRow {
+            row.value = email
+            row.updateCell()
+        }
+
+        if let sendResumeText = data.sendResumeText, !sendResumeText.isEmpty,
+           let row = form.rowBy(tag: "sendResumeText") as? PhoneRow {
+            row.value = sendResumeText
+            row.updateCell()
+        }
+    }
     
     @objc func handleScanResumeWithDocScanner() {
         let scanVC = ResumeScanVC()
@@ -659,6 +747,40 @@ extension AddEditGirlViewController {
         updates()
     }
 
+    
+     func didScanAndParseResume(dict: [String: String]) {
+         func clean(_ key: String) -> String {
+             (dict[key] ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+         }
+
+         let rawDOB = clean("dob")
+         let normalizedDOB = ISODateOnly.normalizeToISO(rawDOB)
+
+         let data = IncomingGirlData(
+             firstName: clean("firstName"),
+             lastName: clean("lastName"),
+             cell: clean("telephone"),
+             city: clean("city"),
+             height: clean("height"),
+             dobISO: normalizedDOB,
+             email: nil,
+             sendResumeText: nil
+         )
+
+         performProgrammaticFormUpdate {
+             applyIncomingDataToModel(data)
+             populateFormRows(from: data)
+
+             if let iso = data.dobISO,
+                let dobDate = ISODateOnly.dateForDateRow(fromISO: iso) {
+                 applyDOB(dobDate)
+             }
+         }
+
+         notifyDraftDidChange()
+     }
+     
+    /*
     func didScanAndParseResume(dict: [String: String]) {
         func clean(_ key: String) -> String {
             (dict[key] ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
@@ -717,52 +839,30 @@ extension AddEditGirlViewController {
 
         notifyDraftDidChange()
     }
-    
+    */
     func importContact(_ contact: CNContact) {
-        let firstName = "\(contact.givenName)"
-        let lastName = "\(contact.familyName)"
-        let phoneNumbers = contact.phoneNumbers.map({ $0.value as CNPhoneNumber })
-        let cellNumber = "\(phoneNumbers.first?.stringValue ?? "")"
-        let emails = contact.emailAddresses.map({ $0.value as String })
-        let email = "\(emails.first ?? "")"
-        
+        let phoneNumbers = contact.phoneNumbers.map { $0.value as CNPhoneNumber }
+        let emails = contact.emailAddresses.map { $0.value as String }
         let address = contact.postalAddresses.first?.value as CNPostalAddress?
-        let city = "\(address?.city ?? "Not Found")"
-        
-        let height = "\(contact.note ?? "No Note")"
-        _ = email
-        _ = height
-        
+
+        let data = IncomingGirlData(
+            firstName: contact.givenName,
+            lastName: contact.familyName,
+            cell: phoneNumbers.first?.stringValue ?? "",
+            city: address?.city ?? "Not Found",
+            height: nil,
+            dobISO: nil,
+            email: emails.first ?? "",
+            sendResumeText: nil
+        )
+
         performProgrammaticFormUpdate {
-            selectedShadchanGirl.girlFirstName = firstName
-            selectedShadchanGirl.girlLastName = lastName
-            selectedShadchanGirl.girlCell = cellNumber
-            selectedShadchanGirl.city = city
-            
-            if let firstNameRow = form.rowBy(tag: "firstName") as? TextRow {
-                firstNameRow.value = firstName
-                firstNameRow.updateCell()
-            }
-            
-            if let secondNameRow = form.rowBy(tag: "lastName") as? TextRow {
-                secondNameRow.value = lastName
-                secondNameRow.updateCell()
-            }
-            
-            if let cellRow = form.rowBy(tag: "cell") as? PhoneRow {
-                cellRow.value = cellNumber
-                cellRow.updateCell()
-            }
-            
-            if let cityRow = form.rowBy(tag: "city") as? TextRow {
-                cityRow.value = city
-                cityRow.updateCell()
-            }
+            applyIncomingDataToModel(data)
+            populateFormRows(from: data)
         }
-        
+
         notifyDraftDidChange()
     }
-
  func applyDraft(_ draft: GirlDraft) {
      performProgrammaticFormUpdate {
          updateSelectedGirl(from: draft)
@@ -777,6 +877,7 @@ extension AddEditGirlViewController {
      }
  }
  
+    // MARK: - Draft Restoration Mapping
     
     private func updateSelectedGirl(from draft: GirlDraft) {
         selectedShadchanGirl.girlFirstName = draft.girlFirstName
@@ -795,6 +896,7 @@ extension AddEditGirlViewController {
             selectedShadchanGirl.key = key
         }
     }
+    
     private func populateFormRows(from draft: GirlDraft) {
         if let row = form.rowBy(tag: "firstName") as? TextRow {
             row.value = draft.girlFirstName
@@ -836,6 +938,7 @@ extension AddEditGirlViewController {
             row.updateCell()
         }
     }
+    
     private func populateLifePlanSection(with selectedPlans: [String]) {
         if let section = form.sectionBy(tag: "lifePlansSection") as? SelectableSection<ImageCheckRow<String>> {
             for baseRow in section.allRows {
