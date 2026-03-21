@@ -763,77 +763,87 @@ extension AddEditGirlViewController {
         notifyDraftDidChange()
     }
 
-    func applyDraft(_ draft: GirlDraft) {
-        performProgrammaticFormUpdate {
-            selectedShadchanGirl.girlFirstName = draft.girlFirstName
-            selectedShadchanGirl.girlLastName = draft.girlLastName
-            selectedShadchanGirl.girlCell = draft.girlCell
-            selectedShadchanGirl.city = draft.city
-            selectedShadchanGirl.dobIntervalString = draft.dobIntervalString
-            selectedShadchanGirl.girlHeight = draft.girlHeight
-            selectedShadchanGirl.lifePlans = draft.lifePlans
-            selectedShadchanGirl.sendResumeEmail = draft.sendResumeEmail
-            selectedShadchanGirl.sendResumeText = draft.sendResumeText
-            selectedShadchanGirl.shadchanNotesNew = draft.shadchanNotesNew
-            isEditingGirl = draft.isEditingGirl
+ func applyDraft(_ draft: GirlDraft) {
+     performProgrammaticFormUpdate {
+         updateSelectedGirl(from: draft)
+         populateFormRows(from: draft)
 
-            if let key = draft.girlKey {
-                selectedShadchanGirl.key = key
-            }
+         if let iso = ISODateOnly.normalizeToISO(draft.dobIntervalString),
+            let date = ISODateOnly.dateForDateRow(fromISO: iso) {
+             applyDOB(date)
+         }
 
-            if let row = form.rowBy(tag: "firstName") as? TextRow {
-                row.value = draft.girlFirstName
+         populateLifePlanSection(with: draft.lifePlans)
+     }
+ }
+ 
+    
+    private func updateSelectedGirl(from draft: GirlDraft) {
+        selectedShadchanGirl.girlFirstName = draft.girlFirstName
+        selectedShadchanGirl.girlLastName = draft.girlLastName
+        selectedShadchanGirl.girlCell = draft.girlCell
+        selectedShadchanGirl.city = draft.city
+        selectedShadchanGirl.dobIntervalString = draft.dobIntervalString
+        selectedShadchanGirl.girlHeight = draft.girlHeight
+        selectedShadchanGirl.lifePlans = draft.lifePlans
+        selectedShadchanGirl.sendResumeEmail = draft.sendResumeEmail
+        selectedShadchanGirl.sendResumeText = draft.sendResumeText
+        selectedShadchanGirl.shadchanNotesNew = draft.shadchanNotesNew
+        isEditingGirl = draft.isEditingGirl
+
+        if let key = draft.girlKey {
+            selectedShadchanGirl.key = key
+        }
+    }
+    private func populateFormRows(from draft: GirlDraft) {
+        if let row = form.rowBy(tag: "firstName") as? TextRow {
+            row.value = draft.girlFirstName
+            row.updateCell()
+        }
+
+        if let row = form.rowBy(tag: "lastName") as? TextRow {
+            row.value = draft.girlLastName
+            row.updateCell()
+        }
+
+        if let row = form.rowBy(tag: "cell") as? PhoneRow {
+            row.value = draft.girlCell
+            row.updateCell()
+        }
+
+        if let row = form.rowBy(tag: "city") as? TextRow {
+            row.value = draft.city
+            row.updateCell()
+        }
+
+        if let row = form.rowBy(tag: "height") as? ActionSheetRow<String> {
+            row.value = draft.girlHeight
+            row.updateCell()
+        }
+
+        if let row = form.rowBy(tag: "email") as? TextRow {
+            row.value = draft.sendResumeEmail
+            row.updateCell()
+        }
+
+        if let row = form.rowBy(tag: "sendResumeText") as? PhoneRow {
+            row.value = draft.sendResumeText
+            row.updateCell()
+        }
+
+        if let row = form.rowBy(tag: "shadchanNotesNew") as? TextAreaRow {
+            row.value = draft.shadchanNotesNew
+            row.updateCell()
+        }
+    }
+    private func populateLifePlanSection(with selectedPlans: [String]) {
+        if let section = form.sectionBy(tag: "lifePlansSection") as? SelectableSection<ImageCheckRow<String>> {
+            for baseRow in section.allRows {
+                guard let row = baseRow as? ImageCheckRow<String>,
+                      let value = row.selectableValue else { continue }
+
+                row.value = selectedPlans.contains(value) ? value : nil
                 row.updateCell()
-            }
-
-            if let row = form.rowBy(tag: "lastName") as? TextRow {
-                row.value = draft.girlLastName
-                row.updateCell()
-            }
-
-            if let row = form.rowBy(tag: "cell") as? PhoneRow {
-                row.value = draft.girlCell
-                row.updateCell()
-            }
-
-            if let row = form.rowBy(tag: "city") as? TextRow {
-                row.value = draft.city
-                row.updateCell()
-            }
-
-            if let row = form.rowBy(tag: "height") as? ActionSheetRow<String> {
-                row.value = draft.girlHeight
-                row.updateCell()
-            }
-
-            if let row = form.rowBy(tag: "email") as? TextRow {
-                row.value = draft.sendResumeEmail
-                row.updateCell()
-            }
-
-            if let row = form.rowBy(tag: "sendResumeText") as? PhoneRow {
-                row.value = draft.sendResumeText
-                row.updateCell()
-            }
-
-            if let row = form.rowBy(tag: "shadchanNotesNew") as? TextAreaRow {
-                row.value = draft.shadchanNotesNew
-                row.updateCell()
-            }
-
-            if let iso = ISODateOnly.normalizeToISO(draft.dobIntervalString),
-               let date = ISODateOnly.dateForDateRow(fromISO: iso) {
-                applyDOB(date)
-            }
-
-            if let section = form.sectionBy(tag: "lifePlansSection") as? SelectableSection<ImageCheckRow<String>> {
-                for baseRow in section.allRows {
-                    guard let row = baseRow as? ImageCheckRow<String>,
-                          let value = row.selectableValue else { continue }
-
-                    row.value = draft.lifePlans.contains(value) ? value : nil
-                    row.updateCell()
-                }
             }
         }
     }
