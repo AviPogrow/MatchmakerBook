@@ -26,7 +26,8 @@ class AddEditGirlViewController: FormViewController, CNContactPickerDelegate, Re
     var notesImageView: UIImageView!
     var resumeImageView: UIImageView!
     var girlsPhotoImageView: UIImageView!
-    var activeImageView = 1
+    
+    private var activeImageKind: ImageKind?
     
     var startingFrame: CGRect?
     var blackBackgroundView: UIView?
@@ -293,7 +294,9 @@ extension AddEditGirlViewController: UIImagePickerControllerDelegate, UINavigati
             case .profile: return "Girls Profile Image"
             }
         }
+     
 
+        
         var pickerTag: Int {
             switch self {
             case .notes: return 101
@@ -301,6 +304,15 @@ extension AddEditGirlViewController: UIImagePickerControllerDelegate, UINavigati
             case .profile: return 103
             }
         }
+        init?(pickerTag: Int) {
+            switch pickerTag {
+            case 101: self = .notes
+            case 102: self = .resume
+            case 103: self = .profile
+            default: return nil
+            }
+        }
+        
     }
     
     private func imageURL(for kind: ImageKind) -> String {
@@ -311,6 +323,17 @@ extension AddEditGirlViewController: UIImagePickerControllerDelegate, UINavigati
             return selectedShadchanGirl.resumeImageURL ?? ""
         case .profile:
             return selectedShadchanGirl.photoImageURL ?? ""
+        }
+    }
+    
+    private func imageView(for kind: ImageKind) -> UIImageView? {
+        switch kind {
+        case .notes:
+            return notesImageView
+        case .resume:
+            return resumeImageView
+        case .profile:
+            return girlsPhotoImageView
         }
     }
 
@@ -443,15 +466,10 @@ extension AddEditGirlViewController: UIImagePickerControllerDelegate, UINavigati
     }
     
     @objc func pickPhoto(_ tapGesture: UITapGestureRecognizer) {
-        if let imageView = tapGesture.view as? UIImageView {
-            if imageView.tag == 103 {
-                activeImageView = 3
-            } else if imageView.tag == 102 {
-                activeImageView = 2
-            } else if imageView.tag == 101 {
-                activeImageView = 1
-            }
-        }
+        guard let tappedView = tapGesture.view as? UIImageView,
+              let kind = ImageKind(pickerTag: tappedView.tag) else { return }
+
+        activeImageKind = kind
 
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
             showPhotoMenu()
@@ -485,33 +503,38 @@ extension AddEditGirlViewController: UIImagePickerControllerDelegate, UINavigati
         ppc?.permittedArrowDirections = .any
         present(imagePicker, animated: true)
     }
-
-    // MARK: Image Picker Delegates
+    
     func imagePickerController(
         _ picker: UIImagePickerController,
         didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
     ) {
-        let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
-        if let theImage = image {
+        let image = info[.originalImage] as? UIImage
 
-            var identifier = ""
-            if activeImageView == 3 {
-                self.girlsPhotoImageView.image = theImage
-                identifier = "photoImageURL"
-            } else if activeImageView == 2 {
-                self.resumeImageView.image = theImage
-                identifier = "resumeImageURL"
-            } else if activeImageView == 1 {
-                self.notesImageView.image = theImage
-                identifier = "notesImageURL"
-            }
-
-            self.uploadImageAndGetURLAndSetInstanceVar(image: theImage, identifier: identifier)
+        guard let selectedImage = image,
+              let kind = activeImageKind else {
+            dismiss(animated: true, completion: nil)
+            return
         }
+
+        imageView(for: kind)?.image = selectedImage
+
+        let identifier: String
+        switch kind {
+        case .notes:
+            identifier = "notesImageURL"
+        case .resume:
+            identifier = "resumeImageURL"
+        case .profile:
+            identifier = "photoImageURL"
+        }
+
+        uploadImageAndGetURLAndSetInstanceVar(image: selectedImage, identifier: identifier)
+        activeImageKind = nil
         dismiss(animated: true, completion: nil)
     }
 
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        activeImageKind = nil
         dismiss(animated: true, completion: nil)
     }
 
