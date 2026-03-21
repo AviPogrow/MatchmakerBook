@@ -77,11 +77,11 @@ class AddEditGirlViewController: FormViewController, CNContactPickerDelegate, Re
         DraftManager.shared.activeDraftProvider = self
         NavigationStateManager.shared.activeProvider = self
 
-        guard !isEditingGirl else { return }
-        guard !hasPresentedAddOptions else { return }
+        //guard !isEditingGirl else { return }
+        //guard !hasPresentedAddOptions else { return }
 
-        hasPresentedAddOptions = true
-        showAddGirlOptions()
+       // hasPresentedAddOptions = true
+        //showAddGirlOptions()
     }
 
     override func viewDidDisappear(_ animated: Bool) {

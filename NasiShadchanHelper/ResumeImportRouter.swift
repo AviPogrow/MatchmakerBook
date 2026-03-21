@@ -27,14 +27,30 @@ final class ResumeImportRouter {
         }
 
         DispatchQueue.main.async {
-            guard let window = AppDelegate.instance().window,
+            guard let window = self.activeWindow(),
                   let root = window.rootViewController else {
-                print("ResumeImportRouter: missing window/rootViewController")
+                guard retryCount < 5 else {
+                    print("ResumeImportRouter: missing active window/rootViewController after retries")
+                    return
+                }
+
+                print("ResumeImportRouter: window/root not ready yet, retrying...")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    self.handleIncomingShare(retryCount: retryCount + 1)
+                }
                 return
             }
 
             guard let tabBar = root as? UITabBarController else {
-                print("ResumeImportRouter: root is not UITabBarController")
+                guard retryCount < 5 else {
+                    print("ResumeImportRouter: root is not UITabBarController after retries")
+                    return
+                }
+
+                print("ResumeImportRouter: root is not UITabBarController yet, retrying...")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    self.handleIncomingShare(retryCount: retryCount + 1)
+                }
                 return
             }
 
@@ -70,9 +86,17 @@ final class ResumeImportRouter {
             }
 
             girlsVC.pendingImportPayload = payload
-
             print("✅ Routed share payload to existing GirlsFilterSearchVC:", payload)
         }
+    }
+
+    // MARK: - Window lookup
+
+    private func activeWindow() -> UIWindow? {
+        UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap { $0.windows }
+            .first { $0.isKeyWindow }
     }
 
     // MARK: - Navigation helpers
@@ -84,16 +108,12 @@ final class ResumeImportRouter {
         if let nav = root as? UINavigationController { return nav }
 
         if let tab = root as? UITabBarController {
-            // If the selected VC is a nav controller, use it;
-            // otherwise try its navigationController.
             return (tab.selectedViewController as? UINavigationController)
                 ?? tab.selectedViewController?.navigationController
         }
 
-        // If root is embedded in a nav controller already:
         if let nav = root.navigationController { return nav }
 
-        // Recurse into presented controllers
         if let presented = root.presentedViewController {
             return bestNav(from: presented)
         }
@@ -103,13 +123,11 @@ final class ResumeImportRouter {
 
     /// Returns the top-most visible view controller to present from.
     private func topMost(from root: UIViewController) -> UIViewController {
-        // Walk presented stack
         var top: UIViewController = root
         while let presented = top.presentedViewController {
             top = presented
         }
 
-        // Dive into containers
         if let tab = top as? UITabBarController, let selected = tab.selectedViewController {
             return topMost(from: selected)
         }
@@ -125,8 +143,11 @@ final class ResumeImportRouter {
 
     private func readPayload() -> IncomingPayload? {
         let defaults = UserDefaults(suiteName: appGroupID)
+
         guard let dict = defaults?.dictionary(forKey: payloadKey),
-              let kind = dict["kind"] as? String else { return nil }
+              let kind = dict["kind"] as? String else {
+            return nil
+        }
 
         if kind == "file",
            let path = dict["path"] as? String,

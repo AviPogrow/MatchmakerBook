@@ -240,7 +240,12 @@ import UniformTypeIdentifiers
 
 //MARK: GirlsFilterSearchVC
 class GirlsFilterSearchVC: UIViewController {
-    var pendingImportPayload: ResumeImportRouter.IncomingPayload?
+    var pendingImportPayload: ResumeImportRouter.IncomingPayload? {
+        didSet {
+            print("GirlsFilterSearchVC: pendingImportPayload set")
+            processPendingImportIfNeeded()
+        }
+    }
     
     private var chipsHeightConstraint: NSLayoutConstraint!
     private var chipsCollapsed = false
@@ -295,7 +300,7 @@ class GirlsFilterSearchVC: UIViewController {
             filtersToggleButton.setTitle(title, for: .normal)
             return
         }
-
+        
         UIView.transition(
             with: filtersToggleButton,
             duration: 0.18,
@@ -309,7 +314,7 @@ class GirlsFilterSearchVC: UIViewController {
     @objc private func toggleFiltersTapped() {
         
         setChipsCollapsed(!areChipsCollapsed, animated: true)
-    
+        
     }
     
     private lazy var resultsHeaderView: UIView = {
@@ -394,9 +399,9 @@ class GirlsFilterSearchVC: UIViewController {
         
         return sb
     }()
-
-   
-
+    
+    
+    
     private lazy var chipsCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -458,15 +463,15 @@ class GirlsFilterSearchVC: UIViewController {
         super.viewDidLoad()
         
         
-            searchBar.delegate = self
-            //startKeyboardObservers()
+        searchBar.delegate = self
+        //startKeyboardObservers()
         
         // --- UI basics ---
         view.backgroundColor = .systemBackground
         
         navigationItem.largeTitleDisplayMode = .never
         navigationItem.titleView = searchBar
-
+        
         
         
         let addButton = UIBarButtonItem(
@@ -483,7 +488,7 @@ class GirlsFilterSearchVC: UIViewController {
         )
         clearButton.isEnabled = true
         navigationItem.rightBarButtonItems = [addButton, clearButton]
-      
+        
         // --- Search bar ---
         searchBar.delegate = self
         searchBar.showsCancelButton = true
@@ -512,13 +517,30 @@ class GirlsFilterSearchVC: UIViewController {
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
-        guard let payload = pendingImportPayload else { return }
+        processPendingImportIfNeeded()
+    }
+    private func processPendingImportIfNeeded() {
+        print("GirlsFilterSearchVC: processPendingImportIfNeeded called")
+        
+        guard isViewLoaded else {
+            print("GirlsFilterSearchVC: view not loaded yet")
+            return
+        }
+        
+        guard view.window != nil else {
+            print("GirlsFilterSearchVC: view not in window yet")
+            return
+        }
+        guard let payload = pendingImportPayload else {
+            print("GirlsFilterSearchVC: no pending payload")
+            return
+        }
+        
         pendingImportPayload = nil
-
+        print("GirlsFilterSearchVC: handling payload now")
         handleIncomingPayload(payload)
     }
-    
+
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()

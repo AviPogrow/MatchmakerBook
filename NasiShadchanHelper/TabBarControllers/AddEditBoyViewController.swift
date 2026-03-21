@@ -235,7 +235,7 @@ form
     <<< ActionSheetRow<String>() {
         $0.title = "Boys Height"
         $0.selectorTitle = "Scroll For More Options"
-        $0.options = ["5'0\"","5'1\"","5'2\"","5'3\"","5'4\"","5'5\"","5'6\"","5'7\"","5'8\"","5'9\"","5'10\"","5'11\"","6'0\"","6'1\"","6'2\"","6'3\"","N/A\""]
+        $0.options = ["5'0\"","5'1\"","5'2\"","5'3\"","5'4\"","5'5\"","5'6\"","5'7\"","5'8\"","5'9\"","5'10\"","5'11\"","6'0\"","6'1\"","6'2\"","6'3\"","N/A"]
        
         $0.value = self.selectedNasiBoy?.boyHeight ?? "N/A"
         $0.onChange { [unowned self] row in
