@@ -4,8 +4,7 @@
 //
 //  Created by test on 2/12/23.
 //  Copyright © 2023 user. All rights reserved.
-//
-import UIKit
+//import UIKit
 import Eureka
 import Firebase
 import ImageRow
@@ -16,16 +15,14 @@ import Combine
 
 class AddEditGirlViewController: FormViewController, CNContactPickerDelegate, ResumeScanVCDelegate, GirlDraftProvider, NavigationStateProvider {
     
-    //MARK: Age row and Dob row sync
-    var ageRowChangingDateRow: Bool = false
+    // MARK: Age row and Dob row sync
     var isSyncingDOBAndAge = false
 
-    //MARK:  Data Model
+    // MARK: Data Model
     var selectedShadchanGirl: ShadchanGirl!
     var isEditingGirl = true
 
-    //MARK:  ImageView Handlers
-    let initialHeight = Float(200.0)
+    // MARK: ImageView Handlers
     var notesImageView: UIImageView!
     var resumeImageView: UIImageView!
     var girlsPhotoImageView: UIImageView!
@@ -34,32 +31,23 @@ class AddEditGirlViewController: FormViewController, CNContactPickerDelegate, Re
     var startingFrame: CGRect?
     var blackBackgroundView: UIView?
     var startingImageView: UIImageView?
-
     
-    var datingHistory: String = ""
-    var scanResumeButton: UIButton!
-
-    
-    
-    // MARK: - Debounced Autosave
+    // MARK: Debounced Autosave
     private let draftDidChangeSubject = PassthroughSubject<Void, Never>()
 
     /// Stores Combine subscriptions so they stay alive
     /// for as long as this view controller is alive.
     private var cancellables = Set<AnyCancellable>()
+    
+    /// Guards autosave / row-driven side effects while the controller
+    /// is applying programmatic form changes (draft restore, contact import,
+    /// resume scan, DOB/age sync, etc.)
     private var isRestoringFormState = false
     
-
-    enum ProfileFormTag: String {
-        case age
-        case dateOfBirth
-    }
-     
-    // MARK: - Lifecycle
+    // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Start listening for debounced autosave events
         setupDebouncedAutosave()
         configureScreenMode()
         configureTableView()
@@ -78,12 +66,9 @@ class AddEditGirlViewController: FormViewController, CNContactPickerDelegate, Re
             .compactMap { $0.value }
 
         selectedShadchanGirl.lifePlans = values
-
-        // Notify autosave pipeline
         notifyDraftDidChange()
     }
 
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
@@ -104,7 +89,7 @@ class AddEditGirlViewController: FormViewController, CNContactPickerDelegate, Re
     }
 }
 
-//MARK: Data Model
+// MARK: Data Model
 extension AddEditGirlViewController {
     
     func initNewNasiGirl() {
@@ -134,17 +119,14 @@ extension AddEditGirlViewController {
     }
 }
 
-//MARK:  Firebase Persistence
+// MARK: Firebase Persistence
 extension AddEditGirlViewController {
     func uploadImageAndGetURLAndSetInstanceVar(image: UIImage, identifier: String) {
         self.view.showLoadingIndicator()
 
-        print("upload image invoked - image state is \(image)")
         guard let uploadData = image.jpegData(compressionQuality: 0.1) else { return }
 
         let filename = NSUUID().uuidString
-        print("the fileName is \(filename)")
-
         let storageRef = Storage.storage().reference().child("test_girl_profile_images").child(filename)
 
         storageRef.putData(uploadData, metadata: nil) { (metadata, err) in
@@ -175,7 +157,6 @@ extension AddEditGirlViewController {
             })
         }
     }
-
 
     @objc func saveGirlToFirebase() {
         selectedShadchanGirl.dateLastUpdate = Int(Date().timeIntervalSince1970)
@@ -248,7 +229,6 @@ extension AddEditGirlViewController {
         present(alert, animated: true)
     }
 
-   
     private func presentDeleteError(_ error: Error) {
         let alert = UIAlertController(
             title: "Couldn’t Delete",
@@ -258,8 +238,6 @@ extension AddEditGirlViewController {
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
     }
-
-   
 
     private func performDelete() {
         guard isEditingGirl else { return }
@@ -293,9 +271,108 @@ extension AddEditGirlViewController {
         }
     }
 }
-extension AddEditGirlViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
-    // MARK: - Image Helper Methods
+extension AddEditGirlViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    private enum ImageKind {
+        case notes
+        case resume
+        case profile
+
+        var sectionTitle: String {
+            switch self {
+            case .notes: return "Photo of Notes"
+            case .resume: return "Photo of Resume"
+            case .profile: return "Girls Profile Image"
+            }
+        }
+
+        var pickerTag: Int {
+            switch self {
+            case .notes: return 101
+            case .resume: return 102
+            case .profile: return 103
+            }
+        }
+    }
+    
+    private func imageURL(for kind: ImageKind) -> String {
+        switch kind {
+        case .notes:
+            return selectedShadchanGirl.notesImageURL ?? ""
+        case .resume:
+            return selectedShadchanGirl.resumeImageURL ?? ""
+        case .profile:
+            return selectedShadchanGirl.photoImageURL ?? ""
+        }
+    }
+
+    private func storeImageView(_ imageView: UIImageView, for kind: ImageKind) {
+        switch kind {
+        case .notes:
+            notesImageView = imageView
+        case .resume:
+            resumeImageView = imageView
+        case .profile:
+            girlsPhotoImageView = imageView
+        }
+    }
+    
+    private func makeImageSection(for kind: ImageKind) -> Section {
+        let section = Section(kind.sectionTitle)
+
+        section <<< ViewRow<UIView>().cellSetup { [weak self] cell, row in
+            guard let self else { return }
+
+            cell.view = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 200))
+            cell.view?.backgroundColor = .white
+
+            let editTapArea = UIImageView(frame: CGRect(x: 0, y: 0, width: 150, height: 200))
+            editTapArea.isUserInteractionEnabled = true
+            editTapArea.tag = kind.pickerTag
+            editTapArea.backgroundColor = .white
+            cell.view?.addSubview(editTapArea)
+
+            editTapArea.addGestureRecognizer(
+                UITapGestureRecognizer(target: self, action: #selector(self.pickPhoto))
+            )
+
+            let previewImageView = UIImageView(frame: CGRect(x: 150, y: 0, width: 200, height: 200))
+            previewImageView.backgroundColor = UIColor.groupTableViewBackground
+            previewImageView.contentMode = .scaleAspectFit
+            previewImageView.isUserInteractionEnabled = true
+            previewImageView.layer.cornerRadius = 17
+            previewImageView.layer.borderWidth = 2.0
+            previewImageView.layer.borderColor = UIColor.red.cgColor
+            previewImageView.clipsToBounds = true
+
+            cell.view?.addSubview(previewImageView)
+            self.storeImageView(previewImageView, for: kind)
+
+            previewImageView.addGestureRecognizer(
+                UITapGestureRecognizer(target: self, action: #selector(self.handleZoomTap))
+            )
+
+            let imageURL = self.imageURL(for: kind)
+
+            if kind == .profile {
+                previewImageView.image = UIImage(named: "selected")
+            }
+
+            previewImageView.loadImageFromUrl(strUrl: imageURL, imgPlaceHolder: "")
+
+            let label = UILabel(frame: CGRect(x: 16, y: 16, width: 90, height: 90))
+            label.adjustsFontSizeToFitWidth = true
+            label.textColor = .systemBlue
+            label.text = "Edit Image"
+            cell.view?.addSubview(label)
+        }
+
+        return section
+    }
+    
+
+    // MARK: Image Helper Methods
     
     func performZoomInForStartingImageView(_ startingImageView: UIImageView) {
         self.startingImageView = startingImageView
@@ -360,7 +437,6 @@ extension AddEditGirlViewController: UIImagePickerControllerDelegate, UINavigati
     
     @objc func pickPhoto(_ tapGesture: UITapGestureRecognizer) {
         if let imageView = tapGesture.view as? UIImageView {
-            print("the imageView is \(imageView.debugDescription)")
             if imageView.tag == 103 {
                 activeImageView = 3
             } else if imageView.tag == 102 {
@@ -376,6 +452,7 @@ extension AddEditGirlViewController: UIImagePickerControllerDelegate, UINavigati
             choosePhotoFromLibrary()
         }
     }
+
     func takePhotoWithCamera() {
         let imagePicker = UIImagePickerController()
         imagePicker.sourceType = .camera
@@ -402,15 +479,13 @@ extension AddEditGirlViewController: UIImagePickerControllerDelegate, UINavigati
         present(imagePicker, animated: true)
     }
 
-    // MARK: - Image Picker Delegates
+    // MARK: Image Picker Delegates
     func imagePickerController(
         _ picker: UIImagePickerController,
         didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
     ) {
         let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
         if let theImage = image {
-
-            print("value of active image View is \(activeImageView)")
 
             var identifier = ""
             if activeImageView == 3 {
@@ -471,17 +546,11 @@ extension AddEditGirlViewController: UIImagePickerControllerDelegate, UINavigati
             present(alert, animated: true)
         }
     }
-
-    func show(image: UIImage) {
-        // placeholder
-    }
-
-   
 }
+
 extension AddEditGirlViewController {
     
-    
-    // MARK: - Autosave
+    // MARK: Autosave
     
     func makeDraft() -> GirlDraft {
         GirlDraft(
@@ -499,61 +568,30 @@ extension AddEditGirlViewController {
             girlKey: selectedShadchanGirl.key
         )
     }
+    
     private func notifyDraftDidChange() {
-        
-        // Ignore change notifications while we are restoring/applying data
-        // to avoid accidental autosaves caused by programmatic row updates.
         guard !isRestoringFormState else { return }
-        
         draftDidChangeSubject.send(())
     }
     
-    
-    
     private func setupDebouncedAutosave() {
         draftDidChangeSubject
-        // Wait 800ms after the most recent change before emitting an event.
-        // If the user keeps typing, the timer resets.
             .debounce(for: .milliseconds(800), scheduler: RunLoop.main)
-        
-        // When the debounce fires, perform the autosave.
             .sink { [weak self] in
                 self?.saveDraftFromCurrentFormState()
             }
-        
-        // Store the subscription so it stays alive
             .store(in: &cancellables)
     }
     
-    
-    
-    /// Called by the Combine debounce pipeline when the user
-    /// has paused editing the form for a short period.
-    ///
-    /// This method:
-    /// 1. Builds a GirlDraft from the current form state
-    /// 2. Asks DraftManager to persist it
-    ///
-    /// Important:
-    /// We intentionally build the draft *here* rather than inside
-    /// the row handlers so that:
-    /// - row handlers stay lightweight
-    /// - there is a single place responsible for draft creation
     private func saveDraftFromCurrentFormState() {
-        
-        // Build a draft using the existing source of truth for draft creation
         let draft = makeDraft()
-        
-        // Persist the draft using the centralized DraftManager
         DraftManager.shared.saveDraft(draft)
-        
-        // Helpful for development to confirm debounce behavior
         print("💾 Debounced autosave triggered")
     }
 }
 
 extension AddEditGirlViewController {
-    //MARK:  Import from Contacts
+    // MARK: Import from Contacts
     func importFromContacts() {
         let store = CNContactStore()
         switch CNContactStore.authorizationStatus(for: .contacts) {
@@ -585,12 +623,10 @@ extension AddEditGirlViewController {
         }))
         present(alert, animated: true)
     }
-
 }
 
-
 extension AddEditGirlViewController {
-    // MARK: - External Data Application
+    // MARK: External Data Application
     
     @objc func handleScanResumeWithDocScanner() {
         let scanVC = ResumeScanVC()
@@ -613,108 +649,76 @@ extension AddEditGirlViewController {
         present(alert, animated: true)
     }
     
+    /// Nesting-safe wrapper for programmatic form mutations.
+    /// If one programmatic update calls another, the original restore state
+    /// is preserved correctly.
     private func performProgrammaticFormUpdate(_ updates: () -> Void) {
-        
-       isRestoringFormState = true
-        
-        // Run all model + UI updates
+        let wasRestoring = isRestoringFormState
+        isRestoringFormState = true
+        defer { isRestoringFormState = wasRestoring }
         updates()
-        
-        // Re-enable normal autosave behavior after the updates finish.
-        isRestoringFormState = false
     }
 
+    func didScanAndParseResume(dict: [String: String]) {
+        func clean(_ key: String) -> String {
+            (dict[key] ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        }
 
-     func didScanAndParseResume(dict: [String: String]) {
+        let firstName = clean("firstName")
+        let lastName  = clean("lastName")
+        let phone     = clean("telephone")
+        let city      = clean("city")
+        let height    = clean("height")
+        let rawDOB    = clean("dob")
 
-       
-         func clean(_ key: String) -> String {
-             (dict[key] ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-         }
+        performProgrammaticFormUpdate {
+            if !firstName.isEmpty { selectedShadchanGirl.girlFirstName = firstName }
+            if !lastName.isEmpty  { selectedShadchanGirl.girlLastName  = lastName }
+            if !phone.isEmpty     { selectedShadchanGirl.girlCell      = phone }
+            if !city.isEmpty      { selectedShadchanGirl.city          = city }
+            if !height.isEmpty    { selectedShadchanGirl.girlHeight    = height }
 
-         let firstName = clean("firstName")
-         let lastName  = clean("lastName")
-         let phone     = clean("telephone")
-         let city      = clean("city")
-         let height    = clean("height")
-         let rawDOB    = clean("dob")
+            if let r = form.rowBy(tag: "firstName") as? TextRow, !firstName.isEmpty {
+                r.value = firstName
+                r.updateCell()
+            }
 
-         // Resume scanning is a programmatic form update, not manual typing.
-         // Temporarily disable row-triggered autosave while we apply parsed values.
-         performProgrammaticFormUpdate {
+            if let r = form.rowBy(tag: "lastName") as? TextRow, !lastName.isEmpty {
+                r.value = lastName
+                r.updateCell()
+            }
 
-             // -------------------------
-             // 1) UPDATE MODEL
-             // -------------------------
-             if !firstName.isEmpty { selectedShadchanGirl.girlFirstName = firstName }
-             if !lastName.isEmpty  { selectedShadchanGirl.girlLastName  = lastName }
-             if !phone.isEmpty     { selectedShadchanGirl.girlCell      = phone }
-             if !city.isEmpty      { selectedShadchanGirl.city          = city }
-             if !height.isEmpty    { selectedShadchanGirl.girlHeight    = height }
+            if let r = form.rowBy(tag: "cell") as? PhoneRow, !phone.isEmpty {
+                r.value = phone
+                r.updateCell()
+            }
 
-             // -------------------------
-             // 2) UPDATE UI (Eureka rows)
-             // -------------------------
-             if let r = form.rowBy(tag: "firstName") as? TextRow, !firstName.isEmpty {
-                 r.value = firstName
-                 r.updateCell()
-             }
+            if let r = form.rowBy(tag: "city") as? TextRow, !city.isEmpty {
+                r.value = city
+                r.updateCell()
+            }
 
-             if let r = form.rowBy(tag: "lastName") as? TextRow, !lastName.isEmpty {
-                 r.value = lastName
-                 r.updateCell()
-             }
+            if let r = form.rowBy(tag: "height") as? ActionSheetRow<String>, !height.isEmpty {
+                r.value = height
+                r.updateCell()
+            }
 
-             if let r = form.rowBy(tag: "cell") as? PhoneRow, !phone.isEmpty {
-                 r.value = phone
-                 r.updateCell()
-             }
+            if !rawDOB.isEmpty,
+               let iso = ISODateOnly.normalizeToISO(rawDOB),
+               let dobDate = ISODateOnly.dateForDateRow(fromISO: iso) {
 
-             if let r = form.rowBy(tag: "city") as? TextRow, !city.isEmpty {
-                 r.value = city
-                 r.updateCell()
-             }
+                selectedShadchanGirl.dobIntervalString = iso
+                applyDOB(dobDate)
 
-             if let r = form.rowBy(tag: "height") as? ActionSheetRow<String>, !height.isEmpty {
-                 r.value = height
-                 r.updateCell()
-             }
+                let ageYears = calculateAgeYears(fromDOBISO: iso)
+                _ = ageYears
+            }
+        }
 
-             // -------------------------
-             // 3) DOB -> ISO normalize -> applyDOB (handles DOB row + Age row)
-             // -------------------------
-             if !rawDOB.isEmpty,
-                let iso = ISODateOnly.normalizeToISO(rawDOB),
-                let dobDate = ISODateOnly.dateForDateRow(fromISO: iso) {
-
-                 // Self-heal model immediately
-                 selectedShadchanGirl.dobIntervalString = iso
-
-                 // applyDOB will:
-                 // - store ISO in model
-                 // - set DateRow value safely
-                 // - update Age IntRow
-                 applyDOB(dobDate)
-
-                 // Optional: update age tag row (if you use it)
-                 let ageYears = calculateAgeYears(fromDOBISO: iso)
-                 //let ageTag = tagForGirlAge(ageYears)
-                 //if let tagRow = form.rowBy(tag: "ageTagRow") as? LabelRow {
-                 //    tagRow.value = ageTag
-                 //    tagRow.hidden = false
-                 //    tagRow.updateCell()
-             //    }
-             }
-         }
-
-         // Now that all parsed values are fully applied, emit one change event.
-         // This produces one debounced autosave instead of multiple row-triggered saves.
-         notifyDraftDidChange()
-     }
-    
+        notifyDraftDidChange()
+    }
     
     func importContact(_ contact: CNContact) {
-        
         let firstName = "\(contact.givenName)"
         let lastName = "\(contact.familyName)"
         let phoneNumbers = contact.phoneNumbers.map({ $0.value as CNPhoneNumber })
@@ -726,24 +730,14 @@ extension AddEditGirlViewController {
         let city = "\(address?.city ?? "Not Found")"
         
         let height = "\(contact.note ?? "No Note")"
+        _ = email
+        _ = height
         
-        print("imported contact: \(firstName), \(phoneNumbers), \(emails)")
-        print("email: \(email), height note: \(height)")
-        
-        // Contact import is a programmatic form update, not manual typing.
-        // Temporarily disable row-triggered autosave while we apply values.
         performProgrammaticFormUpdate {
-            
             selectedShadchanGirl.girlFirstName = firstName
             selectedShadchanGirl.girlLastName = lastName
             selectedShadchanGirl.girlCell = cellNumber
             selectedShadchanGirl.city = city
-            
-            // Optional: only map these if you really want contact data to populate them
-            // selectedShadchanGirl.sendResumeEmail = email
-            // selectedShadchanGirl.girlHeight = height
-            
-            // Update visible rows
             
             if let firstNameRow = form.rowBy(tag: "firstName") as? TextRow {
                 firstNameRow.value = firstName
@@ -764,36 +758,13 @@ extension AddEditGirlViewController {
                 cityRow.value = city
                 cityRow.updateCell()
             }
-            
-            // If you later decide to import email into the form:
-            /*
-            if let emailRow = form.rowBy(tag: "email") as? TextRow {
-                emailRow.value = email
-                emailRow.updateCell()
-            }
-            */
-            
-            // If you later decide to map contact.note into height:
-            /*
-            if let heightRow = form.rowBy(tag: "height") as? ActionSheetRow<String> {
-                heightRow.value = height
-                heightRow.updateCell()
-            }
-            */
         }
         
-        // Now that the import is fully applied, emit one change event.
-        // This results in a single debounced autosave instead of many row-triggered saves.
         notifyDraftDidChange()
     }
 
     func applyDraft(_ draft: GirlDraft) {
-        
-        // Draft restoration is a programmatic form update, not a user edit.
-        // We temporarily disable row-triggered autosave while restoring.
         performProgrammaticFormUpdate {
-            
-            // Update the working model first
             selectedShadchanGirl.girlFirstName = draft.girlFirstName
             selectedShadchanGirl.girlLastName = draft.girlLastName
             selectedShadchanGirl.girlCell = draft.girlCell
@@ -810,7 +781,6 @@ extension AddEditGirlViewController {
                 selectedShadchanGirl.key = key
             }
 
-            // Update visible form rows to match the restored model
             if let row = form.rowBy(tag: "firstName") as? TextRow {
                 row.value = draft.girlFirstName
                 row.updateCell()
@@ -851,13 +821,11 @@ extension AddEditGirlViewController {
                 row.updateCell()
             }
 
-            // Restore DOB and age in a synchronized way
             if let iso = ISODateOnly.normalizeToISO(draft.dobIntervalString),
                let date = ISODateOnly.dateForDateRow(fromISO: iso) {
                 applyDOB(date)
             }
 
-            // Restore life plan selections
             if let section = form.sectionBy(tag: "lifePlansSection") as? SelectableSection<ImageCheckRow<String>> {
                 for baseRow in section.allRows {
                     guard let row = baseRow as? ImageCheckRow<String>,
@@ -869,51 +837,56 @@ extension AddEditGirlViewController {
             }
         }
     }
-    
 }
+
 extension AddEditGirlViewController {
-    // MARK: - DOB <-> Age Sync
+    // MARK: DOB <-> Age Sync
+    
     private func applyAge(_ ageEntered: Int) {
-        if isSyncingDOBAndAge { return }
+        guard !isSyncingDOBAndAge else { return }
+        
         isSyncingDOBAndAge = true
         defer { isSyncingDOBAndAge = false }
 
         let dob = dobByAddingYears(numberOfYears: ageEntered)
         let iso = ISODateOnly.iso(from: dob)
-        selectedShadchanGirl.dobIntervalString = iso
 
-        if let dobRow = form.rowBy(tag: "dob") as? DateRow {
-            dobRow.value = ISODateOnly.dateForDateRow(fromISO: iso)
-            dobRow.updateCell()
-        }
+        performProgrammaticFormUpdate {
+            selectedShadchanGirl.dobIntervalString = iso
 
-        if let ageRow = form.rowBy(tag: "age") as? IntRow {
-            ageRow.value = ageEntered
-            ageRow.updateCell()
+            if let dobRow = form.rowBy(tag: "dob") as? DateRow {
+                dobRow.value = ISODateOnly.dateForDateRow(fromISO: iso)
+                dobRow.updateCell()
+            }
+
+            if let ageRow = form.rowBy(tag: "age") as? IntRow {
+                ageRow.value = ageEntered
+                ageRow.updateCell()
+            }
         }
     }
     
-   
     private func applyDOB(_ date: Date) {
-        if isSyncingDOBAndAge { return }
+        guard !isSyncingDOBAndAge else { return }
+        
         isSyncingDOBAndAge = true
         defer { isSyncingDOBAndAge = false }
 
-        // model (store ISO)
         let iso = ISODateOnly.iso(from: date)
-        selectedShadchanGirl.dobIntervalString = iso
 
-        // DOB row UI (noon-local)
-        if let dobRow = form.rowBy(tag: "dob") as? DateRow {
-            dobRow.value = ISODateOnly.dateForDateRow(fromISO: iso)
-            dobRow.updateCell()
-        }
+        performProgrammaticFormUpdate {
+            selectedShadchanGirl.dobIntervalString = iso
 
-        // Age row UI
-        let ageYears = calculateAgeYears(fromDOBISO: iso)
-        if let ageRow = form.rowBy(tag: "age") as? IntRow {
-            ageRow.value = (ageYears > 0) ? ageYears : nil
-            ageRow.updateCell()
+            if let dobRow = form.rowBy(tag: "dob") as? DateRow {
+                dobRow.value = ISODateOnly.dateForDateRow(fromISO: iso)
+                dobRow.updateCell()
+            }
+
+            let ageYears = calculateAgeYears(fromDOBISO: iso)
+            if let ageRow = form.rowBy(tag: "age") as? IntRow {
+                ageRow.value = (ageYears > 0) ? ageYears : nil
+                ageRow.updateCell()
+            }
         }
     }
 
@@ -925,7 +898,6 @@ extension AddEditGirlViewController {
         return max(years, 0)
     }
 
-    
     func dobByAddingYears(numberOfYears age: Int) -> Date {
         let cal = Calendar.current
         let currentYear = cal.component(.year, from: Date())
@@ -938,27 +910,20 @@ extension AddEditGirlViewController {
 
         return cal.date(from: comps)!
     }
-
 }
 
 extension AddEditGirlViewController {
-    //MARK: State Restoration
+    // MARK: State Restoration
     func makeNavigationState() -> NavigationState {
-        // Capture the currently selected tab so restoration pushes
-        // AddEditGirlViewController onto the correct navigation controller.
         let tabIndex = tabBarController?.selectedIndex ?? 0
 
         return NavigationState(
             screenID: "addEditGirl",
             isEditingGirl: isEditingGirl,
-
-            // Avoid storing an empty string as if it were a real key.
             girlKey: selectedShadchanGirl.key.isEmpty ? nil : selectedShadchanGirl.key,
-
             tabIndex: tabIndex
         )
     }
-    
 }
 
 // MARK: - CNContactPickerDelegate
@@ -984,13 +949,12 @@ extension AddEditGirlViewController {
     func contactPickerDidCancel(_ picker: CNContactPickerViewController) {
         dismiss(animated: true)
     }
-   
 }
 
-//MARK: Setup Scene
+// MARK: Setup Scene
 extension AddEditGirlViewController {
     
-    private func configureScreenMode(){
+    private func configureScreenMode() {
         if isEditingGirl {
             navigationItem.title = "Edit Profile"
             let barButtonDelete = UIBarButtonItem(title: "Delete", style: .plain, target: self, action: #selector(deleteTapped))
@@ -1002,85 +966,26 @@ extension AddEditGirlViewController {
 
         } else {
             navigationItem.title = "Add Profile Details"
-            //showAddGirlOptions()
             initNewNasiGirl()
 
             let barButtonSave = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(saveGirlToFirebase))
             navigationItem.rightBarButtonItem = barButtonSave
         }
-        
     }
-    private func configureTableView(){
+    
+    private func configureTableView() {
         self.tableView.backgroundColor = UIColor.white
     }
     
-    private func buildForm(){
+    // MARK: Form Construction
+    private func buildForm() {
         buildCoreProfileSections()
         buildStatusAndLifePlansSections()
         buildResumeContactAndNotesSections()
         buildImageSections()
-       }
-    private func makeAgeRow() -> IntRow {
-        return IntRow() { row in
-            row.tag = "age"
-            row.title = "Age"
-            row.placeholder = "Enter Girl's Age"
-            
-            // Initial value from model DOB string (backward compatible)
-            let rawDOB = selectedShadchanGirl.dobIntervalString
-            if let iso = ISODateOnly.normalizeToISO(rawDOB) {
-                // self-heal in-memory (optional but recommended)
-                if iso != rawDOB {
-                    selectedShadchanGirl.dobIntervalString = iso
-                }
-                
-                let ageYears = calculateAgeYears(fromDOBISO: iso)
-                row.value = (ageYears > 0) ? ageYears : nil
-            } else {
-                row.value = nil
-            }
-            
-            row.onChange { [unowned self] row in
-                if self.isSyncingDOBAndAge { return }
-                guard let age = row.value, age > 0 else { return }
-                
-                // Applying age updates the DOB-backed model and row state
-                self.applyAge(age)
-                
-                // After the model has been updated, notify autosave
-                self.notifyDraftDidChange()
-            }
-        }
     }
     
-    private func makeDOBRow() -> DateRow {
-        DateRow() { row in
-            row.tag = "dob"
-            row.title = "Date of Birth"
-            row.maximumDate = Date()
-
-            if let iso = ISODateOnly.normalizeToISO(selectedShadchanGirl.dobIntervalString),
-               let date = ISODateOnly.dateForDateRow(fromISO: iso) {
-
-                // optional: self-heal model if it was legacy
-                selectedShadchanGirl.dobIntervalString = iso
-                row.value = date
-            } else {
-                row.value = nil
-            }
-
-            row.onChange { [unowned self] row in
-                if self.isSyncingDOBAndAge { return }
-                guard let date = row.value else { return }
-
-                // Applying DOB updates the model and synchronizes the Age row
-                self.applyDOB(date)
-
-                // Then notify the autosave pipeline
-                self.notifyDraftDidChange()
-            }
-        }
-    }
+    // MARK: Form Section Builders
     private func buildCoreProfileSections() {
         
         form +++ Section("Girls Name")
@@ -1089,11 +994,7 @@ extension AddEditGirlViewController {
             $0.placeholder = "First Name"
             $0.value = selectedShadchanGirl?.girlFirstName ?? ""
             $0.onChange { [unowned self] row in
-
-                // Keep the in-memory working model in sync with the form
                 self.selectedShadchanGirl?.girlFirstName = row.value ?? ""
-
-                // Tell the debounced autosave pipeline that the form changed
                 self.notifyDraftDidChange()
             }
         }
@@ -1103,11 +1004,7 @@ extension AddEditGirlViewController {
             $0.tag = "lastName"
             $0.value = selectedShadchanGirl?.girlLastName ?? ""
             $0.onChange { [unowned self] row in
-
-                // Update the current editing model
                 self.selectedShadchanGirl?.girlLastName = row.value ?? ""
-
-                // Trigger debounced autosave
                 self.notifyDraftDidChange()
             }
         }
@@ -1120,11 +1017,7 @@ extension AddEditGirlViewController {
             $0.value = self.selectedShadchanGirl?.girlCell ?? "N/A"
 
             $0.onChange { [unowned self] row in
-
-                // Update the model immediately as the user edits
                 self.selectedShadchanGirl?.girlCell = row.value ?? "N/A"
-
-                // Notify the autosave pipeline
                 self.notifyDraftDidChange()
             }
         }
@@ -1135,11 +1028,7 @@ extension AddEditGirlViewController {
             $0.placeholder = "City"
             $0.value = selectedShadchanGirl?.city ?? ""
             $0.onChange { [unowned self] row in
-
-                // Keep the model synced with the text field
                 self.selectedShadchanGirl?.city = row.value ?? ""
-
-                // Trigger debounced autosave
                 self.notifyDraftDidChange()
             }
         }
@@ -1150,7 +1039,6 @@ extension AddEditGirlViewController {
         form +++ Section()
         <<< makeDOBRow()
 
-        //Height
         form
         +++
         Section()
@@ -1163,34 +1051,24 @@ extension AddEditGirlViewController {
             $0.value = self.selectedShadchanGirl?.girlHeight ?? "N/A"
 
             $0.onChange { [unowned self] row in
-
-                // Update the model
                 let selected = row.value ?? "N/A"
                 self.selectedShadchanGirl?.girlHeight = selected
-
-                // Trigger debounced autosave
                 self.notifyDraftDidChange()
             }
         }
-
     }
-    private func buildStatusAndLifePlansSections(){
+    
+    private func buildStatusAndLifePlansSections() {
         form
         +++
         Section()
         <<< ActionSheetRow<String>() {
             $0.title = "Girls Status"
-            
             $0.selectorTitle = "Choose a Status"
             $0.options = ["available","engaged"]
-            
             $0.value = self.selectedShadchanGirl?.status ?? "available"
             $0.onChange { [unowned self] row in
-                
-                // Update model state
                 self.selectedShadchanGirl?.status = row.value ?? "available"
-                
-                // Trigger autosave
                 self.notifyDraftDidChange()
             }
         }
@@ -1229,11 +1107,7 @@ extension AddEditGirlViewController {
             $0.value = selectedShadchanGirl?.sendResumeEmail
 
             $0.onChange { [unowned self] row in
-
-                // Update model
                 self.selectedShadchanGirl?.sendResumeEmail = row.value ?? ""
-
-                // Notify autosave pipeline
                 self.notifyDraftDidChange()
             }
         }
@@ -1244,11 +1118,7 @@ extension AddEditGirlViewController {
             $0.value = selectedShadchanGirl?.sendResumeText
 
             $0.onChange { [unowned self] row in
-
-                // Update model
                 self.selectedShadchanGirl?.sendResumeText = row.value ?? ""
-
-                // Trigger autosave
                 self.notifyDraftDidChange()
             }
         }
@@ -1260,103 +1130,73 @@ extension AddEditGirlViewController {
 
             $0.textAreaHeight = .dynamic(initialTextViewHeight: 110)
             $0.onChange { [unowned self] row in
-
-                // Update notes in the working model
                 self.selectedShadchanGirl?.shadchanNotesNew = row.value ?? ""
-
-                // Notify autosave pipeline
                 self.notifyDraftDidChange()
             }
         }
-
-        
     }
-    private func buildImageSections(){
-        
-        form  +++ Section("Photo of Notes")
-         <<< ViewRow<UIView>()
-             .cellSetup { (cell, row) in
-                 cell.view = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 200))
-                 cell.view!.backgroundColor = UIColor.orange
-
-                 let rect = CGRect(x: 0, y: 0, width: 150, height: 200)
-                 let editImageView = UIImageView(frame: rect)
-                 editImageView.isUserInteractionEnabled = true
-                 editImageView.tag = 101
-
-                 editImageView.backgroundColor = .white
-                 cell.view!.addSubview(editImageView)
-
-                 editImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.pickPhoto)))
-                 let rect2 = CGRect(x: 150, y: 0, width: 200, height: 200)
-                 self.notesImageView = UIImageView(frame: rect2)
-                 cell.view?.addSubview(self.notesImageView)
-                 self.notesImageView.contentMode = .scaleAspectFit
-                 self.notesImageView.backgroundColor = UIColor.groupTableViewBackground
-                 self.notesImageView.isUserInteractionEnabled = true
-                 self.notesImageView.layer.cornerRadius = 17
-                 self.notesImageView.layer.borderWidth = 2.0
-                 self.notesImageView.layer.borderColor = UIColor.red.cgColor
-                 self.notesImageView.clipsToBounds = true
-
-                 let imageURL = self.selectedShadchanGirl.notesImageURL ?? ""
-
-                 cell.view!.backgroundColor = UIColor.white
-
-                 self.notesImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleZoomTap)))
-                 self.notesImageView.loadImageFromUrl(strUrl: imageURL, imgPlaceHolder: "")
-
-                 let rect3 = CGRect(x: 16, y: 16, width: 90, height: 90)
-                 let label = UILabel(frame: rect3)
-                 label.adjustsFontSizeToFitWidth
-                 label.textColor = .systemBlue
-                 label.text = "Edit Image"
-                 cell.view!.addSubview(label)
-             }
-        
-        +++ Section("Girls Profile Image")
-        <<< ViewRow<UIView>()
-            .cellSetup { (cell, row) in
-                cell.view = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 200))
-                cell.view!.backgroundColor = UIColor.orange
-
-                let rect = CGRect(x: 0, y: 0, width: 150, height: 200)
-                let editImageView = UIImageView(frame: rect)
-                editImageView.isUserInteractionEnabled = true
-                editImageView.tag = 103
-
-                editImageView.backgroundColor = .white
-                cell.view!.addSubview(editImageView)
-
-                editImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.pickPhoto)))
-                let rect2 = CGRect(x: 150, y: 0, width: 200, height: 200)
-                self.girlsPhotoImageView = UIImageView(frame: rect2)
-                cell.view?.addSubview(self.girlsPhotoImageView)
-                self.girlsPhotoImageView.backgroundColor = UIColor.groupTableViewBackground
-                self.girlsPhotoImageView.contentMode = .scaleAspectFit
-                self.girlsPhotoImageView.isUserInteractionEnabled = true
-                self.girlsPhotoImageView.layer.cornerRadius = 17
-                self.girlsPhotoImageView.clipsToBounds = true
-                self.girlsPhotoImageView.layer.borderWidth = 2.0
-                self.girlsPhotoImageView.layer.borderColor = UIColor.red.cgColor
-                let imageURL = self.selectedShadchanGirl.photoImageURL ?? ""
-
-                cell.view!.backgroundColor = UIColor.white
-                self.girlsPhotoImageView.image = UIImage(named: "selected")
-                self.girlsPhotoImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.handleZoomTap)))
-                self.girlsPhotoImageView.loadImageFromUrl(strUrl: imageURL, imgPlaceHolder: "")
-
-                let rect3 = CGRect(x: 16, y: 16, width: 90, height: 90)
-                let label = UILabel(frame: rect3)
-                label.adjustsFontSizeToFitWidth
-                label.textColor = .systemBlue
-                label.text = "Edit Image"
-                cell.view!.addSubview(label)
+    
+    private func buildImageSections() {
+        form
+            +++ makeImageSection(for: .notes)
+            +++ makeImageSection(for: .resume)
+            +++ makeImageSection(for: .profile)
+    }
+    
+       
+    
+    // MARK: Form Row Builders
+    private func makeAgeRow() -> IntRow {
+        return IntRow() { row in
+            row.tag = "age"
+            row.title = "Age"
+            row.placeholder = "Enter Girl's Age"
+            
+            let rawDOB = selectedShadchanGirl.dobIntervalString
+            if let iso = ISODateOnly.normalizeToISO(rawDOB) {
+                if iso != rawDOB {
+                    selectedShadchanGirl.dobIntervalString = iso
+                }
+                
+                let ageYears = calculateAgeYears(fromDOBISO: iso)
+                row.value = (ageYears > 0) ? ageYears : nil
+            } else {
+                row.value = nil
             }
-        
-        
-        
+            
+            row.onChange { [unowned self] row in
+                guard !self.isSyncingDOBAndAge else { return }
+                guard !self.isRestoringFormState else { return }
+                guard let age = row.value, age > 0 else { return }
+                
+                self.applyAge(age)
+                self.notifyDraftDidChange()
+            }
+        }
     }
     
-    
+    private func makeDOBRow() -> DateRow {
+        DateRow() { row in
+            row.tag = "dob"
+            row.title = "Date of Birth"
+            row.maximumDate = Date()
+
+            if let iso = ISODateOnly.normalizeToISO(selectedShadchanGirl.dobIntervalString),
+               let date = ISODateOnly.dateForDateRow(fromISO: iso) {
+                selectedShadchanGirl.dobIntervalString = iso
+                row.value = date
+            } else {
+                row.value = nil
+            }
+
+            row.onChange { [unowned self] row in
+                guard !self.isSyncingDOBAndAge else { return }
+                guard !self.isRestoringFormState else { return }
+                guard let date = row.value else { return }
+
+                self.applyDOB(date)
+                self.notifyDraftDidChange()
+            }
+        }
+    }
 }
