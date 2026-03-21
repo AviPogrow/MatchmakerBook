@@ -69,11 +69,17 @@ class AddEditGirlViewController: FormViewController, CNContactPickerDelegate, Re
         notifyDraftDidChange()
     }
 
+    private var hasPresentedAddOptions = false
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
         DraftManager.shared.activeDraftProvider = self
         NavigationStateManager.shared.activeProvider = self
+
+        guard !isEditingGirl else { return }
+        guard !hasPresentedAddOptions else { return }
+
+        hasPresentedAddOptions = true
         showAddGirlOptions()
     }
 
@@ -780,66 +786,7 @@ extension AddEditGirlViewController {
          notifyDraftDidChange()
      }
      
-    /*
-    func didScanAndParseResume(dict: [String: String]) {
-        func clean(_ key: String) -> String {
-            (dict[key] ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-        }
-
-        let firstName = clean("firstName")
-        let lastName  = clean("lastName")
-        let phone     = clean("telephone")
-        let city      = clean("city")
-        let height    = clean("height")
-        let rawDOB    = clean("dob")
-
-        performProgrammaticFormUpdate {
-            if !firstName.isEmpty { selectedShadchanGirl.girlFirstName = firstName }
-            if !lastName.isEmpty  { selectedShadchanGirl.girlLastName  = lastName }
-            if !phone.isEmpty     { selectedShadchanGirl.girlCell      = phone }
-            if !city.isEmpty      { selectedShadchanGirl.city          = city }
-            if !height.isEmpty    { selectedShadchanGirl.girlHeight    = height }
-
-            if let r = form.rowBy(tag: "firstName") as? TextRow, !firstName.isEmpty {
-                r.value = firstName
-                r.updateCell()
-            }
-
-            if let r = form.rowBy(tag: "lastName") as? TextRow, !lastName.isEmpty {
-                r.value = lastName
-                r.updateCell()
-            }
-
-            if let r = form.rowBy(tag: "cell") as? PhoneRow, !phone.isEmpty {
-                r.value = phone
-                r.updateCell()
-            }
-
-            if let r = form.rowBy(tag: "city") as? TextRow, !city.isEmpty {
-                r.value = city
-                r.updateCell()
-            }
-
-            if let r = form.rowBy(tag: "height") as? ActionSheetRow<String>, !height.isEmpty {
-                r.value = height
-                r.updateCell()
-            }
-
-            if !rawDOB.isEmpty,
-               let iso = ISODateOnly.normalizeToISO(rawDOB),
-               let dobDate = ISODateOnly.dateForDateRow(fromISO: iso) {
-
-                selectedShadchanGirl.dobIntervalString = iso
-                applyDOB(dobDate)
-
-                let ageYears = calculateAgeYears(fromDOBISO: iso)
-                _ = ageYears
-            }
-        }
-
-        notifyDraftDidChange()
-    }
-    */
+   
     func importContact(_ contact: CNContact) {
         let phoneNumbers = contact.phoneNumbers.map { $0.value as CNPhoneNumber }
         let emails = contact.emailAddresses.map { $0.value as String }
@@ -1107,13 +1054,10 @@ extension AddEditGirlViewController {
         <<< TextRow() {
             $0.tag = "firstName"
             $0.placeholder = "First Name"
-            $0.value = selectedShadchanGirl?.girlFirstName ?? ""
-            $0.onChange { [unowned self] row in
-                self.selectedShadchanGirl?.girlFirstName = row.value ?? ""
-                self.notifyDraftDidChange()
+            bindTextRow($0, initialValue: selectedShadchanGirl?.girlFirstName ?? "") { [weak self] value in
+                self?.selectedShadchanGirl?.girlFirstName = value
             }
         }
-        
 
         <<< TextRow() {
             $0.placeholder = "Last Name"
@@ -1128,11 +1072,8 @@ extension AddEditGirlViewController {
             $0.title = "Cell"
             $0.tag = "cell"
             $0.placeholder = "Add numbers here"
-            $0.value = self.selectedShadchanGirl?.girlCell ?? "N/A"
-
-            $0.onChange { [unowned self] row in
-                self.selectedShadchanGirl?.girlCell = row.value ?? "N/A"
-                self.notifyDraftDidChange()
+            bindPhoneRow($0, initialValue: selectedShadchanGirl?.girlCell ?? "N/A", fallback: "N/A") { [weak self] value in
+                self?.selectedShadchanGirl?.girlCell = value
             }
         }
 
@@ -1150,25 +1091,18 @@ extension AddEditGirlViewController {
         form +++ Section()
         <<< makeDOBRow()
 
-        form
-        +++
-        Section()
+        form +++ Section()
         <<< ActionSheetRow<String>() {
             $0.tag = "height"
             $0.title = "Girls Height"
             $0.selectorTitle = "Scroll For More Options"
-            $0.options = ["4'10\"","4'11\"","5'0\"","5'1\"","5'2\"","5'3\"","5'4\"","5'5\"","5'6\"","5'7\"","5'8\"","5'9\"","5'10\"","5'11\"","6'0\"","6'1\"","6'2\"","6'3\"","N/A\""]
+            $0.options = ["4'10\"","4'11\"","5'0\"","5'1\"","5'2\"","5'3\"","5'4\"","5'5\"","5'6\"","5'7\"","5'8\"","5'9\"","5'10\"","5'11\"","6'0\"","6'1\"","6'2\"","6'3\"","N/A"]
 
-            $0.value = self.selectedShadchanGirl?.girlHeight ?? "N/A"
-
-            $0.onChange { [unowned self] row in
-                let selected = row.value ?? "N/A"
-                self.selectedShadchanGirl?.girlHeight = selected
-                self.notifyDraftDidChange()
+            bindActionSheetRow($0, initialValue: selectedShadchanGirl?.girlHeight ?? "N/A", fallback: "N/A") { [weak self] value in
+                self?.selectedShadchanGirl?.girlHeight = value
             }
         }
     }
-    
     private func buildStatusAndLifePlansSections() {
         form
         +++
