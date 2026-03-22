@@ -738,56 +738,16 @@ class GirlsFilterSearchVC: UIViewController {
     }
 
  private func fetchGirlsFromFirebase(completion: @escaping ([ShadchanGirl]) -> Void) {
-     guard let uid = Auth.auth().currentUser?.uid else {
-         DispatchQueue.main.async { completion([]) }
-         return
+     GirlRepository.shared.fetchAll { [weak self] girls in
+         guard let self else { return }
+
+         self.girlsByKey = Dictionary(uniqueKeysWithValues: girls.map { ($0.key, $0) })
+         self.allResults = girls.map { self.makeResult(from: $0) }
+
+         self.applyFilters()
      }
-
-     let ref = Database.database().reference()
-         .child("PrivateGirlsList")
-         .child(uid)
-
-     ref.observeSingleEvent(of: .value) { snapshot in
-         var girls: [ShadchanGirl] = []
-         girls.reserveCapacity(Int(snapshot.childrenCount))
-
-         for child in snapshot.children {
-             guard let snap = child as? DataSnapshot else { continue }
-
-             let g = ShadchanGirl(snapshot: snap)
-
-             // Normalize + de-dupe legacy categories/lifePlans
-             let normalized = LifePlanNormalizer.normalizeArray(g.categories)
-             g.categories = Array(NSOrderedSet(array: normalized)) as? [String] ?? normalized
-
-             girls.append(g)
-         }
-
-         // Stable, case-insensitive sorting
-         girls.sort {
-             if $0.dateLastUpdate != $1.dateLastUpdate {
-                 return $0.dateLastUpdate > $1.dateLastUpdate
-             }
-
-             let aFirst = $0.girlFirstName.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-             let bFirst = $1.girlFirstName.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-             if aFirst != bFirst { return aFirst < bFirst }
-
-             let aLast = $0.girlLastName.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-             let bLast = $1.girlLastName.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-             return aLast < bLast
-         }
-
-         DispatchQueue.main.async {
-             completion(girls)
-         }
-     }
- }
-
- 
-   
-
-    
+    }
+     
     private func makeMockProfile(from g: ShadchanGirl) -> MockProfile {
         let ageDouble = g.calculateAgeFrom(dobString: g.dobIntervalString)
         let ageInt = ageDouble > 0 ? Int(ageDouble.rounded()) : 0

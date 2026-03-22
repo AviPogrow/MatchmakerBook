@@ -212,52 +212,26 @@ extension AddEditGirlViewController {
     }
 
     func saveSelectedShadchanGirlToFB(completion: @escaping (Result<Void, Error>) -> Void) {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
+        GirlRepository.shared.save(selectedShadchanGirl) { [weak self] result in
+            guard let self else { return }
 
-        let dict = selectedShadchanGirl.toDictionary()
+            switch result {
+            case .success:
+                DraftManager.shared.clearDraft()
+                NavigationStateManager.shared.clear()
 
-        if let existingRef = selectedShadchanGirl.ref {
-            existingRef.updateChildValues(dict) { error, _ in
-                if let error { completion(.failure(error)) }
-                else { completion(.success(())) }
-            }
-        } else {
-            let baseRef = Database.database().reference()
-                .child("PrivateGirlsList")
-                .child(uid)
+                if self.presentingViewController != nil {
+                    self.dismiss(animated: true)
+                } else {
+                    self.navigationController?.popToRootViewController(animated: true)
+                }
 
-            let newRef = baseRef.childByAutoId()
-            selectedShadchanGirl.ref = newRef
-            selectedShadchanGirl.key = newRef.key ?? ""
-
-            newRef.setValue(dict) { error, _ in
-                if let error { completion(.failure(error)) }
-                else { completion(.success(())) }
+            case .failure(let error):
+                print("Save failed:", error)
             }
         }
     }
     
-    @objc private func deleteTapped() {
-        let name = "\(selectedShadchanGirl.girlFirstName) \(selectedShadchanGirl.girlLastName)"
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-
-        let message = name.isEmpty
-            ? "This will permanently remove this record. This action cannot be undone."
-            : "This will permanently delete \(name). This action cannot be undone."
-
-        let alert = UIAlertController(
-            title: "Delete Girl?",
-            message: message,
-            preferredStyle: .alert
-        )
-
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
-            self?.performDelete()
-        })
-
-        present(alert, animated: true)
-    }
 
     private func presentDeleteError(_ error: Error) {
         let alert = UIAlertController(
@@ -269,37 +243,54 @@ extension AddEditGirlViewController {
         present(alert, animated: true)
     }
 
-    private func performDelete() {
-        guard isEditingGirl else { return }
+    
+    @objc private func deleteTapped() {
+        let alert = UIAlertController(
+            title: "Delete Profile",
+            message: "Are you sure you want to delete this girl?",
+            preferredStyle: .alert
+        )
 
-        if let ref = selectedShadchanGirl.ref {
-            ref.removeValue { [weak self] error, _ in
-                guard let self else { return }
-                if let error {
-                    self.presentDeleteError(error)
-                    return
-                }
-                self.navigationController?.popToRootViewController(animated: true)
-            }
-            return
-        }
-
-        guard let uid = Auth.auth().currentUser?.uid, !selectedShadchanGirl.key.isEmpty else { return }
-
-        let ref = Database.database().reference()
-            .child("PrivateGirlsList")
-            .child(uid)
-            .child(selectedShadchanGirl.key)
-
-        ref.removeValue { [weak self] error, _ in
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel)
+        let delete = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
             guard let self else { return }
-            if let error {
-                self.presentDeleteError(error)
-                return
+
+            GirlRepository.shared.delete(self.selectedShadchanGirl) { [weak self] result in
+                guard let self else { return }
+
+                switch result {
+                case .success:
+                    DispatchQueue.main.async {
+                        DraftManager.shared.clearDraft()
+                        NavigationStateManager.shared.clear()
+
+                        if self.presentingViewController != nil {
+                            self.dismiss(animated: true)
+                        } else {
+                            self.navigationController?.popToRootViewController(animated: true)
+                        }
+                    }
+
+                case .failure(let error):
+                    DispatchQueue.main.async {
+                        let errorAlert = UIAlertController(
+                            title: "Delete Failed",
+                            message: error.localizedDescription,
+                            preferredStyle: .alert
+                        )
+                        errorAlert.addAction(UIAlertAction(title: "OK", style: .default))
+                        self.present(errorAlert, animated: true)
+                    }
+                }
             }
-            self.navigationController?.popToRootViewController(animated: true)
         }
+
+        alert.addAction(cancel)
+        alert.addAction(delete)
+
+        present(alert, animated: true)
     }
+    
 }
 
 extension AddEditGirlViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
