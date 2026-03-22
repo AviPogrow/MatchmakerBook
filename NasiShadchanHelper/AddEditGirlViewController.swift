@@ -15,6 +15,13 @@ import Combine
 
 class AddEditGirlViewController: FormViewController, CNContactPickerDelegate, ResumeScanVCDelegate, GirlDraftProvider, NavigationStateProvider {
     
+    private var notesImageUploadSpinner: UIActivityIndicatorView?
+    private var resumeImageUploadSpinner: UIActivityIndicatorView?
+    private var profileImageUploadSpinner: UIActivityIndicatorView?
+    
+    private var saveButton: UIBarButtonItem?
+    private var pendingImageUploadCount = 0
+    
     // MARK: Age row and Dob row sync
     var isSyncingDOBAndAge = false
     
@@ -132,44 +139,56 @@ extension AddEditGirlViewController {
 
 // MARK: Firebase Persistence
 extension AddEditGirlViewController {
-    func uploadImageAndGetURLAndSetInstanceVar(image: UIImage, identifier: String) {
-        self.view.showLoadingIndicator()
+   
+ private   func uploadImageAndStoreURL(image: UIImage, kind: ImageKind, identifier: String) {
+        pendingImageUploadCount += 1
+        updateSaveButtonState()
+        setUploading(true, for: kind)
+        view.showLoadingIndicator()
 
-        guard let uploadData = image.jpegData(compressionQuality: 0.1) else { return }
+        ImageUploadService.shared.uploadImage(image) { [weak self] result in
+            guard let self else { return }
 
-        let filename = NSUUID().uuidString
-        let storageRef = Storage.storage().reference().child("test_girl_profile_images").child(filename)
+            defer {
+                self.pendingImageUploadCount = max(0, self.pendingImageUploadCount - 1)
+                self.updateSaveButtonState()
+                self.setUploading(false, for: kind)
 
-        storageRef.putData(uploadData, metadata: nil) { (metadata, err) in
-            if let err = err {
-                print("Failed to upload post image:", err)
-                return
+                if self.pendingImageUploadCount == 0 {
+                    self.view.hideLoadingIndicator()
+                }
             }
 
-            storageRef.downloadURL(completion: { (downloadURL, err) in
-                if let err = err {
-                    print("Failed to fetch downloadURL:", err)
-                    return
-                }
-
-                guard let imageUrl = downloadURL?.absoluteString else { return }
-
-                print("Successfully uploaded post image:", imageUrl)
-
+            switch result {
+            case .success(let imageURL):
                 if identifier == "notesImageURL" {
-                    self.selectedShadchanGirl.notesImageURL = imageUrl
+                    self.selectedShadchanGirl.notesImageURL = imageURL
                 } else if identifier == "resumeImageURL" {
-                    self.selectedShadchanGirl.resumeImageURL = imageUrl
+                    self.selectedShadchanGirl.resumeImageURL = imageURL
                 } else if identifier == "photoImageURL" {
-                    self.selectedShadchanGirl.photoImageURL = imageUrl
+                    self.selectedShadchanGirl.photoImageURL = imageURL
                 }
 
-                self.view.hideLoadingIndicator()
-            })
+                self.notifyDraftDidChange()
+
+            case .failure(let error):
+                print("Image upload failed:", error)
+            }
         }
     }
-
+    
     @objc func saveGirlToFirebase() {
+        guard pendingImageUploadCount == 0 else {
+            let alert = UIAlertController(
+                title: "Images Still Uploading",
+                message: "Please wait for image uploads to finish before saving.",
+                preferredStyle: .alert
+            )
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            present(alert, animated: true)
+            return
+        }
+
         selectedShadchanGirl.dateLastUpdate = Int(Date().timeIntervalSince1970)
 
         saveSelectedShadchanGirlToFB { [weak self] result in
@@ -318,6 +337,29 @@ extension AddEditGirlViewController: UIImagePickerControllerDelegate, UINavigati
         
     }
     
+    private func uploadSpinner(for kind: ImageKind) -> UIActivityIndicatorView? {
+        switch kind {
+        case .notes:
+            return notesImageUploadSpinner
+        case .resume:
+            return resumeImageUploadSpinner
+        case .profile:
+            return profileImageUploadSpinner
+        }
+    }
+
+    private func storeUploadSpinner(_ spinner: UIActivityIndicatorView, for kind: ImageKind) {
+        switch kind {
+        case .notes:
+            notesImageUploadSpinner = spinner
+        case .resume:
+            resumeImageUploadSpinner = spinner
+        case .profile:
+            profileImageUploadSpinner = spinner
+        }
+    }
+    
+    
     private func imageURL(for kind: ImageKind) -> String {
         switch kind {
         case .notes:
@@ -326,6 +368,18 @@ extension AddEditGirlViewController: UIImagePickerControllerDelegate, UINavigati
             return selectedShadchanGirl.resumeImageURL ?? ""
         case .profile:
             return selectedShadchanGirl.photoImageURL ?? ""
+        }
+    }
+    private func setUploading(_ isUploading: Bool, for kind: ImageKind) {
+        guard let spinner = uploadSpinner(for: kind),
+              let imageView = imageView(for: kind) else { return }
+
+        imageView.alpha = isUploading ? 0.7 : 1.0
+
+        if isUploading {
+            spinner.startAnimating()
+        } else {
+            spinner.stopAnimating()
         }
     }
     
@@ -381,6 +435,18 @@ extension AddEditGirlViewController: UIImagePickerControllerDelegate, UINavigati
 
             cell.view?.addSubview(previewImageView)
             self.storeImageView(previewImageView, for: kind)
+            
+            let spinner = UIActivityIndicatorView(style: .medium)
+            spinner.translatesAutoresizingMaskIntoConstraints = false
+            spinner.hidesWhenStopped = true
+            previewImageView.addSubview(spinner)
+
+            NSLayoutConstraint.activate([
+                spinner.centerXAnchor.constraint(equalTo: previewImageView.centerXAnchor),
+                spinner.centerYAnchor.constraint(equalTo: previewImageView.centerYAnchor)
+            ])
+
+            self.storeUploadSpinner(spinner, for: kind)
 
             previewImageView.addGestureRecognizer(
                 UITapGestureRecognizer(target: self, action: #selector(self.handleZoomTap))
@@ -531,7 +597,8 @@ extension AddEditGirlViewController: UIImagePickerControllerDelegate, UINavigati
             identifier = "photoImageURL"
         }
 
-        uploadImageAndGetURLAndSetInstanceVar(image: selectedImage, identifier: identifier)
+        uploadImageAndStoreURL(image: selectedImage, kind: kind, identifier: identifier)
+        
         activeImageKind = nil
         dismiss(animated: true, completion: nil)
     }
@@ -1039,24 +1106,50 @@ extension AddEditGirlViewController {
 
 // MARK: Setup Scene
 extension AddEditGirlViewController {
-    
     private func configureScreenMode() {
         if isEditingGirl {
             navigationItem.title = "Edit Profile"
-            let barButtonDelete = UIBarButtonItem(title: "Delete", style: .plain, target: self, action: #selector(deleteTapped))
-            barButtonDelete.tintColor = UIColor.red
 
-            let barButtonSave = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(saveGirlToFirebase))
+            let barButtonDelete = UIBarButtonItem(
+                title: "Delete",
+                style: .plain,
+                target: self,
+                action: #selector(deleteTapped)
+            )
+            barButtonDelete.tintColor = .red
 
+            let barButtonSave = UIBarButtonItem(
+                title: "Save",
+                style: .plain,
+                target: self,
+                action: #selector(saveGirlToFirebase)
+            )
+
+            saveButton = barButtonSave
             navigationItem.rightBarButtonItems = [barButtonSave, barButtonDelete]
 
         } else {
             navigationItem.title = "Add Profile Details"
             initNewNasiGirl()
 
-            let barButtonSave = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(saveGirlToFirebase))
+            let barButtonSave = UIBarButtonItem(
+                title: "Save",
+                style: .plain,
+                target: self,
+                action: #selector(saveGirlToFirebase)
+            )
+
+            saveButton = barButtonSave
             navigationItem.rightBarButtonItem = barButtonSave
         }
+
+        updateSaveButtonState()
+    }
+    private func updateSaveButtonState() {
+        let isUploading = pendingImageUploadCount > 0
+
+        saveButton?.isEnabled = !isUploading
+        saveButton?.title = isUploading ? "Uploading..." : "Save"
     }
     
     private func configureTableView() {
