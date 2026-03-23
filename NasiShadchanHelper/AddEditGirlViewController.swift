@@ -458,14 +458,16 @@ extension AddEditGirlViewController: UIImagePickerControllerDelegate, UINavigati
 
         let zoomingImageView = UIImageView(frame: startingFrame!)
         zoomingImageView.backgroundColor = UIColor.groupTableViewBackground
-        self.girlsPhotoImageView.layer.cornerRadius = 17
-        self.girlsPhotoImageView.clipsToBounds = true
-        self.girlsPhotoImageView.layer.borderWidth = 2.0
-        self.girlsPhotoImageView.layer.borderColor = UIColor.red.cgColor
+        zoomingImageView.layer.cornerRadius = 17
+        zoomingImageView.clipsToBounds = true
+        zoomingImageView.layer.borderWidth = 2.0
+        zoomingImageView.layer.borderColor = UIColor.red.cgColor
         zoomingImageView.image = startingImageView.image
         zoomingImageView.isUserInteractionEnabled = true
         zoomingImageView.contentMode = .scaleAspectFit
-        zoomingImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomOut)))
+        zoomingImageView.addGestureRecognizer(
+            UITapGestureRecognizer(target: self, action: #selector(handleZoomOut))
+        )
 
         let pinchGesture = UIPinchGestureRecognizer()
         zoomingImageView.addGestureRecognizer(pinchGesture)
@@ -478,15 +480,21 @@ extension AddEditGirlViewController: UIImagePickerControllerDelegate, UINavigati
 
             keyWindow.addSubview(zoomingImageView)
 
-            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-                self.blackBackgroundView?.alpha = 1
+            UIView.animate(
+                withDuration: 0.5,
+                delay: 0,
+                usingSpringWithDamping: 1,
+                initialSpringVelocity: 1,
+                options: .curveEaseOut,
+                animations: {
+                    self.blackBackgroundView?.alpha = 1
 
-                let height = self.startingFrame!.height / self.startingFrame!.width * keyWindow.frame.width
-                zoomingImageView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: height)
-                zoomingImageView.center = keyWindow.center
-            }, completion: { _ in
-                // do nothing
-            })
+                    let height = self.startingFrame!.height / self.startingFrame!.width * keyWindow.frame.width
+                    zoomingImageView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: height)
+                    zoomingImageView.center = keyWindow.center
+                },
+                completion: nil
+            )
         }
     }
 
