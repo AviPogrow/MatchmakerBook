@@ -532,7 +532,7 @@ extension AddEditGirlViewController: UIImagePickerControllerDelegate, UINavigati
         imagePicker.allowsEditing = false
 
         let ppc = imagePicker.popoverPresentationController
-        ppc?.sourceView = self.girlsPhotoImageView
+        ppc?.sourceView = currentSourceImageView()
         ppc?.permittedArrowDirections = .any
         present(imagePicker, animated: true, completion: nil)
     }
@@ -545,7 +545,7 @@ extension AddEditGirlViewController: UIImagePickerControllerDelegate, UINavigati
         imagePicker.allowsEditing = false
 
         let ppc = imagePicker.popoverPresentationController
-        ppc?.sourceView = self.girlsPhotoImageView
+        ppc?.sourceView = currentSourceImageView()
         ppc?.permittedArrowDirections = .any
         present(imagePicker, animated: true)
     }
@@ -605,12 +605,17 @@ extension AddEditGirlViewController: UIImagePickerControllerDelegate, UINavigati
         alert.addAction(actLibrary)
 
         if let popView = alert.popoverPresentationController {
-            popView.sourceView = self.girlsPhotoImageView
-            popView.sourceRect = self.girlsPhotoImageView.frame
+            let sourceView = currentSourceImageView()
+            popView.sourceView = sourceView
+            popView.sourceRect = sourceView?.bounds ?? .zero
             present(alert, animated: true, completion: nil)
         } else {
             present(alert, animated: true)
         }
+    }
+    private func currentSourceImageView() -> UIImageView? {
+        guard let kind = activeImageKind else { return girlsPhotoImageView }
+        return imageView(for: kind)
     }
 }
 
