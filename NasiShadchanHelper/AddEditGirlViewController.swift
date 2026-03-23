@@ -217,24 +217,7 @@ extension AddEditGirlViewController {
     }
 
     func saveSelectedShadchanGirlToFB(completion: @escaping (Result<Void, Error>) -> Void) {
-        GirlRepository.shared.save(selectedShadchanGirl) { [weak self] result in
-            guard let self else { return }
-
-            switch result {
-            case .success:
-                DraftManager.shared.clearDraft()
-                NavigationStateManager.shared.clear()
-
-                if self.presentingViewController != nil {
-                    self.dismiss(animated: true)
-                } else {
-                    self.navigationController?.popToRootViewController(animated: true)
-                }
-
-            case .failure(let error):
-                print("Save failed:", error)
-            }
-        }
+        GirlRepository.shared.save(selectedShadchanGirl, completion: completion)
     }
     
 
