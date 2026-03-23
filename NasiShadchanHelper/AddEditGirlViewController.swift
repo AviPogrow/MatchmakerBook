@@ -140,7 +140,7 @@ extension AddEditGirlViewController {
 // MARK: Firebase Persistence
 extension AddEditGirlViewController {
    
- private   func uploadImageAndStoreURL(image: UIImage, kind: ImageKind, identifier: String) {
+    private func uploadImageAndStoreURL(image: UIImage, kind: ImageKind) {
         pendingImageUploadCount += 1
         updateSaveButtonState()
         setUploading(true, for: kind)
@@ -161,19 +161,24 @@ extension AddEditGirlViewController {
 
             switch result {
             case .success(let imageURL):
-                if identifier == "notesImageURL" {
-                    self.selectedShadchanGirl.notesImageURL = imageURL
-                } else if identifier == "resumeImageURL" {
-                    self.selectedShadchanGirl.resumeImageURL = imageURL
-                } else if identifier == "photoImageURL" {
-                    self.selectedShadchanGirl.photoImageURL = imageURL
-                }
-
-                self.notifyDraftDidChange()
+              
+            self.setImageURL(imageURL, for: kind)
+            self.notifyDraftDidChange()
 
             case .failure(let error):
                 print("Image upload failed:", error)
             }
+        }
+    }
+    
+    private func setImageURL(_ url: String, for kind: ImageKind) {
+        switch kind {
+        case .notes:
+            selectedShadchanGirl.notesImageURL = url
+        case .resume:
+            selectedShadchanGirl.resumeImageURL = url
+        case .profile:
+            selectedShadchanGirl.photoImageURL = url
         }
     }
     
@@ -308,8 +313,6 @@ extension AddEditGirlViewController: UIImagePickerControllerDelegate, UINavigati
             }
         }
      
-
-        
         var pickerTag: Int {
             switch self {
             case .notes: return 101
@@ -570,28 +573,17 @@ extension AddEditGirlViewController: UIImagePickerControllerDelegate, UINavigati
     ) {
         let image = info[.originalImage] as? UIImage
 
-        guard let selectedImage = image,
-              let kind = activeImageKind else {
-            dismiss(animated: true, completion: nil)
-            return
-        }
+           guard let selectedImage = image,
+                 let kind = activeImageKind else {
+               dismiss(animated: true, completion: nil)
+               return
+           }
 
-        imageView(for: kind)?.image = selectedImage
+           imageView(for: kind)?.image = selectedImage
+           uploadImageAndStoreURL(image: selectedImage, kind: kind)
 
-        let identifier: String
-        switch kind {
-        case .notes:
-            identifier = "notesImageURL"
-        case .resume:
-            identifier = "resumeImageURL"
-        case .profile:
-            identifier = "photoImageURL"
-        }
-
-        uploadImageAndStoreURL(image: selectedImage, kind: kind, identifier: identifier)
-        
-        activeImageKind = nil
-        dismiss(animated: true, completion: nil)
+           activeImageKind = nil
+           dismiss(animated: true, completion: nil)
     }
 
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
