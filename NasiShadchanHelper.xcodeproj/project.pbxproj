@@ -705,6 +705,81 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		CB60A8102F71946600B209A3 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				CB60A8172F71C66B00B209A3 /* ResumeImport */,
+				CB60A8162F71C64800B209A3 /* GirlSearch */,
+				CB60A8152F71C5F400B209A3 /* AddEditGirl */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		CB60A8112F7194A500B209A3 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				CB60A80A2F703D8800B209A3 /* ImageUploadService.swift */,
+				CB60A7A22F5F057100B209A3 /* DraftManager.swift */,
+				CB60A7DC2F61BDC000B209A3 /* NavigationStateManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		CB60A8122F7194BB00B209A3 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				CB60A80D2F70562D00B209A3 /* GirlRepository.swift */,
+				5290EBDB2923BFB10008C57D /* ShadchanGirl.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		CB60A8132F71951A00B209A3 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				52444B012A26D0F900F54E32 /* AppDelegate.swift */,
+				CB60A79F2F5F01F800B209A3 /* AppLifecycleCoordinator.swift */,
+				CB60A7D92F61BD3F00B209A3 /* NavigationState.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		CB60A8142F71953C00B209A3 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		CB60A8152F71C5F400B209A3 /* AddEditGirl */ = {
+			isa = PBXGroup;
+			children = (
+				52DB326029997D0D00AC5F87 /* AddEditGirlViewController.swift */,
+				CB9E7D832F5629FA00B43E38 /* PrefillPacket.swift */,
+				CB60A7A52F5F06BB00B209A3 /* GirlDraft.swift */,
+			);
+			path = AddEditGirl;
+			sourceTree = "<group>";
+		};
+		CB60A8162F71C64800B209A3 /* GirlSearch */ = {
+			isa = PBXGroup;
+			children = (
+				CB4E5B722F2BECD00042A61A /* GirlsFilterSearchVC.swift */,
+			);
+			path = GirlSearch;
+			sourceTree = "<group>";
+		};
+		CB60A8172F71C66B00B209A3 /* ResumeImport */ = {
+			isa = PBXGroup;
+			children = (
+				CB9E7D7F2F52968F00B43E38 /* ResumeImportRouter.swift */,
+				CB90DEE82F4A171E002F7FEA /* ResumeParser .swift */,
+				CB90DEE42F4A0E3F002F7FEA /* ResumeScanVC.swift */,
+				CB9E7D662F50ADE000B43E38 /* ParsedResumeReviewVC.swift */,
+			);
+			path = ResumeImport;
+			sourceTree = "<group>";
+		};
 		CB9E7D642F4F767600B43E38 /* NasiGirlsViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -755,24 +830,13 @@
 		CE3AC07224536729006B9FEA /* NasiShadchanHelper */ = {
 			isa = PBXGroup;
 			children = (
-				CB60A80D2F70562D00B209A3 /* GirlRepository.swift */,
-				CB60A80A2F703D8800B209A3 /* ImageUploadService.swift */,
-				52444B012A26D0F900F54E32 /* AppDelegate.swift */,
-				CB60A79F2F5F01F800B209A3 /* AppLifecycleCoordinator.swift */,
-				CB60A7D92F61BD3F00B209A3 /* NavigationState.swift */,
-				CB60A7DC2F61BDC000B209A3 /* NavigationStateManager.swift */,
-				52DB326029997D0D00AC5F87 /* AddEditGirlViewController.swift */,
-				CB60A7A22F5F057100B209A3 /* DraftManager.swift */,
-				CB60A7A52F5F06BB00B209A3 /* GirlDraft.swift */,
+				CB60A8142F71953C00B209A3 /* UI */,
+				CB60A8132F71951A00B209A3 /* Core */,
+				CB60A8102F71946600B209A3 /* Features */,
+				CB60A8112F7194A500B209A3 /* Services */,
+				CB60A8122F7194BB00B209A3 /* Data */,
 				CB9E7D7D2F52913400B43E38 /* NasiShadchanHelper.entitlements */,
-				CB9E7D832F5629FA00B43E38 /* PrefillPacket.swift */,
-				CB9E7D7F2F52968F00B43E38 /* ResumeImportRouter.swift */,
 				CB9E7D812F52970700B43E38 /* DebugImportViewController.swift */,
-				CB90DEE82F4A171E002F7FEA /* ResumeParser .swift */,
-				CB90DEE42F4A0E3F002F7FEA /* ResumeScanVC.swift */,
-				CB9E7D662F50ADE000B43E38 /* ParsedResumeReviewVC.swift */,
-				CB4E5B722F2BECD00042A61A /* GirlsFilterSearchVC.swift */,
-				5290EBDB2923BFB10008C57D /* ShadchanGirl.swift */,
 				1825F998252C3BA800448269 /* AuthViewControllers */,
 				185179862525FA190099D65E /* CustomViews */,
 				184F2F4E252ADB8900252C97 /* CommonClasses */,
