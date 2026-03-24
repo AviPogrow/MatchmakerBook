@@ -10,7 +10,8 @@
 
 ## 📱 App Screens
 
-![Search](ADD_IMAGE_URL)
+![Sear<img width="556" height="396" alt="banner_reordered" src="https://github.com/user-attachments/assets/ea5fad2e-9397-4edf-aaf8-ff3bf65db71c" />
+ch](ADD_IMAGE_URL)
 ![Profile](ADD_IMAGE_URL)
 ![OCR](ADD_IMAGE_URL)
 
@@ -65,3 +66,17 @@ The system is actively used in production to manage hundreds of candidate profil
 ---
 
 ## 🏗 Architecture Overview
+
+Camera / PDF / Contacts / Share Extension  
+↓  
+Vision OCR  
+↓  
+Text Parsing Engine  
+↓  
+Structured Profile Model  
+↓  
+Firebase Realtime Database  
+↓  
+Search & Filtering  
+↓  
+Matchmaker Workflow
