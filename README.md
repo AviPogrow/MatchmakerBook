@@ -9,17 +9,29 @@
 ---
 ## 📱 App Screens
 
+### 🔍 Powerful Search & Filtering
+Quickly narrow down candidates using multi-dimensional filters — including age, height, and life plans — with instant, real-time results. Designed for speed and clarity when working with large datasets.
+
 <p align="center">
-  <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/SearchFilter.png" height="450"/>
-  <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/profile.png" height="450"/>
-  <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/ocr.jpg" height="400"/>
+  <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/SearchFilter.png" height="500"/>
 </p>
 
+---
+
+### 👤 Structured Candidate Profiles
+All relevant candidate information — personal details, background, and notes — organized into a clean, scannable interface. Built for matchmakers who need fast access to high-signal data.
 
 <p align="center">
-  🔍 Search & Filtering &nbsp;&nbsp;&nbsp;&nbsp;
-  👤 Profile &nbsp;&nbsp;&nbsp;&nbsp;
-  🧠 OCR Pipeline
+  <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/profile.png" height="500"/>
+</p>
+
+---
+
+### 🧠 Resume → Profile Automation (OCR Pipeline)
+Convert unstructured resumes into structured profiles in seconds. The system extracts key fields and pre-fills forms, reducing manual data entry by ~60%.
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/ocr.jpg" height="500"/>
 </p>
 
 ## 🚀 Overview
