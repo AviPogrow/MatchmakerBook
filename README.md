@@ -10,21 +10,19 @@
 
 ## 📱 App Screens
 
-### 🔍 Search & Filtering
+## 📱 App Screens
+
 <p align="center">
-  <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/SearchFilter.png" width="300"/>
+  <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/SearchFilter.png" width="30%" />
+  <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/profile.png" width="30%" />
+  <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/ocr.jpg" width="30%" />
 </p>
 
-### 👤 Candidate Profile
 <p align="center">
-  <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/profile.png" width="300"/>
+  🔍 Search & Filtering &nbsp;&nbsp;&nbsp;&nbsp;
+  👤 Profile &nbsp;&nbsp;&nbsp;&nbsp;
+  🧠 OCR Pipeline
 </p>
-
-### 🧠 Resume OCR Pipeline
-<p align="center">
-  <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/ocr.jpg" width="300"/>
-</p>
-
 ## 🚀 Overview
 
 MatchmakerBook converts unstructured candidate information from real-world sources into structured, searchable profiles.
