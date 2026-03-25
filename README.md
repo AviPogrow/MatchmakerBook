@@ -31,7 +31,7 @@ All relevant candidate information — personal details, background, and notes �
 Convert unstructured resumes into structured profiles in seconds. The system extracts key fields and pre-fills forms, reducing manual data entry by ~60%.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/ocr.jpg" height="500"/>
+  <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/ocr.jpg" height="400"/>
 </p>
 
 ## 🚀 Overview
