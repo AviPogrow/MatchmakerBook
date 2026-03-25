@@ -11,13 +11,13 @@
 ## 📱 App Screens
 
 ### 🔍 Search & Filtering
-![Search](https://github.com/AviPogrow/MatchmakerBook/blob/main/SearchFilter.png?raw=true)
+![Search](https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/SearchFilter.png)
 
 ### 👤 Candidate Profile
-![Profile](PASTE_URL_HERE)
+![Profile](PASTE_NEXT_URL)
 
 ### 🧠 Resume OCR Pipeline
-![OCR](PASTE_URL_HERE)
+![OCR](PASTE_NEXT_URL)
 ---
 
 ## 🚀 Overview
