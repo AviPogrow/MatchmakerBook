@@ -12,7 +12,7 @@
 <p align="center">
   <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/SearchFilter.png" height="450"/>
   <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/profile.png" height="450"/>
-  <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/ocr.jpg" height="450"/>
+  <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/ocr.jpg" height="400"/>
 </p>
 
 
