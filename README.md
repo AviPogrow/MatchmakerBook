@@ -17,7 +17,7 @@
 
 ### 👤 Candidate Profile
 <p align="center">
-  <img src="PASTE_URL" width="300"/>
+  <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/profile.png" width="300"/>
 </p>
 
 ### 🧠 Resume OCR Pipeline
