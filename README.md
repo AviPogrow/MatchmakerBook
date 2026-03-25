@@ -10,11 +10,14 @@
 
 ## 📱 App Screens
 
-![Sear<img width="556" height="396" alt="banner_reordered" src="https://github.com/user-attachments/assets/ea5fad2e-9397-4edf-aaf8-ff3bf65db71c" />
-ch](ADD_IMAGE_URL)
-![Profile](ADD_IMAGE_URL)
-![OCR](ADD_IMAGE_URL)
+### 🔍 Search & Filtering
+![Search](PASTE_URL_HERE)
 
+### 👤 Candidate Profile
+![Profile](PASTE_URL_HERE)
+
+### 🧠 Resume OCR Pipeline
+![OCR](PASTE_URL_HERE)
 ---
 
 ## 🚀 Overview
