@@ -22,7 +22,7 @@
 
 ### 🧠 Resume OCR Pipeline
 <p align="center">
-  <img src="PASTE_URL" width="300"/>
+  <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/ocr.jpg" width="300"/>
 </p>
 
 ## 🚀 Overview
