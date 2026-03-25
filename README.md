@@ -13,11 +13,10 @@
 ## 📱 App Screens
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/SearchFilter.png" width="30%" />
-  <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/profile.png" width="30%" />
-  <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/ocr.jpg" width="30%" />
+  <img src="URL1" height="500" style="margin-right:10px"/>
+  <img src="URL2" height="500" style="margin-right:10px"/>
+  <img src="URL3" height="500"/>
 </p>
-
 <p align="center">
   🔍 Search & Filtering &nbsp;&nbsp;&nbsp;&nbsp;
   👤 Profile &nbsp;&nbsp;&nbsp;&nbsp;
