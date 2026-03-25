@@ -11,14 +11,19 @@
 ## 📱 App Screens
 
 ### 🔍 Search & Filtering
-![Search](https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/SearchFilter.png)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/SearchFilter.png" width="300"/>
+</p>
 
 ### 👤 Candidate Profile
-![Profile](PASTE_NEXT_URL)
+<p align="center">
+  <img src="PASTE_URL" width="300"/>
+</p>
 
 ### 🧠 Resume OCR Pipeline
-![OCR](PASTE_NEXT_URL)
----
+<p align="center">
+  <img src="PASTE_URL" width="300"/>
+</p>
 
 ## 🚀 Overview
 
