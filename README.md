@@ -7,16 +7,14 @@
 📱 Built with UIKit, Swift, Firebase, Vision OCR, and Share Extensions  
 
 ---
-
-## 📱 App Screens
-
 ## 📱 App Screens
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/SearchFilter.png" width="250"/>
-  <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/profile.png" width="250"/>
-  <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/ocr.jpg" width="250"/>
+  <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/SearchFilter.png" height="500"/>
+  <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/profile.png" height="500"/>
+  <img src="https://raw.githubusercontent.com/AviPogrow/MatchmakerBook/main/ocr.jpg" height="500"/>
 </p>
+
 
 <p align="center">
   🔍 Search & Filtering &nbsp;&nbsp;&nbsp;&nbsp;
