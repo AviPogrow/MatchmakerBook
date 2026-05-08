@@ -5,32 +5,48 @@
 //  Created by user on 4/24/20.
 //  Copyright © 2020 user. All rights reserved.
 //
-
 import XCTest
-
-
 @testable import NasiShadchanHelper
 
-class NasiShadchanHelperTests: XCTestCase {
+final class NasiShadchanHelperTests: XCTestCase {
+    
+    func test_appLaunchCoordinator_startsUnauthenticatedFlow_whenUserIsLoggedOut() {
+        
+        let sut = AppLaunchCoordinator()
+        
+        let result = sut.start(isLoggedIn: false)
+        
+        XCTAssertEqual(result, AppLaunchFlow.showLogin)
+        
 
-    override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
     }
+    
+    func test_appLaunchCoordinator_startsMainFlow_whenUserIsLoggedIn() {
 
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        let sut = AppLaunchCoordinator()
+
+        let result = sut.start(isLoggedIn: true)
+
+        XCTAssertEqual(result, AppLaunchFlow.showMainApp)
     }
+    
+    func test_appLaunchCoordinator_storesPendingImport_whenDeepLinkIsImportResume() {
 
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        let sut = AppLaunchCoordinator()
+
+        sut.handle(url: URL(string: "matchmaker://import-resume")!)
+
+        //XCTAssertTrue(sut.hasPendingImportResume)
+        XCTAssertEqual(sut.pendingRoute, .importResume)
     }
+    
+    func test_handleURL_whenURLIsNotImportResume_doesNotStorePendingImport() {
+        let sut = AppLaunchCoordinator()
 
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+        sut.handle(url: URL(string: "matchmaker://something-else")!)
+
+        //XCTAssertFalse(sut.hasPendingImportResume)
+        XCTAssertNil(sut.pendingRoute)
     }
 
 }

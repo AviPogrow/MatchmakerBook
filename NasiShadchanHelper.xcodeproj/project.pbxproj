@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -112,6 +112,7 @@
 		CB60A8B42FAD2BC100B209A3 /* FirebaseAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB60A8B32FAD2BC100B209A3 /* FirebaseAuth.framework */; };
 		CB60A8B62FAD2BD100B209A3 /* FirebaseDatabase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB60A8B52FAD2BD100B209A3 /* FirebaseDatabase.framework */; };
 		CB60A8B82FAD2BE200B209A3 /* FirebaseCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB60A8B72FAD2BE200B209A3 /* FirebaseCore.framework */; };
+		CB8FE59D2FAD4FF400C425A8 /* AppLaunchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB8FE59C2FAD4FF400C425A8 /* AppLaunchCoordinator.swift */; };
 		CB90DEE52F4A0E3F002F7FEA /* ResumeScanVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB90DEE42F4A0E3F002F7FEA /* ResumeScanVC.swift */; };
 		CB90DEE92F4A1725002F7FEA /* ResumeParser .swift in Sources */ = {isa = PBXBuildFile; fileRef = CB90DEE82F4A171E002F7FEA /* ResumeParser .swift */; };
 		CB9E7D632F4E193A00B43E38 /* DateISO.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9E7D622F4E192F00B43E38 /* DateISO.swift */; };
@@ -290,6 +291,7 @@
 		CB60A8B32FAD2BC100B209A3 /* FirebaseAuth.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FirebaseAuth.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB60A8B52FAD2BD100B209A3 /* FirebaseDatabase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FirebaseDatabase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB60A8B72FAD2BE200B209A3 /* FirebaseCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FirebaseCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB8FE59C2FAD4FF400C425A8 /* AppLaunchCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchCoordinator.swift; sourceTree = "<group>"; };
 		CB90DEE42F4A0E3F002F7FEA /* ResumeScanVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResumeScanVC.swift; sourceTree = "<group>"; };
 		CB90DEE82F4A171E002F7FEA /* ResumeParser .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ResumeParser .swift"; sourceTree = "<group>"; };
 		CB9E7D622F4E192F00B43E38 /* DateISO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateISO.swift; sourceTree = "<group>"; };
@@ -330,7 +332,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		CB9E7D772F528FAD00B43E38 /* Exceptions for "ResumeShareExtension" folder in "ResumeShareExtension" target */ = {
+		CB9E7D772F528FAD00B43E38 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -340,18 +342,7 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		CB9E7D6D2F528FAD00B43E38 /* ResumeShareExtension */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				CB9E7D772F528FAD00B43E38 /* Exceptions for "ResumeShareExtension" folder in "ResumeShareExtension" target */,
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = ResumeShareExtension;
-			sourceTree = "<group>";
-		};
+		CB9E7D6D2F528FAD00B43E38 /* ResumeShareExtension */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (CB9E7D772F528FAD00B43E38 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = ResumeShareExtension; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -790,6 +781,7 @@
 		CE3AC07224536729006B9FEA /* NasiShadchanHelper */ = {
 			isa = PBXGroup;
 			children = (
+				CB8FE59C2FAD4FF400C425A8 /* AppLaunchCoordinator.swift */,
 				52444B012A26D0F900F54E32 /* AppDelegate.swift */,
 				CB60A79F2F5F01F800B209A3 /* AppLifecycleCoordinator.swift */,
 				CB60A7D92F61BD3F00B209A3 /* NavigationState.swift */,
@@ -1037,9 +1029,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-NasiShadchanHelper/Pods-NasiShadchanHelper-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-NasiShadchanHelper/Pods-NasiShadchanHelper-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1098,9 +1094,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-NasiShadchanHelper/Pods-NasiShadchanHelper-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-NasiShadchanHelper/Pods-NasiShadchanHelper-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1131,6 +1131,7 @@
 				5299DCF429A7CCBF00050586 /* AllSecondDatesVC.swift in Sources */,
 				52E486C42B23829300CA43CE /* PresenterRowSampleCell.swift in Sources */,
 				52A04EEF29A3A6A700C490B0 /* MatchIdea.swift in Sources */,
+				CB8FE59D2FAD4FF400C425A8 /* AppLaunchCoordinator.swift in Sources */,
 				520578DE299E6F8C00B732A0 /* GirlCollectionViewCell.swift in Sources */,
 				CB219D4E2D8C82EB00D439B6 /* DatingRelationship.swift in Sources */,
 				52DB32572996CD2B00AC5F87 /* SubCategoryVC.swift in Sources */,
