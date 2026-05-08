@@ -113,6 +113,8 @@
 		CB60A8B62FAD2BD100B209A3 /* FirebaseDatabase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB60A8B52FAD2BD100B209A3 /* FirebaseDatabase.framework */; };
 		CB60A8B82FAD2BE200B209A3 /* FirebaseCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB60A8B72FAD2BE200B209A3 /* FirebaseCore.framework */; };
 		CB8FE59D2FAD4FF400C425A8 /* AppLaunchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB8FE59C2FAD4FF400C425A8 /* AppLaunchCoordinator.swift */; };
+		CB8FE5A12FAE18A100C425A8 /* ResumeImportRouting.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB8FE5A02FAE18A100C425A8 /* ResumeImportRouting.swift */; };
+		CB8FE5A32FAE1D1200C425A8 /* SessionManaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB8FE5A22FAE1D1200C425A8 /* SessionManaging.swift */; };
 		CB90DEE52F4A0E3F002F7FEA /* ResumeScanVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB90DEE42F4A0E3F002F7FEA /* ResumeScanVC.swift */; };
 		CB90DEE92F4A1725002F7FEA /* ResumeParser .swift in Sources */ = {isa = PBXBuildFile; fileRef = CB90DEE82F4A171E002F7FEA /* ResumeParser .swift */; };
 		CB9E7D632F4E193A00B43E38 /* DateISO.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9E7D622F4E192F00B43E38 /* DateISO.swift */; };
@@ -292,6 +294,8 @@
 		CB60A8B52FAD2BD100B209A3 /* FirebaseDatabase.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FirebaseDatabase.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB60A8B72FAD2BE200B209A3 /* FirebaseCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FirebaseCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB8FE59C2FAD4FF400C425A8 /* AppLaunchCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLaunchCoordinator.swift; sourceTree = "<group>"; };
+		CB8FE5A02FAE18A100C425A8 /* ResumeImportRouting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResumeImportRouting.swift; sourceTree = "<group>"; };
+		CB8FE5A22FAE1D1200C425A8 /* SessionManaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManaging.swift; sourceTree = "<group>"; };
 		CB90DEE42F4A0E3F002F7FEA /* ResumeScanVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResumeScanVC.swift; sourceTree = "<group>"; };
 		CB90DEE82F4A171E002F7FEA /* ResumeParser .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ResumeParser .swift"; sourceTree = "<group>"; };
 		CB9E7D622F4E192F00B43E38 /* DateISO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateISO.swift; sourceTree = "<group>"; };
@@ -782,6 +786,8 @@
 			isa = PBXGroup;
 			children = (
 				CB8FE59C2FAD4FF400C425A8 /* AppLaunchCoordinator.swift */,
+				CB8FE5A22FAE1D1200C425A8 /* SessionManaging.swift */,
+				CB8FE5A02FAE18A100C425A8 /* ResumeImportRouting.swift */,
 				52444B012A26D0F900F54E32 /* AppDelegate.swift */,
 				CB60A79F2F5F01F800B209A3 /* AppLifecycleCoordinator.swift */,
 				CB60A7D92F61BD3F00B209A3 /* NavigationState.swift */,
@@ -1211,10 +1217,12 @@
 				5299DCE029A6827F00050586 /* FirstDateAppVC.swift in Sources */,
 				52444B022A26D0F900F54E32 /* AppDelegate.swift in Sources */,
 				FFD6A6BD2B2D1AC400459D61 /* SelectBoyVC.swift in Sources */,
+				CB8FE5A32FAE1D1200C425A8 /* SessionManaging.swift in Sources */,
 				CB9E7D852F5629FA00B43E38 /* PrefillPacket.swift in Sources */,
 				3DC1849F258C13AD00B529F0 /* NasiGirl.swift in Sources */,
 				52A357A02A13C4F40064860F /* ShadchanBoyMainVC.swift in Sources */,
 				528A283829A996A6001CE985 /* UserLaunch.swift in Sources */,
+				CB8FE5A12FAE18A100C425A8 /* ResumeImportRouting.swift in Sources */,
 				5290DBB8293E3FAE004F6A04 /* HomeViewController.swift in Sources */,
 				5299DCEE29A7B89300050586 /* FirstDateDetailVC.swift in Sources */,
 				5228CB0E27999EFB00EDF103 /* NasiDate.swift in Sources */,
