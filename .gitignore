@@ -13,3 +13,4 @@ fastlane/report.xml
 fastlane/test_output/
 Config/Secrets.xcconfig
 .swiftpm/
+**/xcschememanagement.plist
