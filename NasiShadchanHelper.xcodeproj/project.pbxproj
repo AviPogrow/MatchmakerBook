@@ -123,6 +123,14 @@
 		CB9E7D802F52968F00B43E38 /* ResumeImportRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9E7D7F2F52968F00B43E38 /* ResumeImportRouter.swift */; };
 		CB9E7D822F52970700B43E38 /* DebugImportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9E7D812F52970700B43E38 /* DebugImportViewController.swift */; };
 		CB9E7D852F5629FA00B43E38 /* PrefillPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9E7D832F5629FA00B43E38 /* PrefillPacket.swift */; };
+		CBF40DF22FC097F500A16CD2 /* AuthSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF40DED2FC097F500A16CD2 /* AuthSession.swift */; };
+		CBF40DF32FC097F500A16CD2 /* MockAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF40DF02FC097F500A16CD2 /* MockAuthService.swift */; };
+		CBF40DF42FC097F500A16CD2 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF40DEC2FC097F500A16CD2 /* AuthService.swift */; };
+		CBF40DF52FC097F500A16CD2 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF40DEE2FC097F500A16CD2 /* LoginView.swift */; };
+		CBF40DF62FC097F500A16CD2 /* AuthError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF40DEB2FC097F500A16CD2 /* AuthError.swift */; };
+		CBF40DF72FC097F500A16CD2 /* SwiftUIAuthHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF40DF12FC097F500A16CD2 /* SwiftUIAuthHostingController.swift */; };
+		CBF40DF82FC097F500A16CD2 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF40DEF2FC097F500A16CD2 /* LoginViewModel.swift */; };
+		CBF40DFA2FC0993F00A16CD2 /* LoginViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF40DF92FC0993F00A16CD2 /* LoginViewModelTests.swift */; };
 		CE3AC07824536729006B9FEA /* CategoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3AC07724536729006B9FEA /* CategoriesViewController.swift */; };
 		CE3AC07B24536729006B9FEA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE3AC07924536729006B9FEA /* Main.storyboard */; };
 		CE3AC07D24536765006B9FEA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE3AC07C24536765006B9FEA /* Assets.xcassets */; };
@@ -305,6 +313,14 @@
 		CB9E7D7F2F52968F00B43E38 /* ResumeImportRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResumeImportRouter.swift; sourceTree = "<group>"; };
 		CB9E7D812F52970700B43E38 /* DebugImportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugImportViewController.swift; sourceTree = "<group>"; };
 		CB9E7D832F5629FA00B43E38 /* PrefillPacket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefillPacket.swift; sourceTree = "<group>"; };
+		CBF40DEB2FC097F500A16CD2 /* AuthError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthError.swift; sourceTree = "<group>"; };
+		CBF40DEC2FC097F500A16CD2 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		CBF40DED2FC097F500A16CD2 /* AuthSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthSession.swift; sourceTree = "<group>"; };
+		CBF40DEE2FC097F500A16CD2 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		CBF40DEF2FC097F500A16CD2 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		CBF40DF02FC097F500A16CD2 /* MockAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAuthService.swift; sourceTree = "<group>"; };
+		CBF40DF12FC097F500A16CD2 /* SwiftUIAuthHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIAuthHostingController.swift; sourceTree = "<group>"; };
+		CBF40DF92FC0993F00A16CD2 /* LoginViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModelTests.swift; sourceTree = "<group>"; };
 		CE3AC07024536729006B9FEA /* NasiShadchanHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NasiShadchanHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE3AC07724536729006B9FEA /* CategoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesViewController.swift; sourceTree = "<group>"; };
 		CE3AC07A24536729006B9FEA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -785,6 +801,13 @@
 		CE3AC07224536729006B9FEA /* NasiShadchanHelper */ = {
 			isa = PBXGroup;
 			children = (
+				CBF40DEB2FC097F500A16CD2 /* AuthError.swift */,
+				CBF40DEC2FC097F500A16CD2 /* AuthService.swift */,
+				CBF40DED2FC097F500A16CD2 /* AuthSession.swift */,
+				CBF40DEE2FC097F500A16CD2 /* LoginView.swift */,
+				CBF40DEF2FC097F500A16CD2 /* LoginViewModel.swift */,
+				CBF40DF02FC097F500A16CD2 /* MockAuthService.swift */,
+				CBF40DF12FC097F500A16CD2 /* SwiftUIAuthHostingController.swift */,
 				CB8FE59C2FAD4FF400C425A8 /* AppLaunchCoordinator.swift */,
 				CB8FE5A22FAE1D1200C425A8 /* SessionManaging.swift */,
 				CB8FE5A02FAE18A100C425A8 /* ResumeImportRouting.swift */,
@@ -816,6 +839,7 @@
 		CE3AC08924536765006B9FEA /* NasiShadchanHelperTests */ = {
 			isa = PBXGroup;
 			children = (
+				CBF40DF92FC0993F00A16CD2 /* LoginViewModelTests.swift */,
 				CE3AC08A24536765006B9FEA /* NasiShadchanHelperTests.swift */,
 				CE3AC08C24536765006B9FEA /* Info.plist */,
 			);
@@ -1211,6 +1235,13 @@
 				184F2F50252ADCDA00252C97 /* Constant.swift in Sources */,
 				5228CB1A27A5834100EDF103 /* DateNumberPIckerViewController.swift in Sources */,
 				CE525A76246366ED00CBEC41 /* HTCollegeTableViewCell.swift in Sources */,
+				CBF40DF22FC097F500A16CD2 /* AuthSession.swift in Sources */,
+				CBF40DF32FC097F500A16CD2 /* MockAuthService.swift in Sources */,
+				CBF40DF42FC097F500A16CD2 /* AuthService.swift in Sources */,
+				CBF40DF52FC097F500A16CD2 /* LoginView.swift in Sources */,
+				CBF40DF62FC097F500A16CD2 /* AuthError.swift in Sources */,
+				CBF40DF72FC097F500A16CD2 /* SwiftUIAuthHostingController.swift in Sources */,
+				CBF40DF82FC097F500A16CD2 /* LoginViewModel.swift in Sources */,
 				3D9DA71E25ACCEB10056F656 /* ViewResumeVCViewController.swift in Sources */,
 				5228CB2127AF015100EDF103 /* ContactsViewController.swift in Sources */,
 				CB90DEE92F4A1725002F7FEA /* ResumeParser .swift in Sources */,
@@ -1250,6 +1281,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CBF40DFA2FC0993F00A16CD2 /* LoginViewModelTests.swift in Sources */,
 				CE3AC08B24536765006B9FEA /* NasiShadchanHelperTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
