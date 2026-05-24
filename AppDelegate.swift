@@ -13,15 +13,17 @@ import IQKeyboardManagerSwift
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    // MARK: - Properties
+    var appCoordinator: AppCoordinator?
+
+    var window: UIWindow? {
+        didSet {
+            window?.overrideUserInterfaceStyle = .light
+        }
+    }
 
     var handle: AuthStateDidChangeListenerHandle?
 
-    // Keep light mode
-    var window: UIWindow? {
-        didSet { window?.overrideUserInterfaceStyle = .light }
-    }
-
+    
     // Deep-link pending flag (so Auth/root reset doesn't wipe out routing)
     private var pendingImportResume = false
 
@@ -55,15 +57,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // IQKeyboardManager
         IQKeyboardManager.shared.enable = true
 
-        // ✅ Fix: store listener handle on the property (don’t shadow with local `let handle = ...`)
-        self.handle = Auth.auth().addStateDidChangeListener { [weak self] _, user in
+        // Firebase auth listener still exists for now,
+        // but root UI creation is moving into AppCoordinator.
+        self.handle = Auth.auth().addStateDidChangeListener { [weak self] _, _ in
             guard let self else { return }
 
-            if user == nil {
-                self.makingRootFlow(Constant.AppRootFlow.kAuthVc)
-            } else {
-                self.makingRootFlow(Constant.AppRootFlow.kEnterApp)
-            }
+            self.window = UIWindow(frame: UIScreen.main.bounds)
+
+            let container = AppContainer()
+
+            let coordinator = AppCoordinator(
+                window: self.window!,
+                container: container
+            )
+
+            self.appCoordinator = coordinator
+            coordinator.start()
         }
 
         return true

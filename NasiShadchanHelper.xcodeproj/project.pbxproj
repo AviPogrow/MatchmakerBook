@@ -101,6 +101,8 @@
 		52E486C82B23836D00CA43CE /* ImagePresentedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E486C72B23836D00CA43CE /* ImagePresentedCell.swift */; };
 		52E486CA2B23852F00CA43CE /* PresenterRowSampleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 52E486C92B23852F00CA43CE /* PresenterRowSampleCell.xib */; };
 		96ACF15F0CF663BA7761302B /* Pods_NasiShadchanHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B189A994D2AB087E2C0A61C4 /* Pods_NasiShadchanHelper.framework */; };
+		CB2044D82FC11B1000BDF975 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2044D72FC11B1000BDF975 /* AppCoordinator.swift */; };
+		CB2044DA2FC11B2700BDF975 /* AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2044D92FC11B2700BDF975 /* AppContainer.swift */; };
 		CB219D4E2D8C82EB00D439B6 /* DatingRelationship.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */; };
 		CB3EED4F2F3E1C8D006B392B /* ProfileSearchFilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3EED4E2F3E1C8D006B392B /* ProfileSearchFilterVC.swift */; };
 		CB4E5B732F2BECD00042A61A /* GirlsFilterSearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4E5B722F2BECD00042A61A /* GirlsFilterSearchVC.swift */; };
@@ -290,6 +292,8 @@
 		846C9E80F08FD96515A31CEB /* Pods-NasiShadchanHelperTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NasiShadchanHelperTests.debug.xcconfig"; path = "Target Support Files/Pods-NasiShadchanHelperTests/Pods-NasiShadchanHelperTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A155ACD0C76331FB368E958C /* Pods-NasiShadchanHelperTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NasiShadchanHelperTests.release.xcconfig"; path = "Target Support Files/Pods-NasiShadchanHelperTests/Pods-NasiShadchanHelperTests.release.xcconfig"; sourceTree = "<group>"; };
 		B189A994D2AB087E2C0A61C4 /* Pods_NasiShadchanHelper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NasiShadchanHelper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB2044D72FC11B1000BDF975 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		CB2044D92FC11B2700BDF975 /* AppContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContainer.swift; sourceTree = "<group>"; };
 		CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatingRelationship.swift; sourceTree = "<group>"; };
 		CB3EED4E2F3E1C8D006B392B /* ProfileSearchFilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSearchFilterVC.swift; sourceTree = "<group>"; };
 		CB4E5B722F2BECD00042A61A /* GirlsFilterSearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GirlsFilterSearchVC.swift; sourceTree = "<group>"; };
@@ -751,6 +755,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		CB2044D62FC11AE700BDF975 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				52444B012A26D0F900F54E32 /* AppDelegate.swift */,
+				CB2044D72FC11B1000BDF975 /* AppCoordinator.swift */,
+				CB2044D92FC11B2700BDF975 /* AppContainer.swift */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
 		CB9E7D642F4F767600B43E38 /* NasiGirlsViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -801,6 +815,7 @@
 		CE3AC07224536729006B9FEA /* NasiShadchanHelper */ = {
 			isa = PBXGroup;
 			children = (
+				CB2044D62FC11AE700BDF975 /* Application */,
 				CBF40DEB2FC097F500A16CD2 /* AuthError.swift */,
 				CBF40DEC2FC097F500A16CD2 /* AuthService.swift */,
 				CBF40DED2FC097F500A16CD2 /* AuthSession.swift */,
@@ -811,7 +826,6 @@
 				CB8FE59C2FAD4FF400C425A8 /* AppLaunchCoordinator.swift */,
 				CB8FE5A22FAE1D1200C425A8 /* SessionManaging.swift */,
 				CB8FE5A02FAE18A100C425A8 /* ResumeImportRouting.swift */,
-				52444B012A26D0F900F54E32 /* AppDelegate.swift */,
 				CB60A79F2F5F01F800B209A3 /* AppLifecycleCoordinator.swift */,
 				CB60A7D92F61BD3F00B209A3 /* NavigationState.swift */,
 				CB60A7DC2F61BDC000B209A3 /* NavigationStateManager.swift */,
@@ -1155,6 +1169,7 @@
 				528F5E232960780C00DE5223 /* CategoryCell.swift in Sources */,
 				FFD6A6BF2B2FDF4400459D61 /* SelectGirlVC.swift in Sources */,
 				CB90DEE52F4A0E3F002F7FEA /* ResumeScanVC.swift in Sources */,
+				CB2044D82FC11B1000BDF975 /* AppCoordinator.swift in Sources */,
 				5228CB1E27A5D02E00EDF103 /* AddEditBoyViewController.swift in Sources */,
 				CB60A7A42F5F057100B209A3 /* DraftManager.swift in Sources */,
 				184B498A2563EED4008B61F9 /* GradientView.swift in Sources */,
@@ -1167,6 +1182,7 @@
 				52DB32572996CD2B00AC5F87 /* SubCategoryVC.swift in Sources */,
 				5299DCF629A7CD3500050586 /* SecondDatesDetailVC.swift in Sources */,
 				52DB32592997A53E00AC5F87 /* GirlGroup.swift in Sources */,
+				CB2044DA2FC11B2700BDF975 /* AppContainer.swift in Sources */,
 				52A04EF729A66FF600C490B0 /* AllReddsVC.swift in Sources */,
 				5290EBDC2923BFB10008C57D /* ShadchanGirl.swift in Sources */,
 				184F2F52252AE02500252C97 /* Utility.swift in Sources */,
