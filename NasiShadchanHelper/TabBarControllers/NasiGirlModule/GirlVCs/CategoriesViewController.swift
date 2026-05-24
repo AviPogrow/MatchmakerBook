@@ -134,7 +134,7 @@ extension CategoriesViewController {
             UserInfo.resetCurrentUser()
             
             // make the authVC the rootVC
-            AppDelegate.instance().makingRootFlow(Constant.AppRootFlow.kAuthVc)
+            //AppDelegate.instance().makingRootFlow(Constant.AppRootFlow.kAuthVc)
         }))
         
         alertControler.addAction(UIAlertAction.init(title:"No", style:.destructive, handler: { (action) in

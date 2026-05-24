@@ -101,6 +101,7 @@
 		52E486C82B23836D00CA43CE /* ImagePresentedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E486C72B23836D00CA43CE /* ImagePresentedCell.swift */; };
 		52E486CA2B23852F00CA43CE /* PresenterRowSampleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 52E486C92B23852F00CA43CE /* PresenterRowSampleCell.xib */; };
 		96ACF15F0CF663BA7761302B /* Pods_NasiShadchanHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B189A994D2AB087E2C0A61C4 /* Pods_NasiShadchanHelper.framework */; };
+		CB1B78312FC35F7900EDDCBC /* AppBootstrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B78302FC35F7900EDDCBC /* AppBootstrapper.swift */; };
 		CB2044D82FC11B1000BDF975 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2044D72FC11B1000BDF975 /* AppCoordinator.swift */; };
 		CB2044DA2FC11B2700BDF975 /* AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2044D92FC11B2700BDF975 /* AppContainer.swift */; };
 		CB219D4E2D8C82EB00D439B6 /* DatingRelationship.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */; };
@@ -292,6 +293,7 @@
 		846C9E80F08FD96515A31CEB /* Pods-NasiShadchanHelperTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NasiShadchanHelperTests.debug.xcconfig"; path = "Target Support Files/Pods-NasiShadchanHelperTests/Pods-NasiShadchanHelperTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A155ACD0C76331FB368E958C /* Pods-NasiShadchanHelperTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NasiShadchanHelperTests.release.xcconfig"; path = "Target Support Files/Pods-NasiShadchanHelperTests/Pods-NasiShadchanHelperTests.release.xcconfig"; sourceTree = "<group>"; };
 		B189A994D2AB087E2C0A61C4 /* Pods_NasiShadchanHelper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NasiShadchanHelper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB1B78302FC35F7900EDDCBC /* AppBootstrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBootstrapper.swift; sourceTree = "<group>"; };
 		CB2044D72FC11B1000BDF975 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		CB2044D92FC11B2700BDF975 /* AppContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContainer.swift; sourceTree = "<group>"; };
 		CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatingRelationship.swift; sourceTree = "<group>"; };
@@ -761,6 +763,7 @@
 				52444B012A26D0F900F54E32 /* AppDelegate.swift */,
 				CB2044D72FC11B1000BDF975 /* AppCoordinator.swift */,
 				CB2044D92FC11B2700BDF975 /* AppContainer.swift */,
+				CB1B78302FC35F7900EDDCBC /* AppBootstrapper.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -1267,6 +1270,7 @@
 				CB8FE5A32FAE1D1200C425A8 /* SessionManaging.swift in Sources */,
 				CB9E7D852F5629FA00B43E38 /* PrefillPacket.swift in Sources */,
 				3DC1849F258C13AD00B529F0 /* NasiGirl.swift in Sources */,
+				CB1B78312FC35F7900EDDCBC /* AppBootstrapper.swift in Sources */,
 				52A357A02A13C4F40064860F /* ShadchanBoyMainVC.swift in Sources */,
 				528A283829A996A6001CE985 /* UserLaunch.swift in Sources */,
 				CB8FE5A12FAE18A100C425A8 /* ResumeImportRouting.swift in Sources */,

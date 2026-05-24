@@ -5,29 +5,45 @@
 //  Created by Avi Pogrow on 5/22/26.
 //  Copyright © 2026 user. All rights reserved.
 //
-
 import UIKit
+import SwiftUI
 
 final class AppCoordinator {
 
     private let window: UIWindow
     private let container: AppContainer
+    private let launchCoordinator = AppLaunchCoordinator()
 
-    init(window: UIWindow,
-         container: AppContainer) {
-
+    init(window: UIWindow, container: AppContainer) {
         self.window = window
         self.container = container
     }
 
-    func start() {
+    func start(isLoggedIn: Bool = false) {
+        let flow = launchCoordinator.start(isLoggedIn: isLoggedIn)
 
-        let vc = UIViewController()
-        vc.view.backgroundColor = .systemBackground
+        switch flow {
+        case .showLogin:
+            showLogin()
 
-        let nav = UINavigationController(rootViewController: vc)
+        case .showMainApp:
+            showMainApp()
+        }
 
-        window.rootViewController = nav
         window.makeKeyAndVisible()
+    }
+
+    private func showLogin() {
+        let loginVC = SwiftUIAuthHostingController()
+        window.rootViewController = loginVC
+    }
+
+    private func showMainApp() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let tabBar = storyboard.instantiateViewController(
+            withIdentifier: "MyTabBarController"
+        )
+
+        window.rootViewController = tabBar
     }
 }

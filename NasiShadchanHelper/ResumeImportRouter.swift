@@ -21,6 +21,7 @@ final class ResumeImportRouter {
 
     // MARK: - Entry point
     func handleIncomingShare(retryCount: Int = 0) {
+        /*
         guard let payload = readPayload() else {
             print("ResumeImportRouter: no payload found")
             return
@@ -73,6 +74,7 @@ final class ResumeImportRouter {
 
             print("✅ Routed share payload to existing GirlsFilterSearchVC:", payload)
         }
+         */
     }
 
     // MARK: - Navigation helpers

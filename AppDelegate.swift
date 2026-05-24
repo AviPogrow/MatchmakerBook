@@ -6,78 +6,25 @@
 //  Copyright © 2020 user. All rights reserved.
 //
 import UIKit
-import Firebase
-import FirebaseAnalytics
-import IQKeyboardManagerSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    var appCoordinator: AppCoordinator?
-
-    var window: UIWindow? {
-        didSet {
-            window?.overrideUserInterfaceStyle = .light
-        }
-    }
-
-    var handle: AuthStateDidChangeListenerHandle?
-
-    
-    // Deep-link pending flag (so Auth/root reset doesn't wipe out routing)
-    private var pendingImportResume = false
-
-    // Access shared delegate
-    class func instance() -> AppDelegate {
-        return UIApplication.shared.delegate as! AppDelegate
-    }
-
-    // MARK: - Init
+    private let bootstrapper: AppBootstrapper
 
     override init() {
+        self.bootstrapper = AppBootstrapper()
         super.init()
-        FirebaseApp.configure()
-        FirebaseConfiguration.shared.setLoggerLevel(.min)
-        Database.database().isPersistenceEnabled = true
     }
 
-    // MARK: - App Lifecycle
-
-    func application(_ application: UIApplication,
-                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-
-        // ✅ Deep link on cold start (if launched via URL)
-        if let url = launchOptions?[.url] as? URL {
-            print("✅ Cold start URL in launchOptions:", url.absoluteString)
-            handleDeepLink(url)
-        } else {
-            print("ℹ️ No launchOptions URL")
-        }
-
-        // IQKeyboardManager
-        IQKeyboardManager.shared.enable = true
-
-        // Firebase auth listener still exists for now,
-        // but root UI creation is moving into AppCoordinator.
-        self.handle = Auth.auth().addStateDidChangeListener { [weak self] _, _ in
-            guard let self else { return }
-
-            self.window = UIWindow(frame: UIScreen.main.bounds)
-
-            let container = AppContainer()
-
-            let coordinator = AppCoordinator(
-                window: self.window!,
-                container: container
-            )
-
-            self.appCoordinator = coordinator
-            coordinator.start()
-        }
-
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+    ) -> Bool {
+        bootstrapper.bootstrap(launchOptions: launchOptions)
         return true
     }
-    
+
     func applicationWillResignActive(_ application: UIApplication) {
         AppLifecycleCoordinator.shared.applicationWillResignActive()
     }
@@ -92,90 +39,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         AppLifecycleCoordinator.shared.applicationDidBecomeActive()
-
-        // The app uses a UITabBarController as the root.
-        // Restoration should start from the tab bar controller so the coordinator
-        // can switch to the correct tab before restoring the pushed screen.
-        if let tabBarController = window?.rootViewController as? UITabBarController {
-            AppLifecycleCoordinator.shared.restoreNavigationIfNeeded(from: tabBarController)
-        }
-    }
-    
-    
-
-    func application(_ app: UIApplication,
-                     open url: URL,
-                     options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-
-        print("✅ AppDelegate openURL called:", url.absoluteString)
-        handleDeepLink(url)
-        return true
-    }
-
-    // MARK: - Deep Link Handling
-
-    private func handleDeepLink(_ url: URL) {
-        print("✅ handleDeepLink:", url.absoluteString)
-
-        guard url.scheme == "matchmaker" else { return }
-
-        if url.host == "import-resume" {
-            print("✅ Deep link matched import-resume (pendingImportResume = true)")
-            pendingImportResume = true
-            tryProcessPendingImport()
-        }
-    }
-
-    private func tryProcessPendingImport() {
-        guard pendingImportResume else { return }
-        guard window?.rootViewController != nil else {
-            print("ℹ️ Root not set yet; will process import after makingRootFlow()")
-            return
-        }
-
-        pendingImportResume = false
-        print("✅ Processing pending import now → calling ResumeImportRouter")
-        ResumeImportRouter.shared.handleIncomingShare()
-    }
-
-    // MARK: - Making RootView Controller
-
-    func makingRootFlow(_ strRoot: String) {
-
-        window?.rootViewController?.removeFromParent()
-
-        if strRoot == Constant.AppRootFlow.kEnterApp {
-
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let tabBar = storyboard.instantiateViewController(withIdentifier: "MyTabBarController")
-            window?.rootViewController = tabBar
-
-        } else if strRoot == Constant.AppRootFlow.kAuthVc {
-
-            let authStoryboard = UIStoryboard(name: "UserAuthentication", bundle: nil)
-            let vcNav: AuthNavViewController = authStoryboard.instantiateViewController()
-            window?.rootViewController = vcNav
-        }
-
-        // ✅ Now that root exists (and auth flow may have just reset it), try routing
-        tryProcessPendingImport()
-    }
-
-    // MARK: - Optional UI Appearance
-
-    private func setUpNavigationAppearance() {
-        UINavigationBar.appearance().isTranslucent = false
-        UINavigationBar.appearance().barTintColor = .yellow
-        UINavigationBar.appearance().backgroundColor = .green
-        UIBarButtonItem.appearance().tintColor = UIColor.red
-        UINavigationBar.appearance().titleTextAttributes = [
-            .font: UIFont.systemFont(ofSize: 18),
-            .foregroundColor: UIColor.white
-        ]
-        UIBarButtonItem.appearance().setTitleTextAttributes(
-            [.font: UIFont.systemFont(ofSize: 18), .foregroundColor: UIColor.white],
-            for: .normal
-        )
     }
 }
 

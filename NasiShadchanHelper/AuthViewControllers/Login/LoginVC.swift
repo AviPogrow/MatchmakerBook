@@ -26,10 +26,10 @@ class LoginVC: UIViewController {
     }
     //MARK: UI Setup
     func setupUI() {
+        /*
         self.viewForm.roundViewTopEdges(radius: 15)
         self.tfEmail.addLeftPadding()
         self.tfPassword.addLeftPadding()
-        
         if AppDelegate.instance().window?.frame.size.height ?? 0.0 < 600.0 {
            // self.heightImageView.constant = 220
         } else {
@@ -51,6 +51,7 @@ class LoginVC: UIViewController {
             }
         }
         self.view.layoutIfNeeded()
+         */
     }
     
     //MARK: Validaitons
@@ -120,7 +121,7 @@ class LoginVC: UIViewController {
                     
                     // get the appDelegate and reset the rootVC
                     // on the window to be navController
-                    AppDelegate.instance().makingRootFlow(Constant.AppRootFlow.kEnterApp)
+                   // AppDelegate.instance().makingRootFlow(Constant.AppRootFlow.kEnterApp)
                     
                     // print(user?.additionalUserInfo)
                 }

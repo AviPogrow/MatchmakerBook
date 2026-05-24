@@ -32,6 +32,7 @@ class SignUpVC: UIViewController {
     
     //MARK: UI Setup
     func setupUI() {
+        /*
         self.viewForm.roundViewTopEdges(radius: 15)
         self.tfEmail.addLeftPadding()
         self.tfPassword.addLeftPadding()
@@ -60,6 +61,7 @@ class SignUpVC: UIViewController {
         }
         
         self.view.layoutIfNeeded()
+         */
     }
     
     //MARK: Validaitons
@@ -93,7 +95,7 @@ class SignUpVC: UIViewController {
                     let user = Mapper<UserInfo>().map(JSON: message as [String : AnyObject])
                     UserInfo.curentUser = user
                     
-                    AppDelegate.instance().makingRootFlow(Constant.AppRootFlow.kEnterApp)
+                   // AppDelegate.instance().makingRootFlow(Constant.AppRootFlow.kEnterApp)
                 }
             }
         }
