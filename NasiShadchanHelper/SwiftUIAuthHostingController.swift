@@ -12,11 +12,17 @@ import SwiftUI
 
 final class SwiftUIAuthHostingController: UIHostingController<LoginView> {
 
-    init() {
-        super.init(rootView: LoginView())
-    }
+    //init() {
+   //     super.init(rootView: LoginView())
+   // }
+    init(viewModel: LoginViewModel) {
+           super.init(rootView: LoginView(viewModel: viewModel))
+       }
 
     @MainActor required dynamic init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder, rootView: LoginView())
-    }
+            fatalError("init(coder:) has not been implemented")
+        }
+    //@MainActor required dynamic init?(coder aDecoder: NSCoder) {
+    //    super.init(coder: aDecoder, rootView: LoginView())
+   // }
 }

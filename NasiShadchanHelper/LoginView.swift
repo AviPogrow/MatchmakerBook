@@ -9,7 +9,11 @@ import SwiftUI
 
 struct LoginView: View {
 
-    @StateObject private var viewModel = LoginViewModel()
+    @StateObject private var viewModel: LoginViewModel
+
+    init(viewModel: LoginViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
 
     var body: some View {
         VStack(spacing: 20) {
@@ -25,19 +29,24 @@ struct LoginView: View {
 
             SecureField("Password", text: $viewModel.password)
                 .textFieldStyle(.roundedBorder)
-            
+
             if let message = viewModel.validationMessage {
                 Text(message)
                     .font(.caption)
                     .foregroundStyle(.red)
             }
 
+            if let errorMessage = viewModel.errorMessage {
+                Text(errorMessage)
+                    .font(.caption)
+                    .foregroundStyle(.red)
+            }
+
             Button {
-
-                viewModel.login()
-
+                Task {
+                    await viewModel.login()
+                }
             } label: {
-
                 if viewModel.isLoading {
                     ProgressView()
                 } else {
@@ -50,7 +59,10 @@ struct LoginView: View {
         .padding()
     }
 }
-
 #Preview {
-    LoginView()
+    LoginView(
+        viewModel: LoginViewModel(
+            authService: FirebaseAuthService()
+        )
+    )
 }

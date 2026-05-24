@@ -8,6 +8,7 @@
 import UIKit
 import SwiftUI
 
+@MainActor
 final class AppCoordinator {
 
     private let window: UIWindow
@@ -34,7 +35,14 @@ final class AppCoordinator {
     }
 
     private func showLogin() {
-        let loginVC = SwiftUIAuthHostingController()
+        let viewModel = LoginViewModel(
+            authService: container.authService
+        )
+
+        let loginVC = SwiftUIAuthHostingController(
+            viewModel: viewModel
+        )
+
         window.rootViewController = loginVC
     }
 

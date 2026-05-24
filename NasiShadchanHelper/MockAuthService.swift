@@ -6,7 +6,12 @@
 //  Copyright © 2026 user. All rights reserved.
 //
 import Foundation
-final class MockAuthService: AuthService {
+/*
+final class MockAuthService: AuthServicing {
+    func login(email: String, password: String) async throws -> AuthSession {
+        
+    }
+    
 
     func login(
         email: String,
@@ -25,3 +30,4 @@ final class MockAuthService: AuthService {
         }
     }
 }
+*/

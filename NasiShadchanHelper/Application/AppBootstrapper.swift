@@ -18,6 +18,7 @@ final class AppBootstrapper {
         configureEarlyInfrastructure()
     }
 
+    @MainActor
     func bootstrap(
         launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) {

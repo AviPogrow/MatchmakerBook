@@ -102,6 +102,7 @@
 		52E486CA2B23852F00CA43CE /* PresenterRowSampleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 52E486C92B23852F00CA43CE /* PresenterRowSampleCell.xib */; };
 		96ACF15F0CF663BA7761302B /* Pods_NasiShadchanHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B189A994D2AB087E2C0A61C4 /* Pods_NasiShadchanHelper.framework */; };
 		CB1B78312FC35F7900EDDCBC /* AppBootstrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B78302FC35F7900EDDCBC /* AppBootstrapper.swift */; };
+		CB1B78352FC3783200EDDCBC /* AuthServicing.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B78342FC3783200EDDCBC /* AuthServicing.swift */; };
 		CB2044D82FC11B1000BDF975 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2044D72FC11B1000BDF975 /* AppCoordinator.swift */; };
 		CB2044DA2FC11B2700BDF975 /* AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2044D92FC11B2700BDF975 /* AppContainer.swift */; };
 		CB219D4E2D8C82EB00D439B6 /* DatingRelationship.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */; };
@@ -128,7 +129,7 @@
 		CB9E7D852F5629FA00B43E38 /* PrefillPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB9E7D832F5629FA00B43E38 /* PrefillPacket.swift */; };
 		CBF40DF22FC097F500A16CD2 /* AuthSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF40DED2FC097F500A16CD2 /* AuthSession.swift */; };
 		CBF40DF32FC097F500A16CD2 /* MockAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF40DF02FC097F500A16CD2 /* MockAuthService.swift */; };
-		CBF40DF42FC097F500A16CD2 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF40DEC2FC097F500A16CD2 /* AuthService.swift */; };
+		CBF40DF42FC097F500A16CD2 /* FirebaseAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF40DEC2FC097F500A16CD2 /* FirebaseAuthService.swift */; };
 		CBF40DF52FC097F500A16CD2 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF40DEE2FC097F500A16CD2 /* LoginView.swift */; };
 		CBF40DF62FC097F500A16CD2 /* AuthError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF40DEB2FC097F500A16CD2 /* AuthError.swift */; };
 		CBF40DF72FC097F500A16CD2 /* SwiftUIAuthHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF40DF12FC097F500A16CD2 /* SwiftUIAuthHostingController.swift */; };
@@ -294,6 +295,7 @@
 		A155ACD0C76331FB368E958C /* Pods-NasiShadchanHelperTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NasiShadchanHelperTests.release.xcconfig"; path = "Target Support Files/Pods-NasiShadchanHelperTests/Pods-NasiShadchanHelperTests.release.xcconfig"; sourceTree = "<group>"; };
 		B189A994D2AB087E2C0A61C4 /* Pods_NasiShadchanHelper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NasiShadchanHelper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB1B78302FC35F7900EDDCBC /* AppBootstrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppBootstrapper.swift; sourceTree = "<group>"; };
+		CB1B78342FC3783200EDDCBC /* AuthServicing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthServicing.swift; sourceTree = "<group>"; };
 		CB2044D72FC11B1000BDF975 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		CB2044D92FC11B2700BDF975 /* AppContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContainer.swift; sourceTree = "<group>"; };
 		CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatingRelationship.swift; sourceTree = "<group>"; };
@@ -320,7 +322,7 @@
 		CB9E7D812F52970700B43E38 /* DebugImportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugImportViewController.swift; sourceTree = "<group>"; };
 		CB9E7D832F5629FA00B43E38 /* PrefillPacket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrefillPacket.swift; sourceTree = "<group>"; };
 		CBF40DEB2FC097F500A16CD2 /* AuthError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthError.swift; sourceTree = "<group>"; };
-		CBF40DEC2FC097F500A16CD2 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		CBF40DEC2FC097F500A16CD2 /* FirebaseAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthService.swift; sourceTree = "<group>"; };
 		CBF40DED2FC097F500A16CD2 /* AuthSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthSession.swift; sourceTree = "<group>"; };
 		CBF40DEE2FC097F500A16CD2 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		CBF40DEF2FC097F500A16CD2 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
@@ -757,11 +759,34 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		CB1B78322FC377BA00EDDCBC /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				CB1B78332FC377DE00EDDCBC /* Auth */,
+				1825F998252C3BA800448269 /* AuthViewControllers */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		CB1B78332FC377DE00EDDCBC /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				CBF40DED2FC097F500A16CD2 /* AuthSession.swift */,
+				CB8FE5A22FAE1D1200C425A8 /* SessionManaging.swift */,
+				CBF40DEB2FC097F500A16CD2 /* AuthError.swift */,
+				CB1B78342FC3783200EDDCBC /* AuthServicing.swift */,
+				CBF40DEC2FC097F500A16CD2 /* FirebaseAuthService.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
 		CB2044D62FC11AE700BDF975 /* Application */ = {
 			isa = PBXGroup;
 			children = (
 				52444B012A26D0F900F54E32 /* AppDelegate.swift */,
 				CB2044D72FC11B1000BDF975 /* AppCoordinator.swift */,
+				CB8FE59C2FAD4FF400C425A8 /* AppLaunchCoordinator.swift */,
+				CB60A79F2F5F01F800B209A3 /* AppLifecycleCoordinator.swift */,
 				CB2044D92FC11B2700BDF975 /* AppContainer.swift */,
 				CB1B78302FC35F7900EDDCBC /* AppBootstrapper.swift */,
 			);
@@ -819,17 +844,12 @@
 			isa = PBXGroup;
 			children = (
 				CB2044D62FC11AE700BDF975 /* Application */,
-				CBF40DEB2FC097F500A16CD2 /* AuthError.swift */,
-				CBF40DEC2FC097F500A16CD2 /* AuthService.swift */,
-				CBF40DED2FC097F500A16CD2 /* AuthSession.swift */,
+				CB1B78322FC377BA00EDDCBC /* Features */,
 				CBF40DEE2FC097F500A16CD2 /* LoginView.swift */,
 				CBF40DEF2FC097F500A16CD2 /* LoginViewModel.swift */,
 				CBF40DF02FC097F500A16CD2 /* MockAuthService.swift */,
 				CBF40DF12FC097F500A16CD2 /* SwiftUIAuthHostingController.swift */,
-				CB8FE59C2FAD4FF400C425A8 /* AppLaunchCoordinator.swift */,
-				CB8FE5A22FAE1D1200C425A8 /* SessionManaging.swift */,
 				CB8FE5A02FAE18A100C425A8 /* ResumeImportRouting.swift */,
-				CB60A79F2F5F01F800B209A3 /* AppLifecycleCoordinator.swift */,
 				CB60A7D92F61BD3F00B209A3 /* NavigationState.swift */,
 				CB60A7DC2F61BDC000B209A3 /* NavigationStateManager.swift */,
 				52DB326029997D0D00AC5F87 /* AddEditGirlViewController.swift */,
@@ -844,7 +864,6 @@
 				CB9E7D662F50ADE000B43E38 /* ParsedResumeReviewVC.swift */,
 				CB4E5B722F2BECD00042A61A /* GirlsFilterSearchVC.swift */,
 				5290EBDB2923BFB10008C57D /* ShadchanGirl.swift */,
-				1825F998252C3BA800448269 /* AuthViewControllers */,
 				185179862525FA190099D65E /* CustomViews */,
 				184F2F4E252ADB8900252C97 /* CommonClasses */,
 				18AB903A252DBA8100D9FCAB /* TabBarControllers */,
@@ -1202,6 +1221,7 @@
 				52E486C22B2381E900CA43CE /* PresenterRowSample.swift in Sources */,
 				3DC1849D258BBE6A00B529F0 /* GirlSentCell.swift in Sources */,
 				520578D5299BBA2500B732A0 /* MatchView.swift in Sources */,
+				CB1B78352FC3783200EDDCBC /* AuthServicing.swift in Sources */,
 				CEC468DB245A217F0071EC85 /* ResumeViewController.swift in Sources */,
 				CB4E5B732F2BECD00042A61A /* GirlsFilterSearchVC.swift in Sources */,
 				CB60A7DB2F61BD3F00B209A3 /* NavigationState.swift in Sources */,
@@ -1256,7 +1276,7 @@
 				CE525A76246366ED00CBEC41 /* HTCollegeTableViewCell.swift in Sources */,
 				CBF40DF22FC097F500A16CD2 /* AuthSession.swift in Sources */,
 				CBF40DF32FC097F500A16CD2 /* MockAuthService.swift in Sources */,
-				CBF40DF42FC097F500A16CD2 /* AuthService.swift in Sources */,
+				CBF40DF42FC097F500A16CD2 /* FirebaseAuthService.swift in Sources */,
 				CBF40DF52FC097F500A16CD2 /* LoginView.swift in Sources */,
 				CBF40DF62FC097F500A16CD2 /* AuthError.swift in Sources */,
 				CBF40DF72FC097F500A16CD2 /* SwiftUIAuthHostingController.swift in Sources */,

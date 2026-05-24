@@ -7,24 +7,25 @@
 //
 
 import Foundation
-
+@MainActor
 final class LoginViewModel: ObservableObject {
 
-    @Published var email = ""
-    @Published var password = ""
-    @Published var isLoading = false
-    @Published var session: AuthSession?
-    @Published var errorMessage: String?
+ 
+      @Published var email = ""
+      @Published var password = ""
+      @Published var isLoading = false
+      @Published var session: AuthSession?
+      @Published var errorMessage: String?
 
-    private let authService: AuthService
+    private let authService: AuthServicing
 
-    init(authService: AuthService = MockAuthService()) {
-        self.authService = authService
-    }
+    init(authService: AuthServicing) {
+          self.authService = authService
+      }
 
     var canLogin: Bool {
-        !email.isEmpty && !password.isEmpty
-    }
+           !email.isEmpty && !password.isEmpty
+       }
 
     var validationMessage: String? {
 
@@ -38,7 +39,7 @@ final class LoginViewModel: ObservableObject {
 
         return nil
     }
-
+ /*
     func login() {
 
         guard canLogin else {
@@ -69,4 +70,32 @@ final class LoginViewModel: ObservableObject {
             }
         }
     }
+  */
+    func login() async {
+        guard canLogin else {
+            return
+        }
+        
+        isLoading = true
+        errorMessage = nil
+        
+        do {
+            let session =
+            try await authService.login(
+                email: email,
+                password: password)
+            self.session = session
+            self.errorMessage = nil
+            print("✅ Login success")
+        } catch {
+            self.session = nil
+            self.errorMessage = error.localizedDescription
+            print("❌ Login failed: \(error.localizedDescription)")
+        }
+        isLoading = false
+    }
+        
 }
+
+    
+
