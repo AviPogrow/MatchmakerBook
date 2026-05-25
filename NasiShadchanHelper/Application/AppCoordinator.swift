@@ -28,10 +28,13 @@ final class AppCoordinator {
     }
 
     private func showLogin() {
+        // get the auth service from container
+        // inject it into the LoginViewModel
+    
         let viewModel = LoginViewModel(
             authService: container.authService
         )
-
+        
         viewModel.onLoginSuccess = { [weak self] in
             self?.showMainApp()
         }
