@@ -28,4 +28,7 @@ final class FirebaseAuthService: AuthServicing {
             email: user.email
         )
     }
+    func logout() throws {
+        try Auth.auth().signOut()
+    }
 }

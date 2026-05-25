@@ -13,6 +13,8 @@ final class AppCoordinator {
 
     private let window: UIWindow
     private let container: AppContainer
+    
+    private var mainTabCoordinator: MainTabCoordinator?
 
     init(window: UIWindow, container: AppContainer) {
         self.window = window
@@ -48,12 +50,14 @@ final class AppCoordinator {
     }
 
     private func showMainApp() {
-        let mainTabCoordinator = MainTabCoordinator(
-            container: container
-        )
+        let coordinator = MainTabCoordinator(container: container)
 
-        let tabBarController = mainTabCoordinator.start()
+        coordinator.onLogout = { [weak self] in
+            self?.showLogin()
+        }
 
-        window.rootViewController = tabBarController
+        mainTabCoordinator = coordinator
+        window.rootViewController = coordinator.start()
+        window.makeKeyAndVisible()
     }
 }

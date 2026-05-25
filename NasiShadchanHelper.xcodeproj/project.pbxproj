@@ -105,6 +105,7 @@
 		CB1B78352FC3783200EDDCBC /* AuthServicing.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B78342FC3783200EDDCBC /* AuthServicing.swift */; };
 		CB1B783A2FC4784200EDDCBC /* MainTabCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B78392FC4784200EDDCBC /* MainTabCoordinator.swift */; };
 		CB1B783C2FC479C200EDDCBC /* FirebaseSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B783B2FC479C200EDDCBC /* FirebaseSessionManager.swift */; };
+		CB1B783F2FC48A1000EDDCBC /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B783E2FC48A0A00EDDCBC /* DashboardViewController.swift */; };
 		CB2044D82FC11B1000BDF975 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2044D72FC11B1000BDF975 /* AppCoordinator.swift */; };
 		CB2044DA2FC11B2700BDF975 /* AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2044D92FC11B2700BDF975 /* AppContainer.swift */; };
 		CB219D4E2D8C82EB00D439B6 /* DatingRelationship.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */; };
@@ -300,6 +301,7 @@
 		CB1B78342FC3783200EDDCBC /* AuthServicing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthServicing.swift; sourceTree = "<group>"; };
 		CB1B78392FC4784200EDDCBC /* MainTabCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabCoordinator.swift; sourceTree = "<group>"; };
 		CB1B783B2FC479C200EDDCBC /* FirebaseSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseSessionManager.swift; sourceTree = "<group>"; };
+		CB1B783E2FC48A0A00EDDCBC /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
 		CB2044D72FC11B1000BDF975 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		CB2044D92FC11B2700BDF975 /* AppContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContainer.swift; sourceTree = "<group>"; };
 		CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatingRelationship.swift; sourceTree = "<group>"; };
@@ -766,6 +768,7 @@
 		CB1B78322FC377BA00EDDCBC /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				CB1B783D2FC48A0000EDDCBC /* Dashboard */,
 				CB1B78332FC377DE00EDDCBC /* Auth */,
 				CB1B78392FC4784200EDDCBC /* MainTabCoordinator.swift */,
 			);
@@ -812,6 +815,14 @@
 				CBF40DEB2FC097F500A16CD2 /* AuthError.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		CB1B783D2FC48A0000EDDCBC /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				CB1B783E2FC48A0A00EDDCBC /* DashboardViewController.swift */,
+			);
+			path = Dashboard;
 			sourceTree = "<group>";
 		};
 		CB2044D62FC11AE700BDF975 /* Application */ = {
@@ -1253,6 +1264,7 @@
 				3DC1849D258BBE6A00B529F0 /* GirlSentCell.swift in Sources */,
 				520578D5299BBA2500B732A0 /* MatchView.swift in Sources */,
 				CB1B78352FC3783200EDDCBC /* AuthServicing.swift in Sources */,
+				CB1B783F2FC48A1000EDDCBC /* DashboardViewController.swift in Sources */,
 				CEC468DB245A217F0071EC85 /* ResumeViewController.swift in Sources */,
 				CB4E5B732F2BECD00042A61A /* GirlsFilterSearchVC.swift in Sources */,
 				CB60A7DB2F61BD3F00B209A3 /* NavigationState.swift in Sources */,
