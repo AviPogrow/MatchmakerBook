@@ -10,8 +10,10 @@ import Foundation
 final class AppContainer {
 
     let authService: AuthServicing
+    let sessionManager: SessionManaging
 
     init() {
         self.authService = FirebaseAuthService()
+        self.sessionManager = FirebaseSessionManager()
     }
 }

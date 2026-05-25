@@ -9,11 +9,8 @@ import SwiftUI
 
 struct LoginView: View {
 
-    @StateObject private var viewModel: LoginViewModel
-
-    init(viewModel: LoginViewModel) {
-        _viewModel = StateObject(wrappedValue: viewModel)
-    }
+    
+    @ObservedObject var viewModel: LoginViewModel
 
     var body: some View {
         VStack(spacing: 20) {
@@ -54,7 +51,7 @@ struct LoginView: View {
                 }
             }
             .buttonStyle(.borderedProminent)
-            .disabled(!viewModel.canLogin || viewModel.isLoading)
+            .disabled(!viewModel.canLogin)
         }
         .padding()
     }

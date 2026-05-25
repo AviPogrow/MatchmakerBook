@@ -10,8 +10,11 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    // place to store the bootstrapper object
+    // so it lives as long as the appDelegate
     private let bootstrapper: AppBootstrapper
 
+    // at the init call the init of boot stapper
     override init() {
         self.bootstrapper = AppBootstrapper()
         super.init()
@@ -21,7 +24,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
+        
+        // at launch call the bootstrap function
+        // to setup window, container, coordinatore
         bootstrapper.bootstrap(launchOptions: launchOptions)
+        
         return true
     }
 

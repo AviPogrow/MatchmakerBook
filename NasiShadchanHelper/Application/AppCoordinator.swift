@@ -13,25 +13,18 @@ final class AppCoordinator {
 
     private let window: UIWindow
     private let container: AppContainer
-    private let launchCoordinator = AppLaunchCoordinator()
 
     init(window: UIWindow, container: AppContainer) {
         self.window = window
         self.container = container
     }
 
-    func start(isLoggedIn: Bool = false) {
-        let flow = launchCoordinator.start(isLoggedIn: isLoggedIn)
-
-        switch flow {
-        case .showLogin:
-            showLogin()
-
-        case .showMainApp:
+    func start() {
+        if container.sessionManager.isLoggedIn() {
             showMainApp()
+        } else {
+            showLogin()
         }
-
-        window.makeKeyAndVisible()
     }
 
     private func showLogin() {
@@ -39,19 +32,25 @@ final class AppCoordinator {
             authService: container.authService
         )
 
+        viewModel.onLoginSuccess = { [weak self] in
+            self?.showMainApp()
+        }
+
         let loginVC = SwiftUIAuthHostingController(
             viewModel: viewModel
         )
 
         window.rootViewController = loginVC
+        window.makeKeyAndVisible()
     }
 
     private func showMainApp() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let tabBar = storyboard.instantiateViewController(
-            withIdentifier: "MyTabBarController"
+        let mainTabCoordinator = MainTabCoordinator(
+            container: container
         )
 
-        window.rootViewController = tabBar
+        let tabBarController = mainTabCoordinator.start()
+
+        window.rootViewController = tabBarController
     }
 }
