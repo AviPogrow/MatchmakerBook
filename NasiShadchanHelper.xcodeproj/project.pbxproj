@@ -555,7 +555,6 @@
 		18AB903A252DBA8100D9FCAB /* TabBarControllers */ = {
 			isa = PBXGroup;
 			children = (
-				5290DBB7293E3FAE004F6A04 /* HomeViewController.swift */,
 				CB9E7D622F4E192F00B43E38 /* DateISO.swift */,
 				CB3EED4E2F3E1C8D006B392B /* ProfileSearchFilterVC.swift */,
 				CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */,
@@ -731,7 +730,6 @@
 		52DB32632999C5C400AC5F87 /* NasiGirlDetailScene */ = {
 			isa = PBXGroup;
 			children = (
-				CE428D53248142B500C34EAB /* ShadchanListDetailViewController.swift */,
 				5228CB2427B4122B00EDF103 /* ShadchanGirlNotesVC.swift */,
 				3D9DA71D25ACCEB10056F656 /* ViewResumeVCViewController.swift */,
 				5228CB2027AF015100EDF103 /* ContactsViewController.swift */,
@@ -890,6 +888,8 @@
 			children = (
 				CB2044D62FC11AE700BDF975 /* Application */,
 				CB1B78322FC377BA00EDDCBC /* Features */,
+				CE428D53248142B500C34EAB /* ShadchanListDetailViewController.swift */,
+				5290DBB7293E3FAE004F6A04 /* HomeViewController.swift */,
 				CB8FE5A02FAE18A100C425A8 /* ResumeImportRouting.swift */,
 				CB60A7D92F61BD3F00B209A3 /* NavigationState.swift */,
 				CB60A7DC2F61BDC000B209A3 /* NavigationStateManager.swift */,
