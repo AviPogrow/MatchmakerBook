@@ -12,6 +12,8 @@ import UIKit
 @MainActor
 final class MainTabCoordinator {
     
+    private var nasiGirlsCoordinator: NasiGirlsCoordinator?
+    
     private let container: AppContainer
     var onLogout: (() -> Void)?
     
@@ -19,11 +21,27 @@ final class MainTabCoordinator {
         self.container = container
     }
     
+    
+    
     func start() -> UITabBarController {
+        let girlsNav = UINavigationController()
+
+        let girlsCoordinator = NasiGirlsCoordinator(
+            navigationController: girlsNav,
+            container: container
+        )
+        girlsCoordinator.start()
+        
+        girlsNav.tabBarItem = UITabBarItem(
+            title: "Nasi Girls",
+            image: UIImage(systemName: "person.3"),
+            tag: 0
+        )
+        self.nasiGirlsCoordinator = girlsCoordinator
+        
         let tabBarController = UITabBarController()
 
-        tabBarController.viewControllers = [
-            makeGirlsFlow(),makeBoysFlow(),makeDashboardFlow()
+        tabBarController.viewControllers = [makeGirlsFlow(),makeBoysFlow(),makeDashboardFlow(),girlsNav
         ]
 
         return tabBarController

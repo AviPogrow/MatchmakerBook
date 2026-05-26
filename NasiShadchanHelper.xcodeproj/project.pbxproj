@@ -106,6 +106,7 @@
 		CB1B783A2FC4784200EDDCBC /* MainTabCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B78392FC4784200EDDCBC /* MainTabCoordinator.swift */; };
 		CB1B783C2FC479C200EDDCBC /* FirebaseSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B783B2FC479C200EDDCBC /* FirebaseSessionManager.swift */; };
 		CB1B783F2FC48A1000EDDCBC /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B783E2FC48A0A00EDDCBC /* DashboardViewController.swift */; };
+		CB1B78422FC5FA5800EDDCBC /* NasiGirlsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B78412FC5FA5800EDDCBC /* NasiGirlsCoordinator.swift */; };
 		CB2044D82FC11B1000BDF975 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2044D72FC11B1000BDF975 /* AppCoordinator.swift */; };
 		CB2044DA2FC11B2700BDF975 /* AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2044D92FC11B2700BDF975 /* AppContainer.swift */; };
 		CB219D4E2D8C82EB00D439B6 /* DatingRelationship.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */; };
@@ -302,6 +303,7 @@
 		CB1B78392FC4784200EDDCBC /* MainTabCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabCoordinator.swift; sourceTree = "<group>"; };
 		CB1B783B2FC479C200EDDCBC /* FirebaseSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseSessionManager.swift; sourceTree = "<group>"; };
 		CB1B783E2FC48A0A00EDDCBC /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
+		CB1B78412FC5FA5800EDDCBC /* NasiGirlsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NasiGirlsCoordinator.swift; sourceTree = "<group>"; };
 		CB2044D72FC11B1000BDF975 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		CB2044D92FC11B2700BDF975 /* AppContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContainer.swift; sourceTree = "<group>"; };
 		CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatingRelationship.swift; sourceTree = "<group>"; };
@@ -766,6 +768,8 @@
 		CB1B78322FC377BA00EDDCBC /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				CB1B78432FC5FBAA00EDDCBC /* MatchmakerGirls */,
+				CB1B78402FC5FA2A00EDDCBC /* NasiGirls */,
 				CB1B783D2FC48A0000EDDCBC /* Dashboard */,
 				CB1B78332FC377DE00EDDCBC /* Auth */,
 				CB1B78392FC4784200EDDCBC /* MainTabCoordinator.swift */,
@@ -821,6 +825,23 @@
 				CB1B783E2FC48A0A00EDDCBC /* DashboardViewController.swift */,
 			);
 			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		CB1B78402FC5FA2A00EDDCBC /* NasiGirls */ = {
+			isa = PBXGroup;
+			children = (
+				CB1B78412FC5FA5800EDDCBC /* NasiGirlsCoordinator.swift */,
+				5290DBB7293E3FAE004F6A04 /* HomeViewController.swift */,
+				CE428D53248142B500C34EAB /* ShadchanListDetailViewController.swift */,
+			);
+			path = NasiGirls;
+			sourceTree = "<group>";
+		};
+		CB1B78432FC5FBAA00EDDCBC /* MatchmakerGirls */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = MatchmakerGirls;
 			sourceTree = "<group>";
 		};
 		CB2044D62FC11AE700BDF975 /* Application */ = {
@@ -888,8 +909,6 @@
 			children = (
 				CB2044D62FC11AE700BDF975 /* Application */,
 				CB1B78322FC377BA00EDDCBC /* Features */,
-				CE428D53248142B500C34EAB /* ShadchanListDetailViewController.swift */,
-				5290DBB7293E3FAE004F6A04 /* HomeViewController.swift */,
 				CB8FE5A02FAE18A100C425A8 /* ResumeImportRouting.swift */,
 				CB60A7D92F61BD3F00B209A3 /* NavigationState.swift */,
 				CB60A7DC2F61BDC000B209A3 /* NavigationStateManager.swift */,
@@ -1238,6 +1257,7 @@
 				184B498A2563EED4008B61F9 /* GradientView.swift in Sources */,
 				5299DCF429A7CCBF00050586 /* AllSecondDatesVC.swift in Sources */,
 				52E486C42B23829300CA43CE /* PresenterRowSampleCell.swift in Sources */,
+				CB1B78422FC5FA5800EDDCBC /* NasiGirlsCoordinator.swift in Sources */,
 				52A04EEF29A3A6A700C490B0 /* MatchIdea.swift in Sources */,
 				CB8FE59D2FAD4FF400C425A8 /* AppLaunchCoordinator.swift in Sources */,
 				520578DE299E6F8C00B732A0 /* GirlCollectionViewCell.swift in Sources */,
