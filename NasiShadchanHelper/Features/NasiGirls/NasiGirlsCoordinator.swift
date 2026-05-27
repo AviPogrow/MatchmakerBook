@@ -13,6 +13,8 @@ final class NasiGirlsCoordinator {
     private let navigationController: UINavigationController
     private let container: AppContainer
     
+    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+    
     init(
           navigationController: UINavigationController,
           container: AppContainer
@@ -20,12 +22,48 @@ final class NasiGirlsCoordinator {
           self.navigationController = navigationController
           self.container = container
       }
+    
     func start() {
-       let storyboard = UIStoryboard(name: "Main", bundle: nil)
-
-          let listVC = storyboard.instantiateViewController(
+      
+        let listVC = storyboard.instantiateViewController(
               withIdentifier: "HomeViewController"
           ) as! HomeViewController
+        
         navigationController.setViewControllers([listVC], animated: false)
+        
+    
+       // the listVC has this closure as an instance property
+       //
+        listVC.onNasiGirlSelected = { [weak self] girl in
+            self?.showDetail(for: girl)
         }
+    }
+    
+    private func showDetail(for girl: NasiGirl) {
+        let identifier = "ShadchanListDetailViewController"
+
+        let detailVC = storyboard.instantiateViewController(
+            withIdentifier: identifier
+        ) as! ShadchanListDetailViewController
+
+        detailVC.selectedNasiGirl = girl
+        
+        detailVC.onSendResumeTapped = { [weak self] girl in
+            self?.showSendResume(for: girl)
+        }
+
+        navigationController.pushViewController(
+            detailVC,
+            animated: true
+        )
+    }
+    private func showSendResume(for girl: NasiGirl) {
+        let vc = storyboard.instantiateViewController(
+            withIdentifier: "ResumeViewController"
+        ) as! ResumeViewController
+
+        vc.selectedNasiGirl = girl
+
+        navigationController.pushViewController(vc, animated: true)
+    }
 }

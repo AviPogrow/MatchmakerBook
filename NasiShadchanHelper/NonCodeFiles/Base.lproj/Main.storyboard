@@ -53,9 +53,6 @@
                                         <rect key="frame" x="0.0" y="471.66666666666657" width="361" height="132.33333333333331"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                         <state key="normal" title="Whole Nasi List (A-Z)"/>
-                                        <connections>
-                                            <segue destination="CdD-Jv-4nl" kind="show" identifier="AllNasiGirls" id="5v3-AF-wmQ"/>
-                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>
@@ -1130,107 +1127,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NxT-x4-5ND" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-5720" y="1189"/>
-        </scene>
-        <!--AllNasiGirlsViewController-->
-        <scene sceneID="dpH-fa-oqb">
-            <objects>
-                <viewController id="CdD-Jv-4nl" userLabel="AllNasiGirlsViewController" customClass="AllNasiGirlsViewController" customModule="NasiShadchanHelper" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Ati-LH-NjM">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="783"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="225" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="26i-Jj-577">
-                                <rect key="frame" x="0.0" y="59" width="393" height="724"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="AllNasiListCell" rowHeight="225" id="P0W-e0-v2u" userLabel="AllGirlsTableViewCell" customClass="AllGirlsTableViewCell" customModule="NasiShadchanHelper" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="50" width="393" height="225"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="P0W-e0-v2u" id="lTq-G0-B21">
-                                            <rect key="frame" x="0.0" y="0.0" width="362.66666666666669" height="225"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="btnGoogle" translatesAutoresizingMaskIntoConstraints="NO" id="dYV-gE-ywP">
-                                                    <rect key="frame" x="20" y="11" width="85" height="203"/>
-                                                    <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="85" id="qtN-R0-nEz"/>
-                                                    </constraints>
-                                                </imageView>
-                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="qIH-Og-80C">
-                                                    <rect key="frame" x="112.99999999999999" y="8" width="241.66666666666663" height="209"/>
-                                                    <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dpU-Jw-ptU">
-                                                            <rect key="frame" x="0.0" y="0.0" width="241.66666666666666" height="46.333333333333336"/>
-                                                            <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                            <nil key="textColor"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Out-jH-DTx">
-                                                            <rect key="frame" x="0.0" y="54.333333333333329" width="241.66666666666666" height="46.333333333333329"/>
-                                                            <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oS0-BO-8bF">
-                                                            <rect key="frame" x="0.0" y="108.66666666666669" width="241.66666666666666" height="46"/>
-                                                            <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wzd-Ap-Xur">
-                                                            <rect key="frame" x="0.0" y="162.66666666666666" width="241.66666666666666" height="46.333333333333343"/>
-                                                            <color key="backgroundColor" systemColor="tableCellGroupedBackgroundColor"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                            <color key="textColor" systemColor="secondaryLabelColor"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                    </subviews>
-                                                </stackView>
-                                            </subviews>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <constraints>
-                                                <constraint firstItem="dYV-gE-ywP" firstAttribute="bottom" secondItem="lTq-G0-B21" secondAttribute="bottomMargin" id="60z-l6-31i"/>
-                                                <constraint firstItem="dYV-gE-ywP" firstAttribute="top" secondItem="lTq-G0-B21" secondAttribute="topMargin" id="8Aw-1B-o2s"/>
-                                                <constraint firstAttribute="trailing" secondItem="qIH-Og-80C" secondAttribute="trailing" constant="8" id="FWt-gi-Daj"/>
-                                                <constraint firstItem="qIH-Og-80C" firstAttribute="top" secondItem="lTq-G0-B21" secondAttribute="top" constant="8" id="Ibs-V8-H2y"/>
-                                                <constraint firstItem="qIH-Og-80C" firstAttribute="leading" secondItem="dYV-gE-ywP" secondAttribute="trailing" constant="8" id="fAl-vR-g6r"/>
-                                                <constraint firstItem="dYV-gE-ywP" firstAttribute="leading" secondItem="lTq-G0-B21" secondAttribute="leadingMargin" id="sfe-dC-wIj"/>
-                                                <constraint firstAttribute="bottom" secondItem="qIH-Og-80C" secondAttribute="bottom" constant="8" id="xTB-Kz-ZPe"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="categoryCodeLabel" destination="Wzd-Ap-Xur" id="LsU-Se-CeE"/>
-                                            <outlet property="cityAndSeminaryLabel" destination="oS0-BO-8bF" id="yob-N3-9YE"/>
-                                            <outlet property="heightAndAgeLabel" destination="Out-jH-DTx" id="4LY-qJ-E9B"/>
-                                            <outlet property="nameTextLabel" destination="dpU-Jw-ptU" id="JWv-NZ-03t"/>
-                                            <outlet property="profileImageView" destination="dYV-gE-ywP" id="Ud5-DV-1XS"/>
-                                            <segue destination="ad9-lp-W7g" kind="show" identifier="ShowProfileDetails" id="Eaa-Ru-1kQ"/>
-                                        </connections>
-                                    </tableViewCell>
-                                </prototypes>
-                            </tableView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="DjP-WR-KMY"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="DjP-WR-KMY" firstAttribute="trailing" secondItem="26i-Jj-577" secondAttribute="trailing" id="1GU-2A-ZEj"/>
-                            <constraint firstItem="26i-Jj-577" firstAttribute="top" secondItem="DjP-WR-KMY" secondAttribute="top" id="Dhk-zj-h9h"/>
-                            <constraint firstItem="DjP-WR-KMY" firstAttribute="bottom" secondItem="26i-Jj-577" secondAttribute="bottom" id="anI-3p-QHg"/>
-                            <constraint firstItem="26i-Jj-577" firstAttribute="leading" secondItem="DjP-WR-KMY" secondAttribute="leading" id="cXG-CW-QgZ"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="Zuf-zd-b0r"/>
-                    <connections>
-                        <outlet property="tableView" destination="26i-Jj-577" id="pdp-jo-0VC"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="FUk-85-tId" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2520" y="-294.31279620853081"/>
         </scene>
         <!--FullTimeYeshivaViewController-->
         <scene sceneID="p6E-O6-a7J">
@@ -3410,7 +3306,6 @@
     </inferredMetricsTieBreakers>
     <resources>
         <image name="AdinaDavis" width="30" height="30"/>
-        <image name="btnGoogle" width="32" height="32"/>
         <image name="google.png" width="18" height="18"/>
         <image name="house" catalog="system" width="128" height="104"/>
         <image name="imgBtnEdit" width="26" height="26"/>
@@ -3434,9 +3329,6 @@
         </systemColor>
         <systemColor name="linkColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="secondaryLabelColor">
-            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="secondarySystemGroupedBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -3470,9 +3362,6 @@
         </systemColor>
         <systemColor name="systemPinkColor">
             <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="tableCellGroupedBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="tintColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

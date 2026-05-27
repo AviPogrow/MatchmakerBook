@@ -18,7 +18,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource,UICollect
     var allNasiGirlsList: [NasiGirl] = [NasiGirl]()
     var filteredNasiGirlsList:[NasiGirl] = [NasiGirl]()
     
-  
+    var onNasiGirlSelected: ((NasiGirl) -> Void)?
 
     fileprivate let enterSearchTermLabel: UILabel = {
         let label = UILabel()
@@ -244,8 +244,10 @@ class HomeViewController: UIViewController, UICollectionViewDataSource,UICollect
         let girlDetailController = storyboard!.instantiateViewController(withIdentifier: identifier) as! ShadchanListDetailViewController
         
         let currentGirl = filteredNasiGirlsList[indexPath.item]
-        girlDetailController.selectedNasiGirl = currentGirl
-        navigationController?.pushViewController(girlDetailController, animated: true)
+        
+        onNasiGirlSelected?(currentGirl)
+        //girlDetailController.selectedNasiGirl = currentGirl
+        //navigationController?.pushViewController(girlDetailController, animated: true)
         }
     
        override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

@@ -70,13 +70,7 @@ class CategoriesViewController: UIViewController {
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        if segue.identifier == "AllNasiGirls" {
-            let controller = segue.destination as! AllNasiGirlsViewController
-            controller.allNasiGirlsList  = arrayOfNasiGirls
-            controller.selectedNasiBoy = selectedNasiBoy
-            
-        }
+       
         
         if segue.identifier == "ShowFullTimeYeshiva" {
             

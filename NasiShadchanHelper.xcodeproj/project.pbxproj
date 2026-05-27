@@ -830,8 +830,8 @@
 		CB1B78402FC5FA2A00EDDCBC /* NasiGirls */ = {
 			isa = PBXGroup;
 			children = (
-				CB1B78412FC5FA5800EDDCBC /* NasiGirlsCoordinator.swift */,
 				5290DBB7293E3FAE004F6A04 /* HomeViewController.swift */,
+				CB1B78412FC5FA5800EDDCBC /* NasiGirlsCoordinator.swift */,
 				CE428D53248142B500C34EAB /* ShadchanListDetailViewController.swift */,
 			);
 			path = NasiGirls;
