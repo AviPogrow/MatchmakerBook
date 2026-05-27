@@ -596,11 +596,11 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="64"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" distribution="fillProportionally" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="kLr-d5-819">
-                                                    <rect key="frame" x="4" y="16.000000000000004" width="400" height="40.333333333333343"/>
+                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="kLr-d5-819">
+                                                    <rect key="frame" x="66.666666666666657" y="12.000000000000004" width="280.66666666666674" height="40.333333333333343"/>
                                                     <subviews>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jUx-gK-WaC">
-                                                            <rect key="frame" x="0.0" y="0.0" width="38.333333333333336" height="40.333333333333336"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="35.666666666666664" height="40.333333333333336"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             <state key="normal" title="Bio">
@@ -608,38 +608,33 @@
                                                             </state>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WIG-Lu-ULK">
-                                                            <rect key="frame" x="46.333333333333329" y="0.0" width="136.33333333333337" height="40.333333333333336"/>
+                                                            <rect key="frame" x="43.666666666666664" y="0.0" width="127.66666666666669" height="40.333333333333336"/>
                                                             <state key="normal" title="Button"/>
                                                             <buttonConfiguration key="configuration" style="plain" title="Contacts">
                                                                 <fontDescription key="titleFontDescription" type="system" pointSize="22"/>
                                                             </buttonConfiguration>
                                                             <connections>
-                                                                <segue destination="i3d-D5-ysr" kind="show" identifier="ShowContactsVC" id="cvU-SS-UCz"/>
-                                                            </connections>
-                                                        </button>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MG5-fC-YY4">
-                                                            <rect key="frame" x="190.66666666666666" y="0.0" width="99.999999999999972" height="40.333333333333336"/>
-                                                            <state key="normal" title="Button"/>
-                                                            <buttonConfiguration key="configuration" style="plain" title="Notes">
-                                                                <fontDescription key="titleFontDescription" type="system" pointSize="22"/>
-                                                            </buttonConfiguration>
-                                                            <connections>
-                                                                <segue destination="o4b-Y8-YS9" kind="show" identifier="ShowNotesVC" id="Efi-Cg-VlR"/>
+                                                                <action selector="showContactsTapped:" destination="ad9-lp-W7g" eventType="touchUpInside" id="JDN-N5-7hf"/>
                                                             </connections>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="agr-Mb-geo">
-                                                            <rect key="frame" x="298.66666666666669" y="0.0" width="101.33333333333331" height="40.333333333333336"/>
+                                                            <rect key="frame" x="179.33333333333331" y="0.0" width="101.33333333333331" height="40.333333333333336"/>
                                                             <state key="normal" title="Button"/>
                                                             <buttonConfiguration key="configuration" style="plain" title="Resume">
                                                                 <fontDescription key="titleFontDescription" type="system" pointSize="22"/>
                                                             </buttonConfiguration>
                                                             <connections>
-                                                                <segue destination="KfI-sv-bnQ" kind="show" identifier="ShowViewResumeVC" id="Fml-2n-hng"/>
+                                                                <action selector="showResumeTapped:" destination="ad9-lp-W7g" eventType="touchUpInside" id="SJd-X5-mVp"/>
                                                             </connections>
                                                         </button>
                                                     </subviews>
+                                                    <color key="backgroundColor" systemColor="opaqueSeparatorColor"/>
                                                 </stackView>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstItem="kLr-d5-819" firstAttribute="centerX" secondItem="mEz-nL-IXY" secondAttribute="centerX" id="FNv-iH-wRf"/>
+                                                <constraint firstItem="kLr-d5-819" firstAttribute="centerY" secondItem="mEz-nL-IXY" secondAttribute="centerY" id="NbP-FB-TXS"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="440" id="BJQ-7V-bMg">
@@ -735,15 +730,15 @@
             <objects>
                 <viewController storyboardIdentifier="ViewResumeVCViewController" id="KfI-sv-bnQ" customClass="ViewResumeVCViewController" customModule="NasiShadchanHelper" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="nzi-iI-Exc">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="783"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AK4-dG-cRb" userLabel="PDFView" customClass="PDFView">
-                                <rect key="frame" x="0.0" y="81" width="393" height="653"/>
+                                <rect key="frame" x="0.0" y="199" width="393" height="585"/>
                                 <color key="backgroundColor" systemColor="systemGray2Color"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B1q-Rn-iJI">
-                                <rect key="frame" x="258" y="20" width="115" height="53"/>
+                                <rect key="frame" x="258" y="138" width="115" height="53"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="34"/>
                                 <state key="normal" title="Dismiss"/>
                                 <connections>
@@ -751,7 +746,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Waiting For Resume Data..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ElC-iP-rzv">
-                                <rect key="frame" x="0.0" y="371" width="393" height="41"/>
+                                <rect key="frame" x="0.0" y="405.66666666666669" width="393" height="41"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="34"/>
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1505,7 +1500,7 @@
             <objects>
                 <tableViewController id="o4b-Y8-YS9" customClass="ShadchanGirlNotesVC" customModule="NasiShadchanHelper" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="Mh1-32-s4i">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="783"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <sections>
@@ -1609,7 +1604,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="ContactsViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="i3d-D5-ysr" userLabel="ContactsViewController" customClass="ContactsViewController" customModule="NasiShadchanHelper" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="vwo-S2-2vM">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="1231"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="1300"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <sections>
@@ -3329,6 +3324,9 @@
         </systemColor>
         <systemColor name="linkColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="opaqueSeparatorColor">
+            <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="secondarySystemGroupedBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

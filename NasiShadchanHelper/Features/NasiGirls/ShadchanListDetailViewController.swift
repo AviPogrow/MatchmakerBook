@@ -69,16 +69,12 @@ let matchButton = UIBarButtonItem(title: "Match Them!",style: .plain, target: se
         
         populateBioTextField()
   
-        //girlProfileImageView.backgroundColor = .white
-        //girlProfileImageView.translatesAutoresizingMaskIntoConstraints = false
-       // girlProfileImageView.layer.cornerRadius = 20
         girlProfileImageView.layer.masksToBounds = true
         girlProfileImageView.contentMode = .scaleAspectFill
         girlProfileImageView.isUserInteractionEnabled = true
         girlProfileImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomTap)))
         
         girlProfileImageView.backgroundColor = .yellow
-        //girlProfileImageView.image = UIImage(named: "Kramer")
         loadProfilePhoto()
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -266,36 +262,19 @@ let matchButton = UIBarButtonItem(title: "Match Them!",style: .plain, target: se
         //label.attributedText = attributedText
         lookingForTextView.attributedText = attributedText
     }
-   
+   // Navigation via coordinator
    @objc func presentSendController(){
+    onSendResumeTapped?(selectedNasiGirl)
+    }
+        
+    @IBAction func showContactsTapped(_ sender: Any) {
+        onContactsTapped?(selectedNasiGirl)
+        
+    }
     
-           onSendResumeTapped?(selectedNasiGirl)
-       }
+    @IBAction func showResumeTapped(_ sender: Any) {
+        onViewResumeTapped?(selectedNasiGirl)
         
-    
-        
-    // MARK: - Navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     
-        
-         if segue.identifier == "ShowViewResumeVC" {
-        let controller = segue.destination as! ViewResumeVCViewController
-           
-            controller.selectedNasiGirl  = self.selectedNasiGirl
-            
-        }
-        
-        else if segue.identifier == "ShowContactsVC" {
-        let controller = segue.destination as! ContactsViewController
-           
-            controller.selectedNasiGirl  = self.selectedNasiGirl
-        }
-        
-        else if segue.identifier == "ShowNotesVC" {
-        let controller = segue.destination as! ShadchanGirlNotesVC
-           
-            controller.selectedNasiGirl  = self.selectedNasiGirl
-        }
         
     }
     

@@ -51,12 +51,37 @@ final class NasiGirlsCoordinator {
         detailVC.onSendResumeTapped = { [weak self] girl in
             self?.showSendResume(for: girl)
         }
+        detailVC.onContactsTapped = { [weak self] girl in
+            self?.showContacts(for: girl)
+        }
+        
+        detailVC.onViewResumeTapped = { [weak self] girl in
+            self?.showViewResume(for: girl)
+        }
 
         navigationController.pushViewController(
             detailVC,
             animated: true
         )
     }
+    private func showContacts(for girl: NasiGirl) {
+        let vc = storyboard.instantiateViewController(
+            withIdentifier: "ContactsViewController"
+        ) as! ContactsViewController
+
+        vc.selectedNasiGirl = girl
+        navigationController.pushViewController(vc, animated: true)
+    }
+    private func showViewResume(for girl: NasiGirl) {
+        let vc = storyboard.instantiateViewController(
+            withIdentifier: "ViewResumeVCViewController"
+        ) as! ViewResumeVCViewController
+
+        vc.selectedNasiGirl = girl
+        navigationController.pushViewController(vc, animated: true)
+    }
+   
+    
     private func showSendResume(for girl: NasiGirl) {
         let vc = storyboard.instantiateViewController(
             withIdentifier: "ResumeViewController"
