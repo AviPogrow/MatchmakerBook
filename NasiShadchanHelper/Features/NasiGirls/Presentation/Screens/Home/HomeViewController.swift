@@ -12,6 +12,8 @@ import Firebase
 
 class HomeViewController: UIViewController, UICollectionViewDataSource,UICollectionViewDelegate,  UICollectionViewDelegateFlowLayout, UISearchBarDelegate  {
     
+    private let repository: NasiGirlsRepository = FirebaseNasiGirlsRepository()
+    
     @IBOutlet weak var collectionView: UICollectionView!
     
     
@@ -169,6 +171,33 @@ class HomeViewController: UIViewController, UICollectionViewDataSource,UICollect
         }
         self.collectionView?.reloadData()
     }
+    
+    func fetchAndCreateNasiGirlsArray() {
+        view.showLoadingIndicator()
+        allNasiGirlsList.removeAll()
+
+        Task {
+            do {
+                let girls = try await repository.fetchNasiGirls()
+
+                await MainActor.run {
+                    self.view.hideLoadingIndicator()
+                    self.allNasiGirlsList = girls
+                    self.filteredNasiGirlsList = girls
+                    self.collectionView.reloadData()
+                }
+            } catch {
+                await MainActor.run {
+                    self.view.hideLoadingIndicator()
+                    print("Failed to fetch Nasi girls:", error)
+                }
+            }
+        }
+    }
+    
+    
+    
+    /*
     func fetchAndCreateNasiGirlsArray() {
         view.showLoadingIndicator()
         allNasiGirlsList.removeAll()
@@ -199,6 +228,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource,UICollect
             }
         }
     }
+     */
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let width = view.frame.width / 2 - 5

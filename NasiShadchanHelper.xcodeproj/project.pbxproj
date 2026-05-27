@@ -107,6 +107,8 @@
 		CB1B783C2FC479C200EDDCBC /* FirebaseSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B783B2FC479C200EDDCBC /* FirebaseSessionManager.swift */; };
 		CB1B783F2FC48A1000EDDCBC /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B783E2FC48A0A00EDDCBC /* DashboardViewController.swift */; };
 		CB1B78422FC5FA5800EDDCBC /* NasiGirlsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B78412FC5FA5800EDDCBC /* NasiGirlsCoordinator.swift */; };
+		CB1B784E2FC73E7200EDDCBC /* NasiGirlsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B784D2FC73E7200EDDCBC /* NasiGirlsRepository.swift */; };
+		CB1B78502FC73F6200EDDCBC /* FirebaseNasiGirlsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B784F2FC73F6200EDDCBC /* FirebaseNasiGirlsRepository.swift */; };
 		CB2044D82FC11B1000BDF975 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2044D72FC11B1000BDF975 /* AppCoordinator.swift */; };
 		CB2044DA2FC11B2700BDF975 /* AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2044D92FC11B2700BDF975 /* AppContainer.swift */; };
 		CB219D4E2D8C82EB00D439B6 /* DatingRelationship.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */; };
@@ -304,6 +306,8 @@
 		CB1B783B2FC479C200EDDCBC /* FirebaseSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseSessionManager.swift; sourceTree = "<group>"; };
 		CB1B783E2FC48A0A00EDDCBC /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
 		CB1B78412FC5FA5800EDDCBC /* NasiGirlsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NasiGirlsCoordinator.swift; sourceTree = "<group>"; };
+		CB1B784D2FC73E7200EDDCBC /* NasiGirlsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NasiGirlsRepository.swift; sourceTree = "<group>"; };
+		CB1B784F2FC73F6200EDDCBC /* FirebaseNasiGirlsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseNasiGirlsRepository.swift; sourceTree = "<group>"; };
 		CB2044D72FC11B1000BDF975 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		CB2044D92FC11B2700BDF975 /* AppContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContainer.swift; sourceTree = "<group>"; };
 		CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatingRelationship.swift; sourceTree = "<group>"; };
@@ -830,9 +834,9 @@
 		CB1B78402FC5FA2A00EDDCBC /* NasiGirls */ = {
 			isa = PBXGroup;
 			children = (
-				5290DBB7293E3FAE004F6A04 /* HomeViewController.swift */,
-				CB1B78412FC5FA5800EDDCBC /* NasiGirlsCoordinator.swift */,
-				CE428D53248142B500C34EAB /* ShadchanListDetailViewController.swift */,
+				CB1B78442FC73CA500EDDCBC /* Presentation */,
+				CB1B78462FC73CD300EDDCBC /* Infrastructure */,
+				CB1B78452FC73CB600EDDCBC /* Domain */,
 			);
 			path = NasiGirls;
 			sourceTree = "<group>";
@@ -842,6 +846,80 @@
 			children = (
 			);
 			path = MatchmakerGirls;
+			sourceTree = "<group>";
+		};
+		CB1B78442FC73CA500EDDCBC /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				CB1B78492FC73DA000EDDCBC /* Screens */,
+				CB1B784A2FC73DAF00EDDCBC /* Coordinators */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		CB1B78452FC73CB600EDDCBC /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				CB1B78482FC73D2300EDDCBC /* Repositories */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		CB1B78462FC73CD300EDDCBC /* Infrastructure */ = {
+			isa = PBXGroup;
+			children = (
+				CB1B78472FC73D1500EDDCBC /* Firebase */,
+			);
+			path = Infrastructure;
+			sourceTree = "<group>";
+		};
+		CB1B78472FC73D1500EDDCBC /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				CB1B784F2FC73F6200EDDCBC /* FirebaseNasiGirlsRepository.swift */,
+			);
+			path = Firebase;
+			sourceTree = "<group>";
+		};
+		CB1B78482FC73D2300EDDCBC /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				CB1B784D2FC73E7200EDDCBC /* NasiGirlsRepository.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		CB1B78492FC73DA000EDDCBC /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				CB1B784B2FC73DDD00EDDCBC /* Home */,
+				CB1B784C2FC73DE600EDDCBC /* Detail */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		CB1B784A2FC73DAF00EDDCBC /* Coordinators */ = {
+			isa = PBXGroup;
+			children = (
+				CB1B78412FC5FA5800EDDCBC /* NasiGirlsCoordinator.swift */,
+			);
+			path = Coordinators;
+			sourceTree = "<group>";
+		};
+		CB1B784B2FC73DDD00EDDCBC /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				5290DBB7293E3FAE004F6A04 /* HomeViewController.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		CB1B784C2FC73DE600EDDCBC /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				CE428D53248142B500C34EAB /* ShadchanListDetailViewController.swift */,
+			);
+			path = Detail;
 			sourceTree = "<group>";
 		};
 		CB2044D62FC11AE700BDF975 /* Application */ = {
@@ -1247,6 +1325,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CB1B784E2FC73E7200EDDCBC /* NasiGirlsRepository.swift in Sources */,
 				5228CB1627A4FF9800EDF103 /* StatusPickerViewController.swift in Sources */,
 				528F5E232960780C00DE5223 /* CategoryCell.swift in Sources */,
 				FFD6A6BF2B2FDF4400459D61 /* SelectGirlVC.swift in Sources */,
@@ -1325,6 +1404,7 @@
 				CEC468E0245C60120071EC85 /* YeshivaAndCollegeWorkingViewController.swift in Sources */,
 				CB60A7A62F5F06CA00B209A3 /* GirlDraft.swift in Sources */,
 				1825F9A0252C400600448269 /* SignUpVC.swift in Sources */,
+				CB1B78502FC73F6200EDDCBC /* FirebaseNasiGirlsRepository.swift in Sources */,
 				52A04EF329A3D98500C490B0 /* MatchIdeaDetailsViewController.swift in Sources */,
 				1851798A2525FAF20099D65E /* ProgressIndicator.swift in Sources */,
 				5228CB2327B1876300EDF103 /* DescriptionCollectionViewCell.swift in Sources */,
