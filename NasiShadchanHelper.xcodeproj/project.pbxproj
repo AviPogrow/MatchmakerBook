@@ -109,6 +109,7 @@
 		CB1B78422FC5FA5800EDDCBC /* NasiGirlsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B78412FC5FA5800EDDCBC /* NasiGirlsCoordinator.swift */; };
 		CB1B784E2FC73E7200EDDCBC /* NasiGirlsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B784D2FC73E7200EDDCBC /* NasiGirlsRepository.swift */; };
 		CB1B78502FC73F6200EDDCBC /* FirebaseNasiGirlsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B784F2FC73F6200EDDCBC /* FirebaseNasiGirlsRepository.swift */; };
+		CB1B785B2FC74CD600EDDCBC /* NasiGirlsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B785A2FC74CD600EDDCBC /* NasiGirlsViewModel.swift */; };
 		CB2044D82FC11B1000BDF975 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2044D72FC11B1000BDF975 /* AppCoordinator.swift */; };
 		CB2044DA2FC11B2700BDF975 /* AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2044D92FC11B2700BDF975 /* AppContainer.swift */; };
 		CB219D4E2D8C82EB00D439B6 /* DatingRelationship.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */; };
@@ -308,6 +309,7 @@
 		CB1B78412FC5FA5800EDDCBC /* NasiGirlsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NasiGirlsCoordinator.swift; sourceTree = "<group>"; };
 		CB1B784D2FC73E7200EDDCBC /* NasiGirlsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NasiGirlsRepository.swift; sourceTree = "<group>"; };
 		CB1B784F2FC73F6200EDDCBC /* FirebaseNasiGirlsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseNasiGirlsRepository.swift; sourceTree = "<group>"; };
+		CB1B785A2FC74CD600EDDCBC /* NasiGirlsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NasiGirlsViewModel.swift; sourceTree = "<group>"; };
 		CB2044D72FC11B1000BDF975 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		CB2044D92FC11B2700BDF975 /* AppContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContainer.swift; sourceTree = "<group>"; };
 		CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatingRelationship.swift; sourceTree = "<group>"; };
@@ -852,6 +854,7 @@
 			isa = PBXGroup;
 			children = (
 				CB1B78492FC73DA000EDDCBC /* Screens */,
+				CB1B78592FC74C9300EDDCBC /* ViewModels */,
 				CB1B784A2FC73DAF00EDDCBC /* Coordinators */,
 			);
 			path = Presentation;
@@ -920,6 +923,14 @@
 				CE428D53248142B500C34EAB /* ShadchanListDetailViewController.swift */,
 			);
 			path = Detail;
+			sourceTree = "<group>";
+		};
+		CB1B78592FC74C9300EDDCBC /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				CB1B785A2FC74CD600EDDCBC /* NasiGirlsViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		CB2044D62FC11AE700BDF975 /* Application */ = {
@@ -1454,6 +1465,7 @@
 				3DC18497258AF5C200B529F0 /* GirlResearchCell.swift in Sources */,
 				521924ED2A1909DE00A9DBA4 /* ShadchanGirlsCategoriesVC.swift in Sources */,
 				CEF80D222460BBBC009FE684 /* FTCollegeTableViewCell.swift in Sources */,
+				CB1B785B2FC74CD600EDDCBC /* NasiGirlsViewModel.swift in Sources */,
 				CEF80D1E245F7014009FE684 /* HudView.swift in Sources */,
 				5228CB2527B4122B00EDF103 /* ShadchanGirlNotesVC.swift in Sources */,
 				18A37FA1252F8AAD009C6BEB /* NotesTableCell.swift in Sources */,

@@ -12,13 +12,11 @@ import Firebase
 
 class HomeViewController: UIViewController, UICollectionViewDataSource,UICollectionViewDelegate,  UICollectionViewDelegateFlowLayout, UISearchBarDelegate  {
     
-    private let repository: NasiGirlsRepository = FirebaseNasiGirlsRepository()
+  
     
     @IBOutlet weak var collectionView: UICollectionView!
     
-    
-    var allNasiGirlsList: [NasiGirl] = [NasiGirl]()
-    var filteredNasiGirlsList:[NasiGirl] = [NasiGirl]()
+    var viewModel: NasiGirlsViewModel!
     
     var onNasiGirlSelected: ((NasiGirl) -> Void)?
 
@@ -37,6 +35,11 @@ class HomeViewController: UIViewController, UICollectionViewDataSource,UICollect
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if viewModel == nil {
+            let repository = FirebaseNasiGirlsRepository()
+            viewModel = NasiGirlsViewModel(repository: repository)
+        }
         navigationItem.title = "All Nasi Girls"
         
         collectionView.dataSource = self
@@ -158,32 +161,21 @@ class HomeViewController: UIViewController, UICollectionViewDataSource,UICollect
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         self.searchBar.resignFirstResponder()
     }
-    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
-        if searchText.isEmpty {
-            self.filteredNasiGirlsList = self.allNasiGirlsList
-        } else {
-            self.filteredNasiGirlsList = self.allNasiGirlsList.filter { (girl) -> Bool in
-                return girl.lastNameOfGirl.lowercased().contains(searchText.lowercased()) || girl.firstNameOfGirl.lowercased().contains(searchText.lowercased()) || girl.cityOfResidence.lowercased().contains(searchText.lowercased()) ||
-                    girl.seminaryName.lowercased().contains(searchText.lowercased())
-            }
-        }
-        self.collectionView?.reloadData()
+        viewModel.filterGirls(searchText: searchText)
+        collectionView.reloadData()
     }
+  
     
     func fetchAndCreateNasiGirlsArray() {
         view.showLoadingIndicator()
-        allNasiGirlsList.removeAll()
 
         Task {
             do {
-                let girls = try await repository.fetchNasiGirls()
+                try await viewModel.loadGirls()
 
                 await MainActor.run {
                     self.view.hideLoadingIndicator()
-                    self.allNasiGirlsList = girls
-                    self.filteredNasiGirlsList = girls
                     self.collectionView.reloadData()
                 }
             } catch {
@@ -251,14 +243,14 @@ class HomeViewController: UIViewController, UICollectionViewDataSource,UICollect
     }
      func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
        // enterSearchTermLabel.isHidden = appResults.count != 0
-        return filteredNasiGirlsList.count
+         return viewModel.filteredGirls.count
       }
     
        func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
          let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! SearchResultCell
         
          
-          cell.girl = filteredNasiGirlsList[indexPath.item]
+           cell.girl = viewModel.filteredGirls[indexPath.item]
            
            return cell
         }
@@ -273,7 +265,8 @@ class HomeViewController: UIViewController, UICollectionViewDataSource,UICollect
         let identifier = "ShadchanListDetailViewController"
         let girlDetailController = storyboard!.instantiateViewController(withIdentifier: identifier) as! ShadchanListDetailViewController
         
-        let currentGirl = filteredNasiGirlsList[indexPath.item]
+           let currentGirl = viewModel.filteredGirls[indexPath.item]
+           onNasiGirlSelected?(currentGirl)
         
         onNasiGirlSelected?(currentGirl)
         //girlDetailController.selectedNasiGirl = currentGirl
@@ -288,8 +281,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource,UICollect
             
             self.searchBar.resignFirstResponder()
             let controller = segue.destination as! CategoryViewController
-            controller.arrayGirlsList  = self.allNasiGirlsList
-        }
+            controller.arrayGirlsList = viewModel.allGirls        }
     }
    
 }
