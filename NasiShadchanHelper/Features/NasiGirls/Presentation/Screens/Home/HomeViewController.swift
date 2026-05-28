@@ -36,10 +36,7 @@ class HomeViewController: UIViewController, UICollectionViewDataSource,UICollect
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if viewModel == nil {
-            let repository = FirebaseNasiGirlsRepository()
-            viewModel = NasiGirlsViewModel(repository: repository)
-        }
+       
         navigationItem.title = "All Nasi Girls"
         
         collectionView.dataSource = self
@@ -263,14 +260,10 @@ class HomeViewController: UIViewController, UICollectionViewDataSource,UICollect
         logOutImageView.isHidden = true
         
         let identifier = "ShadchanListDetailViewController"
-        let girlDetailController = storyboard!.instantiateViewController(withIdentifier: identifier) as! ShadchanListDetailViewController
+       
+        let currentGirl = viewModel.filteredGirls[indexPath.item]
+          onNasiGirlSelected?(currentGirl)
         
-           let currentGirl = viewModel.filteredGirls[indexPath.item]
-           onNasiGirlSelected?(currentGirl)
-        
-        onNasiGirlSelected?(currentGirl)
-        //girlDetailController.selectedNasiGirl = currentGirl
-        //navigationController?.pushViewController(girlDetailController, animated: true)
         }
     
        override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

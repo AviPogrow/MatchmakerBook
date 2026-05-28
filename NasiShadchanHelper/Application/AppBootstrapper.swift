@@ -45,7 +45,7 @@ final class AppBootstrapper {
         // save the appCoordinator object
         self.appCoordinator = coordinator
 
-        // call stat on the coordinator
+        // call start on the coordinator
         coordinator.start()
     }
 

@@ -16,11 +16,21 @@ final class AppCoordinator {
     
     private var mainTabCoordinator: MainTabCoordinator?
 
+    // bootStrap
+     //creates an AppCoordinator
+    // and a UIWindow
+    // and inits the AppCoordinator
+    // app coordinator stores them to use later
+    // window will be set with rootViewController
+    // container will provide authService to init
+    // the loginViewModel
     init(window: UIWindow, container: AppContainer) {
         self.window = window
         self.container = container
     }
 
+    // we now use the session manager of the container
+    // to check if user is logged in
     func start() {
         if container.sessionManager.isLoggedIn() {
             showMainApp()
@@ -31,20 +41,27 @@ final class AppCoordinator {
 
     private func showLogin() {
         // get the auth service from container
-        // inject it into the LoginViewModel
-    
+        // init a LoginViewModel with authService
+        // we then will use LoginViewModel
+        // to init the LoginView
         let viewModel = LoginViewModel(
             authService: container.authService
         )
-        
+        // set the closure on the onLoginSuccesss
+        // callback
         viewModel.onLoginSuccess = { [weak self] in
             self?.showMainApp()
         }
 
+        // inject the view model into the init method
+        // of hostingController
+        // that then injects it into the loginView
+        // which is the rootView
         let loginVC = SwiftUIAuthHostingController(
             viewModel: viewModel
         )
 
+        
         window.rootViewController = loginVC
         window.makeKeyAndVisible()
     }

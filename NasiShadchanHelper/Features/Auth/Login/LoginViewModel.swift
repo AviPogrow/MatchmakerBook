@@ -35,7 +35,6 @@ final class LoginViewModel: ObservableObject {
 
     var onLoginSuccess: (() -> Void)?
     
-
     private let authService: AuthServicing
 
     init(authService: AuthServicing) {

@@ -31,7 +31,10 @@ final class NasiGirlsCoordinator {
         
         navigationController.setViewControllers([listVC], animated: false)
         
-    
+        let repository = FirebaseNasiGirlsRepository()
+        let viewModel = NasiGirlsViewModel(repository: repository)
+        
+        listVC.viewModel = viewModel
        // the listVC has this closure as an instance property
        //
         listVC.onNasiGirlSelected = { [weak self] girl in
