@@ -14,6 +14,7 @@ final class AppCoordinator {
     private let window: UIWindow
     private let container: AppContainer
     
+    private var authCoordinator: AuthCoordinator?
     private var mainTabCoordinator: MainTabCoordinator?
 
     // bootStrap
@@ -40,29 +41,18 @@ final class AppCoordinator {
     }
 
     private func showLogin() {
-        // get the auth service from container
-        // init a LoginViewModel with authService
-        // we then will use LoginViewModel
-        // to init the LoginView
-        let viewModel = LoginViewModel(
-            authService: container.authService
+
+        let coordinator = AuthCoordinator(
+            container: container
         )
-        // set the closure on the onLoginSuccesss
-        // callback
-        viewModel.onLoginSuccess = { [weak self] in
+
+        coordinator.onAuthSuccess = { [weak self] in
             self?.showMainApp()
         }
 
-        // inject the view model into the init method
-        // of hostingController
-        // that then injects it into the loginView
-        // which is the rootView
-        let loginVC = SwiftUIAuthHostingController(
-            viewModel: viewModel
-        )
+        authCoordinator = coordinator
 
-        
-        window.rootViewController = loginVC
+        window.rootViewController = coordinator.start()
         window.makeKeyAndVisible()
     }
 

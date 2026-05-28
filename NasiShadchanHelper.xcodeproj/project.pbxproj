@@ -110,6 +110,7 @@
 		CB1B784E2FC73E7200EDDCBC /* NasiGirlsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B784D2FC73E7200EDDCBC /* NasiGirlsRepository.swift */; };
 		CB1B78502FC73F6200EDDCBC /* FirebaseNasiGirlsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B784F2FC73F6200EDDCBC /* FirebaseNasiGirlsRepository.swift */; };
 		CB1B785B2FC74CD600EDDCBC /* NasiGirlsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B785A2FC74CD600EDDCBC /* NasiGirlsViewModel.swift */; };
+		CB1B786C2FC88ACD00EDDCBC /* AuthCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B786B2FC88ACD00EDDCBC /* AuthCoordinator.swift */; };
 		CB2044D82FC11B1000BDF975 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2044D72FC11B1000BDF975 /* AppCoordinator.swift */; };
 		CB2044DA2FC11B2700BDF975 /* AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2044D92FC11B2700BDF975 /* AppContainer.swift */; };
 		CB219D4E2D8C82EB00D439B6 /* DatingRelationship.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */; };
@@ -310,6 +311,7 @@
 		CB1B784D2FC73E7200EDDCBC /* NasiGirlsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NasiGirlsRepository.swift; sourceTree = "<group>"; };
 		CB1B784F2FC73F6200EDDCBC /* FirebaseNasiGirlsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseNasiGirlsRepository.swift; sourceTree = "<group>"; };
 		CB1B785A2FC74CD600EDDCBC /* NasiGirlsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NasiGirlsViewModel.swift; sourceTree = "<group>"; };
+		CB1B786B2FC88ACD00EDDCBC /* AuthCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthCoordinator.swift; sourceTree = "<group>"; };
 		CB2044D72FC11B1000BDF975 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		CB2044D92FC11B2700BDF975 /* AppContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContainer.swift; sourceTree = "<group>"; };
 		CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatingRelationship.swift; sourceTree = "<group>"; };
@@ -425,7 +427,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1825F998252C3BA800448269 /* LegacyAuthViewControllers */ = {
+		1825F998252C3BA800448269 /* Legacy */ = {
 			isa = PBXGroup;
 			children = (
 				184B49852563E766008B61F9 /* getStarted */,
@@ -435,7 +437,7 @@
 				1825F99A252C3C4200448269 /* Login */,
 				1825F99B252C3C4C00448269 /* SignUp */,
 			);
-			path = LegacyAuthViewControllers;
+			path = Legacy;
 			sourceTree = "<group>";
 		};
 		1825F99A252C3C4200448269 /* Login */ = {
@@ -786,10 +788,10 @@
 		CB1B78332FC377DE00EDDCBC /* Auth */ = {
 			isa = PBXGroup;
 			children = (
-				CB1B78382FC46EF800EDDCBC /* Models */,
-				CB1B78372FC46E9C00EDDCBC /* Services */,
-				CB1B78362FC46E3B00EDDCBC /* Login */,
-				1825F998252C3BA800448269 /* LegacyAuthViewControllers */,
+				1825F998252C3BA800448269 /* Legacy */,
+				CB1B78642FC8883200EDDCBC /* Domain */,
+				CB1B78652FC8884100EDDCBC /* Infrastructure */,
+				CB1B78662FC8885600EDDCBC /* Presentation */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -808,10 +810,7 @@
 			isa = PBXGroup;
 			children = (
 				CB1B78342FC3783200EDDCBC /* AuthServicing.swift */,
-				CBF40DF02FC097F500A16CD2 /* MockAuthService.swift */,
-				CBF40DEC2FC097F500A16CD2 /* FirebaseAuthService.swift */,
 				CB8FE5A22FAE1D1200C425A8 /* SessionManaging.swift */,
-				CB1B783B2FC479C200EDDCBC /* FirebaseSessionManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -931,6 +930,66 @@
 				CB1B785A2FC74CD600EDDCBC /* NasiGirlsViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		CB1B78642FC8883200EDDCBC /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				CB1B78372FC46E9C00EDDCBC /* Services */,
+				CB1B78382FC46EF800EDDCBC /* Models */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		CB1B78652FC8884100EDDCBC /* Infrastructure */ = {
+			isa = PBXGroup;
+			children = (
+				CB1B786A2FC88A6B00EDDCBC /* Mock */,
+				CB1B78692FC889D500EDDCBC /* Firebase */,
+			);
+			path = Infrastructure;
+			sourceTree = "<group>";
+		};
+		CB1B78662FC8885600EDDCBC /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				CB1B78682FC8891300EDDCBC /* Coordinators */,
+				CB1B78672FC888D400EDDCBC /* Screens */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		CB1B78672FC888D400EDDCBC /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				CB1B78362FC46E3B00EDDCBC /* Login */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		CB1B78682FC8891300EDDCBC /* Coordinators */ = {
+			isa = PBXGroup;
+			children = (
+				CB1B786B2FC88ACD00EDDCBC /* AuthCoordinator.swift */,
+			);
+			path = Coordinators;
+			sourceTree = "<group>";
+		};
+		CB1B78692FC889D500EDDCBC /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				CB1B783B2FC479C200EDDCBC /* FirebaseSessionManager.swift */,
+				CBF40DEC2FC097F500A16CD2 /* FirebaseAuthService.swift */,
+			);
+			path = Firebase;
+			sourceTree = "<group>";
+		};
+		CB1B786A2FC88A6B00EDDCBC /* Mock */ = {
+			isa = PBXGroup;
+			children = (
+				CBF40DF02FC097F500A16CD2 /* MockAuthService.swift */,
+			);
+			path = Mock;
 			sourceTree = "<group>";
 		};
 		CB2044D62FC11AE700BDF975 /* Application */ = {
@@ -1406,6 +1465,7 @@
 				1825F99E252C3FE400448269 /* LoginVC.swift in Sources */,
 				5228CB2727B4163300EDF103 /* ShadchanGirlNote.swift in Sources */,
 				520578CF299BB55700B732A0 /* SendMessageButton.swift in Sources */,
+				CB1B786C2FC88ACD00EDDCBC /* AuthCoordinator.swift in Sources */,
 				52DB325F2998904100AC5F87 /* Variables.swift in Sources */,
 				52DB325B2997BFE700AC5F87 /* GirlCell.swift in Sources */,
 				184F985C252C696100187D72 /* AuthNavViewController.swift in Sources */,
