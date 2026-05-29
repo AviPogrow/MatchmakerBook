@@ -9,7 +9,7 @@ import Foundation
 
 @MainActor
 final class SignupViewModel: ObservableObject {
-
+    @Published var selectedImageData: Data?
     @Published var email = ""
     @Published var password = ""
     @Published var isLoading = false
@@ -40,7 +40,10 @@ final class SignupViewModel: ObservableObject {
     init(authService: AuthServicing) {
         self.authService = authService
     }
-
+    func profileImageSelected(_ data: Data) {
+        selectedImageData = data
+        errorMessage = nil
+    }
     func signup() async {
         isLoading = true
         errorMessage = nil
@@ -59,4 +62,4 @@ final class SignupViewModel: ObservableObject {
             errorMessage = error.localizedDescription
         }
     }
-}
+    }
