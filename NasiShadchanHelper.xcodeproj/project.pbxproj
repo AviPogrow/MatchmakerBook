@@ -120,6 +120,8 @@
 		CB2044D82FC11B1000BDF975 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2044D72FC11B1000BDF975 /* AppCoordinator.swift */; };
 		CB2044DA2FC11B2700BDF975 /* AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2044D92FC11B2700BDF975 /* AppContainer.swift */; };
 		CB219D4E2D8C82EB00D439B6 /* DatingRelationship.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */; };
+		CB2C88842FCA10AA005DFB6A /* ProfileImageUploading.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2C88832FCA10AA005DFB6A /* ProfileImageUploading.swift */; };
+		CB2C88862FCA14BC005DFB6A /* MockProfileImageUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2C88852FCA14BC005DFB6A /* MockProfileImageUploader.swift */; };
 		CB3EED4F2F3E1C8D006B392B /* ProfileSearchFilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB3EED4E2F3E1C8D006B392B /* ProfileSearchFilterVC.swift */; };
 		CB4E5B732F2BECD00042A61A /* GirlsFilterSearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4E5B722F2BECD00042A61A /* GirlsFilterSearchVC.swift */; };
 		CB60A7A12F5F01F900B209A3 /* AppLifecycleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB60A79F2F5F01F800B209A3 /* AppLifecycleCoordinator.swift */; };
@@ -327,6 +329,8 @@
 		CB2044D72FC11B1000BDF975 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		CB2044D92FC11B2700BDF975 /* AppContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContainer.swift; sourceTree = "<group>"; };
 		CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatingRelationship.swift; sourceTree = "<group>"; };
+		CB2C88832FCA10AA005DFB6A /* ProfileImageUploading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageUploading.swift; sourceTree = "<group>"; };
+		CB2C88852FCA14BC005DFB6A /* MockProfileImageUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockProfileImageUploader.swift; sourceTree = "<group>"; };
 		CB3EED4E2F3E1C8D006B392B /* ProfileSearchFilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSearchFilterVC.swift; sourceTree = "<group>"; };
 		CB4E5B722F2BECD00042A61A /* GirlsFilterSearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GirlsFilterSearchVC.swift; sourceTree = "<group>"; };
 		CB60A79F2F5F01F800B209A3 /* AppLifecycleCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLifecycleCoordinator.swift; sourceTree = "<group>"; };
@@ -823,6 +827,7 @@
 			children = (
 				CB1B78342FC3783200EDDCBC /* AuthServicing.swift */,
 				CB8FE5A22FAE1D1200C425A8 /* SessionManaging.swift */,
+				CB2C88832FCA10AA005DFB6A /* ProfileImageUploading.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1002,6 +1007,7 @@
 			isa = PBXGroup;
 			children = (
 				CBF40DF02FC097F500A16CD2 /* MockAuthService.swift */,
+				CB2C88852FCA14BC005DFB6A /* MockProfileImageUploader.swift */,
 			);
 			path = Mock;
 			sourceTree = "<group>";
@@ -1457,6 +1463,7 @@
 				529D21AD2A05F70100D1500D /* BoySubCategoriesVC.swift in Sources */,
 				3DC184A125936A7700B529F0 /* SentTableViewCell.swift in Sources */,
 				52A41BC6277F3BF700FE7C7A /* NasiBoy.swift in Sources */,
+				CB2C88862FCA14BC005DFB6A /* MockProfileImageUploader.swift in Sources */,
 				5290DBBA293E86AF004F6A04 /* CategoryHeader.swift in Sources */,
 				529A47A127F64EB00026A67E /* ErekaVC.swift in Sources */,
 				52E486C82B23836D00CA43CE /* ImagePresentedCell.swift in Sources */,
@@ -1518,6 +1525,7 @@
 				1851798A2525FAF20099D65E /* ProgressIndicator.swift in Sources */,
 				5228CB2327B1876300EDF103 /* DescriptionCollectionViewCell.swift in Sources */,
 				52E486C62B23831B00CA43CE /* SelectableViewController.swift in Sources */,
+				CB2C88842FCA10AA005DFB6A /* ProfileImageUploading.swift in Sources */,
 				CE3AC0AC2454650F006B9FEA /* SingleTableViewCell.swift in Sources */,
 				529D21AF2A06D41900D1500D /* BoyCollectionViewCell.swift in Sources */,
 				CE525A702461B55300CBEC41 /* UIImage+Resize.swift in Sources */,

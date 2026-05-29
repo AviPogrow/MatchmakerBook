@@ -58,6 +58,18 @@ struct SignupView: View {
                             .foregroundStyle(.secondary)
                     }
             }
+            
+            if viewModel.isUploadingImage {
+                ProgressView(value: viewModel.uploadProgress)
+                    .padding(.horizontal)
+            }
+            
+            Button("Test Upload Progress") {
+                Task {
+                    await viewModel.simulateUploadProgress()
+                }
+            }
+            .buttonStyle(.bordered)
 
             TextField("Email", text: $viewModel.email)
                 .textFieldStyle(.roundedBorder)

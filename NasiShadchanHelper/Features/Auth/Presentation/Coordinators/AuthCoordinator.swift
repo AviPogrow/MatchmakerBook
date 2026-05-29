@@ -59,7 +59,8 @@ final class AuthCoordinator {
 
     private func showSignup() {
         let viewModel = SignupViewModel(
-            authService: container.authService
+            authService: container.authService,
+            profileImageUploader: MockProfileImageUploader()
         )
 
         viewModel.onSignupSuccess = { [weak self] in
