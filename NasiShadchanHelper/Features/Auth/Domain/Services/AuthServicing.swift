@@ -10,5 +10,6 @@ import Foundation
 
 protocol AuthServicing {
     func login(email: String, password: String) async throws -> AuthSession
+    func signup(email: String, password: String) async throws -> AuthSession
     func logout() throws
 }

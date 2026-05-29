@@ -31,4 +31,27 @@ final class FirebaseAuthService: AuthServicing {
     func logout() throws {
         try Auth.auth().signOut()
     }
+    
+    func signup(email: String, password: String) async throws -> AuthSession {
+        try await withCheckedThrowingContinuation { continuation in
+            Auth.auth().createUser(withEmail: email, password: password) { result, error in
+
+                if let error = error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+
+                guard let user = result?.user else {
+                    continuation.resume(throwing: AuthError.unknown)
+                    return
+                }
+
+                let session = AuthSession(
+                    userID: user.uid,
+                    email: user.email
+                )
+                continuation.resume(returning: session)
+            }
+        }
+    }
 }

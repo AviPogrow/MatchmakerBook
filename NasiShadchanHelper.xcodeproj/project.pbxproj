@@ -111,6 +111,12 @@
 		CB1B78502FC73F6200EDDCBC /* FirebaseNasiGirlsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B784F2FC73F6200EDDCBC /* FirebaseNasiGirlsRepository.swift */; };
 		CB1B785B2FC74CD600EDDCBC /* NasiGirlsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B785A2FC74CD600EDDCBC /* NasiGirlsViewModel.swift */; };
 		CB1B786C2FC88ACD00EDDCBC /* AuthCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B786B2FC88ACD00EDDCBC /* AuthCoordinator.swift */; };
+		CB1B786F2FC8947800EDDCBC /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B786E2FC8947800EDDCBC /* WelcomeView.swift */; };
+		CB1B78712FC8948B00EDDCBC /* WelcomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B78702FC8948B00EDDCBC /* WelcomeViewModel.swift */; };
+		CB1B78732FC894EF00EDDCBC /* WelcomeHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B78722FC894EF00EDDCBC /* WelcomeHostingController.swift */; };
+		CB1B78762FC896B300EDDCBC /* SignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B78752FC896B300EDDCBC /* SignupView.swift */; };
+		CB1B78782FC896C400EDDCBC /* SignupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B78772FC896C400EDDCBC /* SignupViewModel.swift */; };
+		CB1B787A2FC896D800EDDCBC /* SignupHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1B78792FC896D800EDDCBC /* SignupHostingController.swift */; };
 		CB2044D82FC11B1000BDF975 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2044D72FC11B1000BDF975 /* AppCoordinator.swift */; };
 		CB2044DA2FC11B2700BDF975 /* AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2044D92FC11B2700BDF975 /* AppContainer.swift */; };
 		CB219D4E2D8C82EB00D439B6 /* DatingRelationship.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */; };
@@ -312,6 +318,12 @@
 		CB1B784F2FC73F6200EDDCBC /* FirebaseNasiGirlsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseNasiGirlsRepository.swift; sourceTree = "<group>"; };
 		CB1B785A2FC74CD600EDDCBC /* NasiGirlsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NasiGirlsViewModel.swift; sourceTree = "<group>"; };
 		CB1B786B2FC88ACD00EDDCBC /* AuthCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthCoordinator.swift; sourceTree = "<group>"; };
+		CB1B786E2FC8947800EDDCBC /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		CB1B78702FC8948B00EDDCBC /* WelcomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewModel.swift; sourceTree = "<group>"; };
+		CB1B78722FC894EF00EDDCBC /* WelcomeHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeHostingController.swift; sourceTree = "<group>"; };
+		CB1B78752FC896B300EDDCBC /* SignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupView.swift; sourceTree = "<group>"; };
+		CB1B78772FC896C400EDDCBC /* SignupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupViewModel.swift; sourceTree = "<group>"; };
+		CB1B78792FC896D800EDDCBC /* SignupHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupHostingController.swift; sourceTree = "<group>"; };
 		CB2044D72FC11B1000BDF975 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		CB2044D92FC11B2700BDF975 /* AppContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContainer.swift; sourceTree = "<group>"; };
 		CB219D4D2D8C82E900D439B6 /* DatingRelationship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatingRelationship.swift; sourceTree = "<group>"; };
@@ -962,6 +974,8 @@
 		CB1B78672FC888D400EDDCBC /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				CB1B78742FC8969500EDDCBC /* SignUp */,
+				CB1B786D2FC8945A00EDDCBC /* Welcome */,
 				CB1B78362FC46E3B00EDDCBC /* Login */,
 			);
 			path = Screens;
@@ -990,6 +1004,26 @@
 				CBF40DF02FC097F500A16CD2 /* MockAuthService.swift */,
 			);
 			path = Mock;
+			sourceTree = "<group>";
+		};
+		CB1B786D2FC8945A00EDDCBC /* Welcome */ = {
+			isa = PBXGroup;
+			children = (
+				CB1B786E2FC8947800EDDCBC /* WelcomeView.swift */,
+				CB1B78702FC8948B00EDDCBC /* WelcomeViewModel.swift */,
+				CB1B78722FC894EF00EDDCBC /* WelcomeHostingController.swift */,
+			);
+			path = Welcome;
+			sourceTree = "<group>";
+		};
+		CB1B78742FC8969500EDDCBC /* SignUp */ = {
+			isa = PBXGroup;
+			children = (
+				CB1B78752FC896B300EDDCBC /* SignupView.swift */,
+				CB1B78772FC896C400EDDCBC /* SignupViewModel.swift */,
+				CB1B78792FC896D800EDDCBC /* SignupHostingController.swift */,
+			);
+			path = SignUp;
 			sourceTree = "<group>";
 		};
 		CB2044D62FC11AE700BDF975 /* Application */ = {
@@ -1410,6 +1444,7 @@
 				52A04EEF29A3A6A700C490B0 /* MatchIdea.swift in Sources */,
 				CB8FE59D2FAD4FF400C425A8 /* AppLaunchCoordinator.swift in Sources */,
 				520578DE299E6F8C00B732A0 /* GirlCollectionViewCell.swift in Sources */,
+				CB1B78762FC896B300EDDCBC /* SignupView.swift in Sources */,
 				CB219D4E2D8C82EB00D439B6 /* DatingRelationship.swift in Sources */,
 				52DB32572996CD2B00AC5F87 /* SubCategoryVC.swift in Sources */,
 				5299DCF629A7CD3500050586 /* SecondDatesDetailVC.swift in Sources */,
@@ -1448,6 +1483,7 @@
 				184B49872563E77C008B61F9 /* GetStartedVC.swift in Sources */,
 				5228CB10279C492A00EDF103 /* AllDatesViewController.swift in Sources */,
 				CB60A7DD2F61BDC000B209A3 /* NavigationStateManager.swift in Sources */,
+				CB1B787A2FC896D800EDDCBC /* SignupHostingController.swift in Sources */,
 				184F9859252C622B00187D72 /* AlignedPlaceholderTextField.swift in Sources */,
 				52DB326129997D0D00AC5F87 /* AddEditGirlViewController.swift in Sources */,
 				524724702A02901E00D2B91B /* BoyGroup.swift in Sources */,
@@ -1460,9 +1496,11 @@
 				CB1B783C2FC479C200EDDCBC /* FirebaseSessionManager.swift in Sources */,
 				CECE6A4F24559EF900084A28 /* Config.swift in Sources */,
 				528F5E2529619AFC00DE5223 /* CategoryViewController.swift in Sources */,
+				CB1B78782FC896C400EDDCBC /* SignupViewModel.swift in Sources */,
 				3D9DA72225AE1A600056F656 /* AllGirlsTableViewCell.swift in Sources */,
 				CB3EED4F2F3E1C8D006B392B /* ProfileSearchFilterVC.swift in Sources */,
 				1825F99E252C3FE400448269 /* LoginVC.swift in Sources */,
+				CB1B78712FC8948B00EDDCBC /* WelcomeViewModel.swift in Sources */,
 				5228CB2727B4163300EDF103 /* ShadchanGirlNote.swift in Sources */,
 				520578CF299BB55700B732A0 /* SendMessageButton.swift in Sources */,
 				CB1B786C2FC88ACD00EDDCBC /* AuthCoordinator.swift in Sources */,
@@ -1497,11 +1535,13 @@
 				CBF40DF72FC097F500A16CD2 /* SwiftUIAuthHostingController.swift in Sources */,
 				CBF40DF82FC097F500A16CD2 /* LoginViewModel.swift in Sources */,
 				3D9DA71E25ACCEB10056F656 /* ViewResumeVCViewController.swift in Sources */,
+				CB1B78732FC894EF00EDDCBC /* WelcomeHostingController.swift in Sources */,
 				5228CB2127AF015100EDF103 /* ContactsViewController.swift in Sources */,
 				CB90DEE92F4A1725002F7FEA /* ResumeParser .swift in Sources */,
 				5299DCE029A6827F00050586 /* FirstDateAppVC.swift in Sources */,
 				52444B022A26D0F900F54E32 /* AppDelegate.swift in Sources */,
 				FFD6A6BD2B2D1AC400459D61 /* SelectBoyVC.swift in Sources */,
+				CB1B786F2FC8947800EDDCBC /* WelcomeView.swift in Sources */,
 				CB8FE5A32FAE1D1200C425A8 /* SessionManaging.swift in Sources */,
 				CB9E7D852F5629FA00B43E38 /* PrefillPacket.swift in Sources */,
 				3DC1849F258C13AD00B529F0 /* NasiGirl.swift in Sources */,

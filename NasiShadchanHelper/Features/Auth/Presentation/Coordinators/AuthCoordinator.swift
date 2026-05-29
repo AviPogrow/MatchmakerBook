@@ -8,10 +8,13 @@
 
 import UIKit
 
+import UIKit
+
 @MainActor
 final class AuthCoordinator {
 
     private let container: AppContainer
+    private let navigationController = UINavigationController()
 
     var onAuthSuccess: (() -> Void)?
 
@@ -20,7 +23,27 @@ final class AuthCoordinator {
     }
 
     func start() -> UIViewController {
+        showWelcome()
+        return navigationController
+    }
 
+    private func showWelcome() {
+        let viewModel = WelcomeViewModel()
+
+        viewModel.onLoginTapped = { [weak self] in
+            self?.showLogin()
+        }
+
+        viewModel.onSignupTapped = { [weak self] in
+            self?.showSignup()
+        }
+
+        let welcomeVC = WelcomeHostingController(viewModel: viewModel)
+
+        navigationController.setViewControllers([welcomeVC], animated: false)
+    }
+
+    private func showLogin() {
         let viewModel = LoginViewModel(
             authService: container.authService
         )
@@ -29,8 +52,12 @@ final class AuthCoordinator {
             self?.onAuthSuccess?()
         }
 
-        return SwiftUIAuthHostingController(
-            viewModel: viewModel
-        )
+        let loginVC = SwiftUIAuthHostingController(viewModel: viewModel)
+
+        navigationController.pushViewController(loginVC, animated: true)
+    }
+
+    private func showSignup() {
+        // next step
     }
 }
