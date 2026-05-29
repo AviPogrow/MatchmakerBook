@@ -58,6 +58,16 @@ final class AuthCoordinator {
     }
 
     private func showSignup() {
-        // next step
+        let viewModel = SignupViewModel(
+            authService: container.authService
+        )
+
+        viewModel.onSignupSuccess = { [weak self] in
+            self?.onAuthSuccess?()
+        }
+
+        let signupVC = SignupHostingController(viewModel: viewModel)
+
+        navigationController.pushViewController(signupVC, animated: true)
     }
 }
