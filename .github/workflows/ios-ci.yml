@@ -29,4 +29,5 @@ jobs:
           xcodebuild clean build \
             -workspace NasiShadchanHelper.xcworkspace \
             -scheme NasiShadchanHelper \
-            -destination 'generic/platform=iOS'
+            -destination 'generic/platform=iOS' \
+            CODE_SIGNING_ALLOWED=NO
