@@ -2,10 +2,13 @@ name: iOS CI
 
 on:
   workflow_dispatch:
+
   push:
     branches: [ main ]
+
   pull_request:
     branches: [ main ]
+
 jobs:
   build:
     runs-on: macos-15
@@ -21,9 +24,9 @@ jobs:
             -scheme NasiShadchanHelper \
             -showdestinations
 
-     - name: Build app
-  run: |
-    xcodebuild clean build \
-      -workspace NasiShadchanHelper.xcworkspace \
-      -scheme NasiShadchanHelper \
-      -destination 'generic/platform=iOS'
+      - name: Build app
+        run: |
+          xcodebuild clean build \
+            -workspace NasiShadchanHelper.xcworkspace \
+            -scheme NasiShadchanHelper \
+            -destination 'generic/platform=iOS'
