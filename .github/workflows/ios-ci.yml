@@ -2,10 +2,8 @@ name: iOS CI
 
 on:
   workflow_dispatch:
-
   push:
     branches: [ main ]
-
   pull_request:
     branches: [ main ]
 
@@ -17,22 +15,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Install CocoaPods
+        run: |
+          pod install
+
       - name: Show available simulators
         run: |
-          xcrun simctl list devices available
+          xcrun simctl list devices
 
       - name: Build app
         run: |
           xcodebuild clean build \
-            -workspace NasiShadchanHelper.xcworkspace \
-            -scheme NasiShadchanHelper \
-            -destination 'generic/platform=iOS' \
-            CODE_SIGNING_ALLOWED=NO
+          -workspace NasiShadchanHelper.xcworkspace \
+          -scheme NasiShadchanHelper \
+          -destination 'generic/platform=iOS' \
+          CODE_SIGNING_ALLOWED=NO
 
       - name: Run unit tests
         run: |
           xcodebuild test \
-            -workspace NasiShadchanHelper.xcworkspace \
-            -scheme NasiShadchanHelper \
-            -destination 'platform=iOS Simulator,name=iPhone 16' \
-            CODE_SIGNING_ALLOWED=NO
+          -workspace NasiShadchanHelper.xcworkspace \
+          -scheme NasiShadchanHelper \
+          -destination 'platform=iOS Simulator,name=iPhone 16' \
+          CODE_SIGNING_ALLOWED=NO
