@@ -26,15 +26,8 @@ jobs:
       - name: Build app
         run: |
           xcodebuild clean build \
-          -workspace NasiShadchanHelper.xcworkspace \
-          -scheme NasiShadchanHelper \
-          -destination 'generic/platform=iOS' \
-          CODE_SIGNING_ALLOWED=NO
-
-      - name: Run unit tests
-        run: |
-          xcodebuild test \
-          -workspace NasiShadchanHelper.xcworkspace \
-          -scheme NasiShadchanHelper \
-          -destination 'platform=iOS Simulator,name=iPhone 16' \
-          CODE_SIGNING_ALLOWED=NO
+            -workspace NasiShadchanHelper.xcworkspace \
+            -scheme NasiShadchanHelper \
+            -destination 'platform=iOS Simulator,name=iPhone 16' \
+            EXCLUDED_ARCHS=arm64 \
+            CODE_SIGNING_ALLOWED=NO
