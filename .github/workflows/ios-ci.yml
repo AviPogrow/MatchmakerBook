@@ -14,9 +14,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install CocoaPods
-        run: pod install
-
       - name: Build app
         run: |
           xcodebuild clean build \
